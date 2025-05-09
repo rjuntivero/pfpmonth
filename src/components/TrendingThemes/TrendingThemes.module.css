@@ -1,0 +1,31 @@
+:root {
+  --gap: 20px;
+}
+
+.marquee {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--main);
+  opacity: 25%;
+  padding-block: 0.5rem;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+}
+
+.marquee ul {
+  list-style: none;
+  flex-shrink: 0;
+  gap: var(--gap);
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  min-width: 100%;
+  animation: scroll 20s linear infinite;
+}
+
+@keyframes scroll {
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+  }
+}

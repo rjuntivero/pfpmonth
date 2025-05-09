@@ -8,13 +8,10 @@
 
   color: var(--foreground);
 
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
   align-items: center;
   justify-items: center;
   min-height: 100svh;
   padding: 80px;
-  gap: 64px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -38,6 +35,7 @@
   flex-direction: column;
   align-items: center;
   grid-row-start: 2;
+  gap: 3rem;
 }
 
 .header {

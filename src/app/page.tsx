@@ -1,3 +1,4 @@
+import TrendingThemes from '@/components/TrendingThemes/TrendingThemes';
 import styles from './page.module.css';
 import CallToAction from '@/components/CallToAction/CallToAction';
 
@@ -17,9 +18,16 @@ export default function Home() {
           </header>
           <h2>Vote. Upload. Slay</h2>
         </div>
-        <div className={styles.CallToAction}>
+        <section>
+          <TrendingThemes />
+        </section>
+        <section className={styles.CallToAction}>
           <CallToAction />
-        </div>
+        </section>
+        <h1>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus exercitationem ipsa necessitatibus aliquam nihil explicabo? Similique amet sequi placeat in labore, voluptate voluptates praesentium autem necessitatibus totam doloribus
+          excepturi odit.
+        </h1>
       </main>
     </div>
   );

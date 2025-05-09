@@ -47,4 +47,5 @@
 
 button:hover {
   color: var(--main);
+  transition: 200ms color 0ms cubic-bezier(0.16, 1, 0.3, 1);
 }

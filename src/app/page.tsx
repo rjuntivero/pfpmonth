@@ -1,4 +1,5 @@
 import styles from './page.module.css';
+import CallToAction from '@/components/CallToAction/CallToAction';
 
 export default function Home() {
   return (
@@ -15,6 +16,9 @@ export default function Home() {
             <p>Create Monthly Profile Themes for your Discord server</p>
           </header>
           <h2>Vote. Upload. Slay</h2>
+        </div>
+        <div className={styles.CallToAction}>
+          <CallToAction />
         </div>
       </main>
     </div>

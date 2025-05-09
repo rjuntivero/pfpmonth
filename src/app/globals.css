@@ -1,6 +1,9 @@
 :root {
   --background: linear-gradient(180deg, #211e21 3.85%, #272327 52.4%, #211e21 95.19%);
-  --foreground: #171717;
+  --foreground: #d9d9d9;
+  --main: #936d9c;
+  --accent: #d19c1d;
+  --text: #1e1e1e;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,6 +55,7 @@ button {
   border: none;
   font-family: 'ClashDisplay';
   padding: 0.5em 1em;
+  transition: 200ms color 0ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (prefers-color-scheme: dark) {

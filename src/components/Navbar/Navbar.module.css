@@ -1,7 +1,4 @@
 .navbar {
-  /* Navbar */
-
-  /* Auto layout */
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -17,46 +14,50 @@
 
   background: #211e21;
   border-radius: 15px;
-
-  /* Inside auto layout */
-  flex: none;
-  order: 0;
-  align-self: stretch;
-  flex-grow: 0;
-}
-
-.navbar ul li {
-  margin: 0;
-  padding: 0;
-  display: flex;
 }
 
 .navbar ul {
+  position: relative;
   list-style: none;
   display: flex;
   gap: 88px;
+  padding: 0;
+  margin: 0;
 }
 
-.navbar li {
-  font-size: 1.25rem;
+.navbar ul li {
+  display: flex;
+  align-items: center;
 }
 
-.navbar button {
+.navbar a {
   color: var(--foreground);
+  text-decoration: none;
+  font-size: 1.25rem;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  position: relative;
+  transition: color 0.2s ease;
 }
 
-button:hover {
+.navbar a:hover {
   color: var(--main);
-  transition: 200ms color 0ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-button.selected {
+.navbar a.selected {
   color: var(--main);
-  border-bottom: 2px solid var(--main);
 }
 
-@media (max-width: 600px) {
-  .navbar {
-    display: none;
-  }
+.underline {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background-color: var(--main);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+.navContainer {
+  position: relative;
+  width: 100%;
 }

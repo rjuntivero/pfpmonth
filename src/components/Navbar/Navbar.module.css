@@ -12,8 +12,8 @@
   max-width: 1440px;
   height: 92px;
 
-  background: #211e21;
   border-radius: 15px;
+  z-index: 999;
 }
 
 .navbar ul {

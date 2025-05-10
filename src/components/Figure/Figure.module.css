@@ -1,0 +1,50 @@
+.stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.graphicContainer {
+  width: 220px;
+  height: auto;
+  aspect-ratio: 1/1;
+  position: relative;
+  object-fit: cover;
+  overflow: hidden;
+  border: 2px solid pink;
+}
+
+.stat::before {
+  content: '';
+  width: 40px;
+  aspect-ratio: 1/1;
+  position: absolute;
+  top: -55px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 2px solid red;
+  background-color: var(--accent);
+  z-index: 2;
+}
+
+.graphic {
+  object-fit: cover;
+  filter: contrast(1.1);
+}
+/* Fastest User */
+
+h2.statTitle {
+  font-weight: 600;
+  font-family: var(--font-baloo);
+  font-size: 3.25rem;
+  color: var(--accent);
+  letter-spacing: -0.09em;
+  text-shadow: 0px 7px 0px rgba(0, 0, 0, 0.75), -2px -2px 0 #251628, 2px -2px 0 #251628, -2px 2px 0 #251628, 2px 2px 0 #251628;
+}
+
+h2.username {
+  text-shadow: 0px 7px 0px rgba(0, 0, 0, 0.75), -2px -2px 0 #251628, 2px -2px 0 #251628, -2px 2px 0 #251628, 2px 2px 0 #251628;
+  font-size: 2rem;
+}

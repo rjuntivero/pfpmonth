@@ -10,7 +10,7 @@ const navItems = [
   { name: 'Home', path: '/' },
   { name: 'Leaderboard', path: '/leaderboard' },
   { name: 'Upload', path: '/upload' },
-  { name: 'Themes', path: '/themes' },
+  { name: 'Themes', path: '/themes/adventure' },
   { name: 'Profile', path: '/profile' },
   { name: 'Settings', path: '/settings' },
 ];

@@ -3,7 +3,10 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   max-height: 600px;
-  padding: 3rem;
+  padding-inline: 3rem;
+  padding-block: 6rem;
   background-color: black;
+  z-index: 100;
 }

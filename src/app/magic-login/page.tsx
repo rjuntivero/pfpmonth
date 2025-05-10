@@ -7,7 +7,7 @@ interface SearchParams {
   };
 }
 
-export default async function MagicLoginPage({ searchParams }: SearchParams) {
+export default async function MagicLogin({ searchParams }: SearchParams) {
   const discord_id = searchParams.discord_id?.trim();
   const token = searchParams.token?.trim();
 

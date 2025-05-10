@@ -59,9 +59,6 @@
 }
 
 .hero h2 {
-  width: 520px;
-  height: 59px;
-
   font-style: normal;
   font-weight: 600;
   font-size: 48px;
@@ -75,7 +72,6 @@
 
   /* Inside auto layout */
   flex: none;
-  order: 1;
   align-self: stretch;
   flex-grow: 0;
 }
@@ -152,4 +148,20 @@ a.secondary {
 
 .footer img {
   flex-shrink: 0;
+}
+
+.getStarted {
+  & h2 {
+    margin-bottom: 0.6em;
+  }
+  text-align: center;
+}
+
+.actionBtn {
+  background-color: var(--main);
+  padding: 1em 1.5em;
+  font-weight: 600;
+  color: var(--text);
+  border-radius: 20px;
+  font-size: 1.25rem;
 }

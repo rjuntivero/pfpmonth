@@ -3,7 +3,7 @@ import styles from './page.module.css';
 import CallToAction from '@/components/CallToAction/CallToAction';
 import ThemeSlider from '@/components/ThemeSlider/ThemeSlider';
 
-export default function Home() {
+export default function Page() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -17,7 +17,10 @@ export default function Home() {
             </h1>
             <p>Create Monthly Profile Themes for your Discord server</p>
           </header>
-          <h2>Vote. Upload. Slay</h2>
+          <div className={styles.getStarted}>
+            <h2>Vote. Upload. Slay</h2>
+            <button className={styles.actionBtn}>Get Started</button>
+          </div>
         </div>
         <section>
           <TrendingThemes />

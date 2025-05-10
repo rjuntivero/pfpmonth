@@ -1,44 +1,39 @@
-// app/magic-login/page.tsx
-'use client';
+import { redirect } from 'next/navigation';
 
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+interface SearchParams {
+  searchParams: {
+    discord_id?: string;
+    token?: string;
+  };
+}
 
-export default function MagicLoginPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
+export default async function MagicLoginPage({ searchParams }: SearchParams) {
+  const discord_id = searchParams.discord_id?.trim();
+  const token = searchParams.token?.trim();
 
-  const discordId = searchParams.get('discord_id')?.trim();
-  const token = searchParams.get('token')?.trim();
+  if (!discord_id || !token) {
+    return (
+      <main className="">
+        <h1>Invalid login link.</h1>
+      </main>
+    );
+  }
 
-  const [status, setStatus] = useState('Logging you in...');
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/magic-login/api`, {
+    method: 'POST',
+    body: JSON.stringify({ discord_id, token }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
-  useEffect(() => {
-    async function login() {
-      if (!discordId || !token) {
-        setStatus('Invalid login link.');
-        return;
-      }
-
-      const res = await fetch('/magic-login/api', {
-        method: 'POST',
-        body: JSON.stringify({ discord_id: discordId, token }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (res.ok) {
-        router.replace('/');
-      } else {
-        setStatus('Invalid or expired link.');
-      }
-    }
-
-    login();
-  }, [discordId, token, router]);
+  if (res.ok) {
+    redirect('/');
+  }
 
   return (
-    <main className="p-8 text-center">
-      <h1>{status}</h1>
+    <main className="">
+      <h1>Invalid or expired link.</h1>
     </main>
   );
 }

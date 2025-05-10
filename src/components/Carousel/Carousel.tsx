@@ -83,7 +83,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
           return (
             <div
               key={`${slide.month}-${i}`}
-              className={`${styles.slide} ${isActive ? styles.active : ''}`}
+              className={`${styles.slide} ${isActive ? styles.active : styles.inactive}`}
               style={{ backgroundImage: `url(${slide.image})` }}
               onClick={() => {
                 setActiveIndex(logicalIndex);

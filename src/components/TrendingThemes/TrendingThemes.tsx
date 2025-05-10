@@ -1,26 +1,18 @@
 import styles from './TrendingThemes.module.css';
 export default function TrendingThemes() {
+  const trendingThemes = ['Teen Titans', 'Fallout', 'Invincible', 'Presidents', 'Wednesday', 'Halloween', 'Sinners', 'Friday the 13th'];
+
   return (
     <div className={styles.marquee} aria-hidden="true">
       <ul>
-        <li>Teen Titans</li>
-        <li>Fallout</li>
-        <li>Invincinble</li>
-        <li>Presidents</li>
-        <li>Wednesday</li>
-        <li>Halloween</li>
-        <li>Sinners</li>
-        <li>Friday the 13th</li>
+        {trendingThemes.map((theme) => (
+          <li key={theme}>{theme}</li>
+        ))}
       </ul>
       <ul>
-        <li>Teen Titans</li>
-        <li>Fallout</li>
-        <li>Invincinble</li>
-        <li>Presidents</li>
-        <li>Wednesday</li>
-        <li>Halloween</li>
-        <li>Sinners</li>
-        <li>Friday the 13th</li>
+        {trendingThemes.map((theme) => (
+          <li key={theme}>{theme}</li>
+        ))}
       </ul>
     </div>
   );

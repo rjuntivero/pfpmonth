@@ -50,7 +50,7 @@
 .allThemes {
   background-color: var(--main);
   border-radius: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1rem;
   font-weight: 600;
   color: black;
   border: none;

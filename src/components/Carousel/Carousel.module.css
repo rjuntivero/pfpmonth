@@ -46,6 +46,11 @@
   transform: scale(1.05);
 }
 
+.inactive {
+  filter: brightness(0.6);
+  transition: all 100ms ease-out;
+}
+
 .controls {
   display: flex;
   justify-content: center;

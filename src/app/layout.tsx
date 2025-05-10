@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import { Baloo_2 } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar/Navbar';
+import Footer from '@/components/Footer/Footer';
 
 const clashDisplay = localFont({
   src: '../fonts/ClashDisplay-Variable.ttf',
@@ -38,6 +39,7 @@ export default function RootLayout({
       <body className={`${clashDisplay.variable} ${baloo.variable}`}>
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

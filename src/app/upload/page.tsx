@@ -26,10 +26,6 @@ export default function Upload() {
         <section className={styles.CallToAction}>
           <CallToAction />
         </section>
-        <h1>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus exercitationem ipsa necessitatibus aliquam nihil explicabo? Similique amet sequi placeat in labore, voluptate voluptates praesentium autem necessitatibus totam doloribus
-          excepturi odit.
-        </h1>
       </main>
     </div>
   );

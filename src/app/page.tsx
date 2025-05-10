@@ -1,6 +1,7 @@
 import TrendingThemes from '@/components/TrendingThemes/TrendingThemes';
 import styles from './page.module.css';
 import CallToAction from '@/components/CallToAction/CallToAction';
+import ThemeCarousel from '@/components/ThemeCarousel/ThemeCarousel';
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
         <section>
           <TrendingThemes />
         </section>
+        <ThemeCarousel />
         <section className={styles.CallToAction}>
           <CallToAction />
         </section>

@@ -38,15 +38,6 @@
   padding: 1rem;
 }
 
-.navLeft,
-.navRight {
-  font-size: 2rem;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: white;
-}
-
 .allThemes {
   background-color: var(--main);
   border-radius: 1rem;

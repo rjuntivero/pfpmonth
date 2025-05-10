@@ -42,9 +42,24 @@ h2.statTitle {
   color: var(--accent);
   letter-spacing: -0.09em;
   text-shadow: 0px 7px 0px rgba(0, 0, 0, 0.75), -2px -2px 0 #251628, 2px -2px 0 #251628, -2px 2px 0 #251628, 2px 2px 0 #251628;
+  text-align: center;
 }
 
 h2.username {
   text-shadow: 0px 7px 0px rgba(0, 0, 0, 0.75), -2px -2px 0 #251628, 2px -2px 0 #251628, -2px 2px 0 #251628, 2px 2px 0 #251628;
   font-size: 2rem;
+}
+
+@media (max-width: 990px) {
+  h2.statTitle {
+    font-size: 2rem;
+  }
+
+  h2.username {
+    font-size: 1.2rem;
+  }
+
+  .graphicContainer {
+    width: 250px;
+  }
 }

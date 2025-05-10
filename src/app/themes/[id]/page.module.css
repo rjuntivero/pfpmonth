@@ -29,13 +29,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* border: 1px solid red; */
   gap: 2rem;
 }
 
 .frameWrapper {
   position: absolute;
-  top: -50;
+  top: -60;
   left: 0;
   width: 100vw;
   height: auto;
@@ -47,6 +46,58 @@
 .frame {
   object-fit: cover;
   z-index: 0;
+}
+
+.details {
+  display: grid;
+  width: 100%;
+  grid-template-columns: auto 1fr auto auto auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  /* border: 1px solid red; */
+  & .joinBtn {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    width: fit-content;
+    aspect-ratio: 5/2;
+    border-radius: 50px;
+    justify-self: center;
+    background-color: black;
+  }
+  & .date {
+    grid-column: 3;
+    grid-row: 1;
+    padding: 0.5em;
+    font-size: 4rem;
+    font-family: var(--font-baloo);
+    color: var(--accent);
+    font-weight: 500;
+    position: relative;
+    text-shadow: -4px -4px 0 #3a2e11, 4px -4px 0 #3a2e11, -4px 4px 0 #3a2e11, 4px 4px 0 #3a2e11;
+  }
+  & .likesBtn {
+    grid-column: 5;
+    grid-row: 2;
+
+    color: green;
+  }
+  & .dislikesBtn {
+    grid-column: 4;
+    grid-row: 2;
+    color: red;
+  }
+}
+
+.date::after {
+  content: '2025';
+  position: absolute;
+  top: 45;
+  right: -10;
+  font-size: 1.5rem;
+  text-shadow: none;
+  color: var(--foreground);
+  rotate: 5deg;
+  font-family: 'ClashDisplay';
 }
 
 .title {
@@ -66,6 +117,7 @@
     /* or 51px */
     text-align: center;
     letter-spacing: -0.11em;
+    white-space: wrap;
 
     color: #d9d9d9;
     text-shadow: -3px -3px 0 #404040, 3px -3px 0 #404040, -3px 3px 0 #404040, 3px 3px 0 #404040;
@@ -104,6 +156,7 @@
   flex-direction: column;
   align-items: center;
   gap: 1.2rem;
+  padding-bottom: 3em;
   & .authorAvatar {
     width: 250px;
     height: auto;
@@ -135,14 +188,38 @@
     font-weight: 600;
     background-color: black;
     padding: 0.5em 1em;
+    text-align: center;
   }
 }
 
-.details {
+.users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: center;
+}
+
+.stats {
   padding: 6rem;
   display: flex;
+  gap: 2em;
   justify-content: space-between;
   width: 100%;
+  overflow-x: auto;
+}
+
+div.users {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.participants h1 {
+  text-align: center;
+  padding-bottom: 0.5em;
+  font-weight: 500;
+  font-size: 2rem;
+
+  text-shadow: 0px 5px 0px rgba(0, 0, 0, 1), -3px -3px 0 #251628, 3px -3px 0 #251628, -3px 3px 0 #251628, 3px 3px 0 #251628;
 }
 
 .fadeOverlay {
@@ -154,4 +231,54 @@
   z-index: -0.5; /* lower than content, higher than background */
   background: linear-gradient(to bottom, transparent, black);
   pointer-events: none;
+}
+
+@media (max-width: 800px) {
+  .stats {
+    padding-block: 3.5rem;
+    padding-inline: 0;
+  }
+
+  .title {
+    margin-bottom: 9rem;
+    & h2 {
+      font-size: 2rem;
+    }
+    & h1 {
+      font-size: 7rem;
+    }
+  }
+
+  .author {
+    & .authorAvatar {
+      width: 200px;
+    }
+
+    & .authorName {
+      font-size: 1rem;
+    }
+
+    & .comment {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .page {
+    padding: 1.25em;
+  }
+
+  .frameWrapper {
+    top: 0px;
+    aspect-ratio: 1606 / 852;
+  }
+
+  .title {
+    margin-bottom: 5rem;
+
+    & h1 {
+      font-size: 5.5rem;
+    }
+  }
 }

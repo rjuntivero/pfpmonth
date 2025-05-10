@@ -98,6 +98,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
 
       <div className={styles.controls}>
         <button onClick={() => handleScroll(-1)}>{'<'}</button>
+        <button>Fornite</button>
         <button onClick={() => handleScroll(1)}>{'>'}</button>
       </div>
     </div>

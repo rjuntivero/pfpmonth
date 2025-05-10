@@ -54,11 +54,14 @@
 .controls {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 1rem;
+  gap: 1.5rem;
   & button {
     font-size: 2rem;
   }
+}
+
+.controls button {
+  padding: 0;
 }
 
 @media (max-width: 600px) {

@@ -1,0 +1,88 @@
+:root {
+  --gap: 1.5rem;
+  --lg-gap: 2.5rem;
+}
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
+  gap: var(--gap);
+  & h3 {
+    font: var(--font-baloo);
+    font-weight: 600;
+    font-size: 1.5rem;
+  }
+}
+
+.header {
+  text-align: end;
+  & h2 {
+    font-size: 3rem;
+    color: var(--main);
+  }
+}
+
+.date {
+  color: var(--accent);
+  text-align: center;
+}
+
+.track {
+  border: 1px solid yellow;
+}
+
+.carousel {
+  padding: 1rem;
+}
+
+.navLeft,
+.navRight {
+  font-size: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.allThemes {
+  background-color: var(--main);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: black;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.allThemes:hover {
+  color: var(--foreground);
+  transition: all 150ms ease-in-out;
+}
+
+.sliderSection {
+  position: relative;
+}
+
+.fadeLeft,
+.fadeRight {
+  top: 0;
+  bottom: 0;
+  width: 6rem;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.fadeLeft {
+  left: 0;
+  background-color: black;
+  /* background: linear-gradient(to right, var(--background, #1a1a1a), transparent); */
+}
+
+.fadeRight {
+  right: 0;
+  background: linear-gradient(to left, var(--background, #1a1a1a), transparent);
+}

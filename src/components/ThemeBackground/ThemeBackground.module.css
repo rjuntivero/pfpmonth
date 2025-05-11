@@ -17,5 +17,5 @@
 .bgImage {
   object-fit: cover;
   object-position: top;
-  filter: blur(2) contrast(70%) saturate(80%) brightness(0.6);
+  filter: blur(4) contrast(75%) saturate(90%) brightness(0.6);
 }

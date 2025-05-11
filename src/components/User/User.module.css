@@ -3,7 +3,7 @@
   width: 250px;
   height: auto;
   aspect-ratio: 7/2;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   padding-inline: 1em;
   padding-block: 0.5em;
@@ -26,7 +26,54 @@
   object-fit: cover;
 }
 
-.username {
+.user {
   flex: 2;
   font-size: 1.1rem;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+h3.username {
+  font-weight: 500;
+  grid-row: 1;
+}
+
+h3.character {
+  grid-row: 2;
+  font-size: 0.9rem;
+  color: var(--main);
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  .container {
+    width: 135px;
+    border-radius: 20px;
+    gap: 0.3em;
+  }
+
+  .user {
+    grid-template-rows: repeat(2, auto);
+    align-items: center;
+  }
+
+  h3.username {
+    font-size: 1rem;
+  }
+
+  h3.character {
+    grid-row: 2;
+    font-size: 0.65rem;
+    color: var(--main);
+    font-weight: 500;
+  }
+  .container {
+    flex-direction: column;
+    aspect-ratio: 1/1;
+    text-align: center;
+  }
+
+  .avatarContainer {
+    flex: 2;
+  }
 }

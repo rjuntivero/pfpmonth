@@ -4,6 +4,7 @@ import { Baloo_2 } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Footer/Footer';
+import { Inter } from 'next/font/google';
 
 const clashDisplay = localFont({
   src: '../fonts/ClashDisplay-Variable.ttf',
@@ -19,10 +20,12 @@ const baloo = Baloo_2({
   display: 'swap',
 });
 
-// const geistMono = Geist_Mono({
-//   variable: '--font-geist-mono',
-//   subsets: ['latin'],
-// });
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -36,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${clashDisplay.variable} ${baloo.variable}`}>
+      <body className={`${clashDisplay.variable} ${baloo.variable} ${inter.variable}`}>
         <Navbar />
         {children}
         <Footer />

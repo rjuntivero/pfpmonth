@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import styles from './Navbar.module.css';
+import Image from 'next/image';
 
 const navItems = [
   { name: 'Home', path: '/' },
@@ -36,7 +37,10 @@ export default function Navbar() {
 
   return (
     <div className={styles.navbar}>
-      <ul ref={containerRef}>
+      <div className={styles.menu}>
+        <Image src="/Menu.svg" alt="Menu Icon" width={40} height={40} className={styles.menuIcon} />
+      </div>
+      <ul ref={containerRef} className={styles.navItems}>
         {navItems.map((item) => (
           <li key={item.name}>
             <Link href={item.path} data-path={item.path} className={`${pathname === item.path ? styles.selected : ''}`}>

@@ -9,8 +9,11 @@ import Image from 'next/image';
 export default function Figure() {
   return (
     <article className={styles.stat}>
+      <div className={styles.iconContainer}>
+        <Image src="/crown.svg" alt="Crown Graphic" width={50} height={50} className={styles.icon} />
+      </div>
       <div className={styles.graphicContainer}>
-        <Image src="/sinners.jpg" alt="Detail Graphic" fill className={styles.graphic} />
+        <Image src="/happy.png" alt="Detail Graphic" fill className={styles.graphic} />
       </div>
       <h2 className={styles.statTitle}>Fastest User</h2>
       <h2 className={styles.username}>raipunzel</h2>

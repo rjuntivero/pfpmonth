@@ -5,10 +5,11 @@ export default function User() {
   return (
     <div className={styles.container}>
       <div className={styles.avatarContainer}>
-        <Image src="/sinners.jpg" alt="User photo" fill className={styles.avatar} />
+        <Image src="/bubblegum.jpg" alt="User photo" fill className={styles.avatar} />
       </div>
-      <div className={styles.username}>
-        <h3>raipunzel</h3>
+      <div className={styles.user}>
+        <h3 className={styles.username}>raipunzel</h3>
+        <h3 className={styles.character}>Princess Bubblegum</h3>
       </div>
     </div>
   );

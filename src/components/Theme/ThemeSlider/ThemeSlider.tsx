@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/Carousel/Carousel';
 
@@ -21,11 +21,23 @@ const slides = [
 
 export default function ThemeSlider() {
   const [activeSlide, setActiveSlide] = useState(slides[0]);
+  const [serverName, setServerName] = useState('');
+  useEffect(() => {
+    const cookie = document.cookie
+      .split('; ')
+      .find((row) => row.startsWith('server_name='))
+      ?.split('=')[1];
+
+    if (cookie) {
+      setServerName(decodeURIComponent(cookie));
+    }
+    console.log(document.cookie);
+  }, []);
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h3>barbz</h3>
+        <h3>{serverName}</h3>
         <h2>Themes</h2>
       </div>
 

@@ -30,6 +30,8 @@ export async function POST(request: Request) {
     // create new user
     await supabase.from('users').insert([{ discord_id: discord_id, username: username, avatar_url: avatar_url }]);
   }
+
+  await supabase.from('user_servers').insert([{ discord_id: discord_id, server_id: server_id }]);
   if (!server) {
     // insert new server
     await supabase.from('servers').insert([{ id: server_id, name: server_name, icon_url: server_icon }]);

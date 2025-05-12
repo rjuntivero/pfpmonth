@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styles from './page.module.css';
-import ThemeBackground from '@/components/ThemeBackground/ThemeBackground';
+import ThemeBackground from '@/components/Theme/ThemeBackground/ThemeBackground';
 import Figure from '@/components/Figure/Figure';
 import User from '@/components/User/User';
 import Feedback from '@/components/Feedback/Feedback';

@@ -1,7 +1,7 @@
-import TrendingThemes from '@/components/TrendingThemes/TrendingThemes';
+import TrendingThemes from '@/components/Theme/TrendingThemes/TrendingThemes';
 import styles from './page.module.css';
 import CallToAction from '@/components/CallToAction/CallToAction';
-import ThemeSlider from '@/components/ThemeSlider/ThemeSlider';
+import ThemeSlider from '@/components/Theme/ThemeSlider/ThemeSlider';
 
 export default function Page() {
   return (

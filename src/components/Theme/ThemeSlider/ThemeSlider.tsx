@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import styles from './ThemeSlider.module.css';
-import Carousel from '../Carousel/Carousel';
+import Carousel from '@/components/Carousel/Carousel';
 
 const slides = [
   { month: 'January', year: 2025, image: '/sinners.jpg' },

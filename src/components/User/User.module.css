@@ -47,9 +47,11 @@ h3.character {
 
 @media (max-width: 600px) {
   .container {
-    width: 135px;
+    width: minmax(135px, 100%);
     border-radius: 20px;
     gap: 0.3em;
+    flex-basis: 100px;
+    max-width: 135px;
   }
 
   .user {

@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-// The client you created from the Server-Side Auth instructions
 import { createClient } from '@/utils/supabaseSSR';
 
 export async function GET(request: Request) {
@@ -11,9 +10,30 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+
     if (!error) {
       const forwardedHost = request.headers.get('x-forwarded-host'); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === 'development';
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        const { id, user_metadata } = user;
+        console.log('USER DATA: ', user_metadata);
+
+        // check if user already exists
+        const { data: existingUser } = await supabase.from('users').select('id').eq('id', id).maybeSingle();
+
+        if (!existingUser) {
+          const { error: insertError } = await supabase.from('users').insert({
+            id,
+            username: user_metadata?.name.split('#')[0] ?? 'unknown',
+            avatar_url: user_metadata?.avatar_url,
+            discord_id: user_metadata?.provider_id,
+          });
+        }
+      }
       if (isLocalEnv) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
         return NextResponse.redirect(`${origin}${next}`);

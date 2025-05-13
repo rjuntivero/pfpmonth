@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
+
   const searchParams = new URL(req.url).searchParams;
   const discord_id = searchParams.get('discord_id');
   const server_id = searchParams.get('server_id');

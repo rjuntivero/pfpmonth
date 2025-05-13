@@ -8,6 +8,7 @@ interface Slide {
   month: string;
   year: number;
   image: string;
+  name: string;
 }
 
 interface Props {
@@ -61,11 +62,15 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
   };
 
   useLayoutEffect(() => {
-    scrollTo(CLONE_COUNT);
-    setActiveIndex(0);
-    setActiveSlide(slides[0]);
+    const now = new Date();
+    const current = slides.findIndex((s) => s.month === now.toLocaleString('default', { month: 'long' }) && s.year === now.getFullYear());
 
-    // Fade in after first frame rendered with correct position
+    const startIndex = current !== -1 ? current : 0;
+
+    scrollTo(startIndex + CLONE_COUNT);
+    setActiveIndex(startIndex);
+    setActiveSlide(slides[startIndex]);
+
     requestAnimationFrame(() => {
       setReady(true);
     });
@@ -79,6 +84,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
         {extendedSlides.map((slide, i) => {
           const logicalIndex = (i - CLONE_COUNT + originalLength) % originalLength;
           const isActive = logicalIndex === activeIndex;
+          console.log(`[Carousel] i=${i}, logicalIndex=${logicalIndex}, month=${slide.month}, name=${slide.name}, isActive=${isActive}`);
 
           return (
             <div
@@ -98,7 +104,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
 
       <div className={styles.controls}>
         <button onClick={() => handleScroll(-1)}>{'<'}</button>
-        <button>Fornite</button>
+        <button>{slides[activeIndex]?.name}</button>
         <button onClick={() => handleScroll(1)}>{'>'}</button>
       </div>
     </div>

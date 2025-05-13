@@ -1,38 +1,49 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/Carousel/Carousel';
 
-const slides = [
-  { month: 'January', year: 2025, image: '/sinners.jpg' },
-  { month: 'February', year: 2025, image: '/avatar.jpg' },
-  { month: 'March', year: 2025, image: '/mario.jpg' },
-  { month: 'April', year: 2025, image: '/avengers.jpg' },
-  { month: 'May', year: 2025, image: '/adventure.jpg' },
-  { month: 'June', year: 2025, image: '/awog.jpg' },
-  { month: 'July', year: 2025, image: '/simpsons.avif' },
-  { month: 'August', year: 2025, image: '/powerpuff.jpg' },
-  { month: 'September', year: 2025, image: '/lol.jpg' },
-  { month: 'October', year: 2025, image: '/valorant.jpg' },
-  { month: 'November', year: 2025, image: '/fortnite.jpeg' },
-  { month: 'December', year: 2025, image: '/naruto.jpg' },
-];
+interface Theme {
+  name: string;
+  start_date: string; // e.g., "2025-05-01"
+  image_url: string;
+}
 
-export default function ThemeSlider() {
-  const [activeSlide, setActiveSlide] = useState(slides[0]);
-  const [serverName, setServerName] = useState('');
-  useEffect(() => {
-    const cookie = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('server_name='))
-      ?.split('=')[1];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    if (cookie) {
-      setServerName(decodeURIComponent(cookie));
-    }
-    console.log(document.cookie);
-  }, []);
+export default function ThemeSlider({ serverName, themes }: { serverName: string; themes: Theme[] }) {
+  const currentYear = new Date().getFullYear();
+
+  const completeSlides = MONTHS.map((monthName, monthIndex) => {
+    const theme = themes.find((t) => {
+      const [yearStr, monthStr] = t.start_date.split('-');
+      const themeYear = Number(yearStr);
+      const themeMonth = Number(monthStr); // 1–12
+
+      const isMatch = themeYear === currentYear && themeMonth === monthIndex + 1;
+
+      if (isMatch) {
+        console.log('✅ MAPPED:', {
+          theme: t.name,
+          start_date: t.start_date,
+          matchedMonthIndex: monthIndex,
+          matchedMonthName: monthName,
+        });
+      }
+
+      return isMatch;
+    });
+
+    return {
+      month: monthName,
+      year: currentYear,
+      image: theme?.image_url || '/no-image-placeholder.png',
+      name: theme?.name || 'No Theme Yet',
+    };
+  });
+
+  const [activeSlide, setActiveSlide] = useState(completeSlides[new Date().getMonth()]);
 
   return (
     <div className={styles.wrapper}>
@@ -45,7 +56,7 @@ export default function ThemeSlider() {
         <h3 className={styles.date}>
           {activeSlide.month} {activeSlide.year}
         </h3>
-        <Carousel slides={slides} setActiveSlide={setActiveSlide} />
+        <Carousel slides={completeSlides} setActiveSlide={setActiveSlide} />
         <div className={styles.fadeLeft} />
         <div className={styles.fadeRight} />
       </section>

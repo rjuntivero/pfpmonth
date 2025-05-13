@@ -1,4 +1,4 @@
-import { SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient, User } from '@supabase/supabase-js';
 
 export interface Metadata {
   discord_id?: string;
@@ -7,7 +7,7 @@ export interface Metadata {
   server_icon?: string;
 }
 
-export async function updateSupabaseTables(supabase: SupabaseClient, user: any, metadata: Metadata) {
+export async function updateSupabaseTables(supabase: SupabaseClient, user: User, metadata: Metadata) {
   const { discord_id, server_id, server_name, server_icon } = metadata;
   const { id, user_metadata } = user;
 

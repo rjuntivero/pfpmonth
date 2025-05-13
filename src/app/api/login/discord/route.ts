@@ -8,12 +8,16 @@ export async function GET(req: NextRequest) {
   const searchParams = new URL(req.url).searchParams;
   const discord_id = searchParams.get('discord_id');
   const server_id = searchParams.get('server_id');
+  const server_name = searchParams.get('server_name');
+  const server_icon = searchParams.get('server_icon');
 
-  if (!discord_id || !server_id) {
+  if (!discord_id || !server_id || !server_name || !server_icon) {
     return NextResponse.redirect(new URL('/error?reason=missing', req.url));
   }
 
-  const redirectTo = `http://localhost:8080/auth/callback/`;
+  const payload = encodeURIComponent(JSON.stringify({ discord_id, server_id, server_name, server_icon }));
+
+  const redirectTo = `http://localhost:8080/auth/callback?data=${payload}`;
 
   console.log('[Login Route] 🔁 redirectTo:', redirectTo);
 
@@ -21,6 +25,10 @@ export async function GET(req: NextRequest) {
     provider: 'discord',
     options: {
       redirectTo: redirectTo,
+      // queryParams: {
+      //   server_name: server_name as string,
+      //   server_icon: server_icon as string,
+      // },
     },
   });
 

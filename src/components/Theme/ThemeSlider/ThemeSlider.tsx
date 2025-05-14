@@ -38,7 +38,7 @@ export default function ThemeSlider({ serverName, themes }: { serverName: string
     return {
       month: monthName,
       year: currentYear,
-      image: theme?.image_url || '/no-image-placeholder.png',
+      image: theme?.image_url || '/no-image-placeholder.jpg',
       name: theme?.name || 'No Theme Yet',
     };
   });

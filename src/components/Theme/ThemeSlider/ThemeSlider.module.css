@@ -8,8 +8,6 @@
   align-items: center;
   flex-direction: column;
   width: 100%;
-  padding: 1rem;
-  gap: var(--gap);
   & h3 {
     font: var(--font-baloo);
     font-weight: 600;

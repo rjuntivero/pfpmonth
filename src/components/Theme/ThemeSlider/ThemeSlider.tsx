@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import styles from './ThemeSlider.module.css';
+import { useRouter } from 'next/navigation';
 import Carousel from '@/components/Carousel/Carousel';
 
 interface Theme {
@@ -12,8 +13,9 @@ interface Theme {
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export default function ThemeSlider({ serverName, themes }: { serverName: string; themes: Theme[] }) {
+export default function ThemeSlider({ serverName, themes }: { serverName?: string; themes: Theme[] }) {
   const currentYear = new Date().getFullYear();
+  const router = useRouter();
 
   const completeSlides = MONTHS.map((monthName, monthIndex) => {
     const theme = themes.find((t) => {
@@ -61,7 +63,9 @@ export default function ThemeSlider({ serverName, themes }: { serverName: string
         <div className={styles.fadeRight} />
       </section>
 
-      <button className={styles.allThemes}>All themes</button>
+      <button className={styles.allThemes} onClick={() => router.push('/themes')}>
+        All themes
+      </button>
     </div>
   );
 }

@@ -9,7 +9,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <ThemeBackground themeId={params.id} />
+        <ThemeBackground themeId={params.id} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
         <div className={styles.fadeOverlay} />
 
         <div className={styles.frameWrapper}>

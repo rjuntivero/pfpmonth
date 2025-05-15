@@ -3,6 +3,7 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import ThemeSlider from '@/components/Theme/ThemeSlider/ThemeSlider';
 import { fetchThemesAndServer } from '@/utils/fetchThemes';
+import { CurtainDrapes } from '@/components/CurtainDrapes/CurtainDrapes';
 
 export default async function Page() {
   const { themes } = await fetchThemesAndServer();
@@ -18,10 +19,13 @@ export default async function Page() {
           </div>
         </div>
         <div className={styles.themes}>
+          <CurtainDrapes />
+
+          <Image src="/curtainsTop.svg" alt="curtain top container" width={1472} height={36} className={styles.curtainsTop} />
           <div className={styles.details}>
             <h1 className={styles.year}>2025</h1>
           </div>
-          <ThemeSlider themes={themes} />
+          <ThemeSlider themes={themes} display="none" />
         </div>
       </main>
     </div>

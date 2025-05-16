@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { Baloo_2 } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/Navbar/Navbar';
-import Footer from '@/components/Footer/Footer';
+import Navbar from '@/components/layouts/Navbar/Navbar';
+import Footer from '@/components/layouts/Footer/Footer';
 import { Inter } from 'next/font/google';
 
 const clashDisplay = localFont({

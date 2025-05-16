@@ -1,9 +1,9 @@
-import ThemeBackground from '@/components/Theme/ThemeBackground/ThemeBackground';
+import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackground';
 import styles from './page.module.css';
 import Image from 'next/image';
-import ThemeSlider from '@/components/Theme/ThemeSlider/ThemeSlider';
-import { fetchThemesAndServer } from '@/utils/fetchThemes';
-import { CurtainDrapes } from '@/components/CurtainDrapes/CurtainDrapes';
+import ThemeSlider from '@/components/ui/Theme/ThemeSlider/ThemeSlider';
+import { fetchThemesAndServer } from '@/lib/fetchThemes';
+import { CurtainDrapes } from '@/components/ui/CurtainDrapes/CurtainDrapes';
 
 export default async function Page() {
   const { themes } = await fetchThemesAndServer();

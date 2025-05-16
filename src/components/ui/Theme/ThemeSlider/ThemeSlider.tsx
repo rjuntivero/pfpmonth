@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './ThemeSlider.module.css';
-import Carousel from '@/components/Carousel/Carousel';
+import Carousel from '@/components/ui/Theme/Carousel/Carousel';
 
 interface Theme {
   name: string;

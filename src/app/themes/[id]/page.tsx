@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import styles from './page.module.css';
-import ThemeBackground from '@/components/Theme/ThemeBackground/ThemeBackground';
-import Figure from '@/components/Figure/Figure';
-import User from '@/components/User/User';
-import Feedback from '@/components/Feedback/Feedback';
+import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackground';
+import Figure from '@/components/ui/Figure/Figure';
+import User from '@/components/ui/User/User';
+import Feedback from '@/components/ui/LikeButton/LikeButton';
 
 export default function Page({ params }: { params: { id: string } }) {
   return (

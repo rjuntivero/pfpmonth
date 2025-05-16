@@ -1,0 +1,55 @@
+.poll {
+  width: 100%;
+  aspect-ratio: 1/1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 1px solid #404040;
+  align-self: start;
+  border-radius: 20px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.poll::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--bg-image);
+  background-position: center;
+  background-size: cover;
+  filter: brightness(30%) contrast(1.2);
+  z-index: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.poll:hover:before {
+  transform: scale(1.05) translateY(-10px);
+  transition: all 0.3s ease-in-out;
+  filter: brightness(40%);
+}
+
+.poll .content {
+  z-index: 2;
+  position: relative;
+}
+
+.poll .content h1 {
+  font-size: 1.5rem;
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.poll .votes h2 {
+  font-family: 'ClashDisplay';
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.poll .votes h2:first-child {
+  font-size: 3.5rem;
+  font-weight: 700;
+}

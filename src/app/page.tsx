@@ -1,8 +1,8 @@
-import TrendingThemes from '@/components/Theme/TrendingThemes/TrendingThemes';
+import TrendingThemes from '@/components/ui/Theme/TrendingThemes/TrendingThemes';
 import styles from './page.module.css';
-import CallToAction from '@/components/CallToAction/CallToAction';
-import ThemeSlider from '@/components/Theme/ThemeSlider/ThemeSlider';
-import { fetchThemesAndServer } from '@/utils/fetchThemes';
+import CallToAction from '@/components/layouts/CallToAction/CallToAction';
+import ThemeSlider from '@/components/ui/Theme/ThemeSlider/ThemeSlider';
+import { fetchThemesAndServer } from '@/lib/fetchThemes';
 
 export default async function Page() {
   const { serverName, themes } = await fetchThemesAndServer();

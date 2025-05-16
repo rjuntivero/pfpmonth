@@ -11,7 +11,6 @@
   cursor: pointer;
   overflow: hidden;
   position: relative;
-  z-index: 1;
 }
 
 .poll::before {
@@ -22,7 +21,6 @@
   background-position: center;
   background-size: cover;
   filter: brightness(30%) contrast(1.2);
-  z-index: 0;
   transition: all 0.3s ease-in-out;
 }
 
@@ -52,4 +50,60 @@
 .poll .votes h2:first-child {
   font-size: 3.5rem;
   font-weight: 700;
+}
+
+.voteBtn {
+  color: var(--foreground);
+  transition: all 0.2s ease-in-out;
+}
+.voteBtn:hover {
+  color: var(--main);
+  filter: brightness(1.4);
+  transition: all 0.2s ease-in-out;
+}
+
+.uploadContent {
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 1em;
+}
+
+.uploadGrid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: repeat(3, 1fr);
+  justify-items: start;
+  align-items: center;
+  row-gap: 2em;
+  font-size: 1.35rem;
+  width: 100%;
+}
+
+.uploadGrid input {
+  background-color: #484348;
+  border: none;
+  padding: 0.9em;
+  width: 100%;
+  font-family: var(--font-baloo);
+}
+
+.fileInput::file-selector-button {
+  font-family: 'ClashDisplay';
+  background-color: transparent;
+  border: none;
+  border-radius: 20px;
+  margin-right: 0.5em;
+  cursor: pointer;
+  font-weight: 500;
+
+  padding: 0;
+  color: var(--foreground);
+}
+
+.uploadGrid button {
+  background-color: var(--main);
+  grid-column: 2;
+  justify-self: end;
+  border-radius: 50px;
 }

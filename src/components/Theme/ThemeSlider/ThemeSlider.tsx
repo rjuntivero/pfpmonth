@@ -13,7 +13,7 @@ interface Theme {
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export default function ThemeSlider({ serverName, themes, display = 'both' }: { serverName?: string; themes: Theme[]; display?: 'none' | 'date' | 'button' | 'both' }) {
+export default function ThemeSlider({ serverName, themes, display = 'both', monthClassName }: { serverName?: string; themes: Theme[]; display?: 'none' | 'date' | 'button' | 'both'; monthClassName?: string }) {
   const currentYear = new Date().getFullYear();
   const router = useRouter();
 
@@ -33,19 +33,19 @@ export default function ThemeSlider({ serverName, themes, display = 'both' }: { 
 
   const [activeSlide, setActiveSlide] = useState(completeSlides[new Date().getMonth()]);
 
-  const showDate = display === 'date' || display === 'both';
+  const showDetails = display === 'date' || display === 'both';
   const showButton = display === 'button' || display === 'both';
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
         {serverName && <h3>{serverName}</h3>}
-        <h2>Themes</h2>
+        {showDetails && <h2>Themes</h2>}
       </div>
 
       <section className={styles.sliderSection}>
-        <h3 className={styles.date}>
-          {activeSlide.month} {showDate && activeSlide.year}
+        <h3 className={`${styles.date} ${monthClassName || ''}`}>
+          {activeSlide.month} {showDetails && activeSlide.year}
         </h3>
         <Carousel slides={completeSlides} setActiveSlide={setActiveSlide} />
         <div className={styles.fadeLeft} />

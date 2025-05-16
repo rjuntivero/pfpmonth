@@ -5,6 +5,7 @@
 
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
+  --text-outline: -3px -3px 0 #404040, 3px -3px 0 #404040, -3px 3px 0 #404040, 3px 3px 0 #404040;
 
   color: var(--foreground);
   min-height: 100svh;
@@ -125,7 +126,7 @@
     white-space: wrap;
 
     color: var(--foreground);
-    text-shadow: -3px -3px 0 #404040, 3px -3px 0 #404040, -3px 3px 0 #404040, 3px 3px 0 #404040;
+    text-shadow: var(--text-outline);
 
     /* Inside auto layout */
     flex: none;

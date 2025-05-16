@@ -24,6 +24,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [ready, setReady] = useState(false);
+  const [currentMonthIndex, setCurrentMonthIndex] = useState<number | null>(null);
 
   const x = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 200, damping: 30 });
@@ -70,6 +71,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
     scrollTo(startIndex + CLONE_COUNT);
     setActiveIndex(startIndex);
     setActiveSlide(slides[startIndex]);
+    setCurrentMonthIndex(current);
 
     requestAnimationFrame(() => {
       setReady(true);
@@ -84,12 +86,11 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
         {extendedSlides.map((slide, i) => {
           const logicalIndex = (i - CLONE_COUNT + originalLength) % originalLength;
           const isActive = logicalIndex === activeIndex;
-          console.log(`[Carousel] i=${i}, logicalIndex=${logicalIndex}, month=${slide.month}, name=${slide.name}, isActive=${isActive}`);
 
           return (
             <div
               key={`${slide.month}-${i}`}
-              className={`${styles.slide} ${isActive ? styles.active : styles.inactive}`}
+              className={`${styles.slide} ${isActive ? styles.active : styles.inactive} ${logicalIndex === currentMonthIndex ? styles.currentTheme : ''}`}
               style={{ backgroundImage: `url(${slide.image})` }}
               onClick={() => {
                 setActiveIndex(logicalIndex);
@@ -104,7 +105,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
 
       <div className={styles.controls}>
         <button onClick={() => handleScroll(-1)}>{'<'}</button>
-        <button>{slides[activeIndex]?.name}</button>
+        <button className={styles.activeSlideName}>{slides[activeIndex]?.name}</button>
         <button onClick={() => handleScroll(1)}>{'>'}</button>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import styles from './CurtainDrapes.module.css';
 
 export function CurtainDrapes() {
+  // eslint-disable-next-line
   const [open, setOpen] = useState(false);
 
   useEffect(() => {

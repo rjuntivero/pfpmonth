@@ -23,9 +23,11 @@ export default async function Page() {
 
           <Image src="/curtainsTop.svg" alt="curtain top container" width={1472} height={36} className={styles.curtainsTop} />
           <div className={styles.details}>
+            <button className={styles.yearNav}>{'<'}</button>
             <h1 className={styles.year}>2025</h1>
+            <button className={styles.yearNav}>{'>'}</button>
           </div>
-          <ThemeSlider themes={themes} display="none" />
+          <ThemeSlider themes={themes} display="none" monthClassName={styles.themesPage} />
         </div>
       </main>
     </div>

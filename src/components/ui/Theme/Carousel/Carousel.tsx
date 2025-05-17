@@ -2,13 +2,16 @@
 
 import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import styles from './Carousel.module.css';
+import { UUID } from 'crypto';
 
 interface Slide {
   month: string;
   year: number;
   image: string;
   name: string;
+  id?: UUID;
 }
 
 interface Props {
@@ -17,6 +20,7 @@ interface Props {
 }
 
 export default function Carousel({ slides, setActiveSlide }: Props) {
+  const router = useRouter();
   const CLONE_COUNT = 3;
   const originalLength = slides.length;
   const extendedSlides = [...slides.slice(-CLONE_COUNT), ...slides, ...slides.slice(0, CLONE_COUNT)];
@@ -89,7 +93,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
 
           return (
             <div
-              key={`${slide.month}-${i}`}
+              key={`${slide.id ?? 'placeholder'}-${i}`}
               className={`${styles.slide} ${isActive ? styles.active : styles.inactive} ${logicalIndex === currentMonthIndex ? styles.currentTheme : ''}`}
               style={{ backgroundImage: `url(${slide.image})` }}
               onClick={() => {
@@ -97,6 +101,13 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
                 setActiveSlide(slides[logicalIndex]);
                 scrollTo(i);
                 realignIfClone(i);
+
+                const clickedSlide = slides[logicalIndex];
+                const isClickingActive = logicalIndex === activeIndex;
+
+                if (isClickingActive && clickedSlide?.id) {
+                  router.push(`/themes/${clickedSlide.id}`);
+                }
               }}
             />
           );

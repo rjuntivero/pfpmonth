@@ -4,12 +4,14 @@ import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackgrou
 import Figure from '@/components/ui/Figure/Figure';
 import User from '@/components/ui/User/User';
 import Feedback from '@/components/ui/LikeButton/LikeButton';
+import { fetchThemeData } from '@/lib/fetchTheme';
 
-export default function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
+  const themeData = await fetchThemeData({ themeId: params.id });
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <ThemeBackground themeId={params.id} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+        <ThemeBackground themeId={themeData.themeImage} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
         <div className={styles.fadeOverlay} />
 
         <div className={styles.frameWrapper}>
@@ -17,11 +19,8 @@ export default function Page({ params }: { params: { id: string } }) {
         </div>
 
         <div className={styles.title}>
-          {/* <h2 className={styles.date}>
-            May <span>2025</span>
-          </h2> */}
           <h2>Theme</h2>
-          <h1>{params.id}</h1>
+          <h1>{themeData.themeName}</h1>
           <button className={styles.joinBtn}>Join Theme</button>
           <div className={styles.reviews}>
             <button className={`${styles.dislikesBtn} ${styles.btn}`}>

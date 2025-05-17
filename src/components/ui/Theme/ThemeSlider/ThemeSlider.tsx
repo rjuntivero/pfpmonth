@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/ui/Theme/Carousel/Carousel';
+import { UUID } from 'crypto';
 
 interface Theme {
   name: string;
   start_date: string;
   image_url: string;
+  id?: UUID;
 }
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -28,6 +30,7 @@ export default function ThemeSlider({ serverName, themes, display = 'both', mont
       year: currentYear,
       image: theme?.image_url || '/no-image-placeholder.jpg',
       name: theme?.name || 'No Theme',
+      id: theme?.id || undefined,
     };
   });
 

@@ -12,13 +12,10 @@ export default function Page() {
           <h2>Vote for a Theme</h2>
         </div>
         <div className={styles.polls}>
-          <Poll image="/sinners.jpg" />
-          <Poll image="/adventure.jpg" />
-          <Poll image="/avatar.jpg" />
-          <Poll image="/naruto.jpg" />
-          <Poll image="/naruto.jpg" />
-          <Poll image="/naruto.jpg" />
-          <Poll image="/naruto.jpg" />
+          <Poll type="theme" image="/sinners.jpg" />
+          <Poll type="theme" image="/naruto.jpg" />
+          <Poll type="theme" image="/avatar.jpg" />
+          <Poll type="upload" />
         </div>
       </main>
     </div>

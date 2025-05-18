@@ -40,8 +40,17 @@
 }
 
 @media (max-width: 800px) {
-  .polls {
-    padding: 4px;
+  .main .polls {
+    padding: 1rem;
+  }
+  .main {
+    padding: 0px;
+  }
+}
+
+@media (max-width: 600px) {
+  .main .polls {
+    padding: 0.5rem;
   }
   .main {
     padding: 0px;

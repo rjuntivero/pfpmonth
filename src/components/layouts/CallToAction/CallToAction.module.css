@@ -1,12 +1,11 @@
 .wrapper {
-  /* Background */
-
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 1068px;
   height: 566px;
+  overflow: hidden;
 }
 
 .chasm {
@@ -16,6 +15,18 @@
   width: 100%;
   height: auto;
   z-index: 1;
+}
+
+.floatingHeader {
+  font-size: 5.75rem;
+  z-index: 3;
+  max-width: 687px;
+  font-weight: bold;
+  font-family: 'ClashDisplay';
+  line-height: 82.46%;
+  contain: layout paint;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .wrapper h1 {
@@ -45,6 +56,11 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+
+.motionSpan {
+  display: inline-block;
+  will-change: transform;
 }
 
 .baloo {

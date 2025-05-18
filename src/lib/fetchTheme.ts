@@ -15,6 +15,7 @@ export async function fetchThemeData({ themeId }: { themeId: string }) {
 
   const themeImage = themeData?.image_url;
   const themeName = themeData?.name;
+  console.log('FETCHED THEME IMAGE: ', themeImage);
 
   return { themeImage: themeImage, themeName: themeName };
 }

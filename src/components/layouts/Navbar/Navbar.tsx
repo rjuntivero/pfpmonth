@@ -24,7 +24,10 @@ export default function Navbar() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const activeLink = containerRef.current.querySelector(`a[data-path="${pathname}"]`);
+    const activeLink = Array.from(containerRef.current.querySelectorAll('a')).find((link) => {
+      const basePath = link.getAttribute('data-path');
+      return pathname === basePath || pathname.startsWith(basePath + '/');
+    });
     if (activeLink) {
       const rect = activeLink.getBoundingClientRect();
       const containerRect = containerRef.current.getBoundingClientRect();
@@ -41,13 +44,17 @@ export default function Navbar() {
         <Image src="/Menu.svg" alt="Menu Icon" width={40} height={40} className={styles.menuIcon} />
       </div>
       <ul ref={containerRef} className={styles.navItems}>
-        {navItems.map((item) => (
-          <li key={item.name}>
-            <Link href={item.path} data-path={item.path} className={`${pathname === item.path ? styles.selected : ''}`}>
-              {item.name}
-            </Link>
-          </li>
-        ))}
+        {navItems.map((item) => {
+          const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
+
+          return (
+            <li key={item.name}>
+              <Link href={item.path} data-path={item.path} className={isActive ? styles.selected : ''}>
+                {item.name}
+              </Link>
+            </li>
+          );
+        })}
         <motion.div
           className={styles.underline}
           initial={false}

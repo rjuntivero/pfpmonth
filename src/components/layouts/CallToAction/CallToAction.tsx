@@ -82,7 +82,7 @@ export default function CallToAction() {
           <FloatingText text="THE" startIndex={6} balooIndices={[0]} /> <FloatingText text="NEXT" startIndex={9} balooIndices={[0, 1]} /> <FloatingText text="THEME" startIndex={12} balooIndices={[0, 4]} />
         </span>
       </h1>
-      <Image src="/CallToActionChasm.svg" className={styles.chasm} alt="Chasm" width={1068} height={566} />
+      <Image src="/CallToActionChasm.svg" className={styles.chasm} alt="Chasm" width={1068} height={566} priority />
       <button ref={buttonRef} className={styles.voteBtn}>
         <span className={styles.voteLabel}>Vote here</span>
       </button>

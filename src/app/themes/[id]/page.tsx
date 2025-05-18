@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <ThemeBackground themeId={themeData.themeImage} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+        <ThemeBackground themeImage={themeData.themeImage} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
         <div className={styles.fadeOverlay} />
 
         <div className={styles.frameWrapper}>

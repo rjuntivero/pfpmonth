@@ -4,6 +4,10 @@
   --main: #936d9c;
   --accent: #d19c1d;
   --text: #1e1e1e;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

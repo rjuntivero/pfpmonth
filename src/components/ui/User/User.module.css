@@ -1,6 +1,5 @@
 .container {
   border-radius: 50px;
-  width: 250px;
   height: auto;
   aspect-ratio: 7/2;
   background-color: rgba(0, 0, 0, 0.8);
@@ -36,11 +35,12 @@
 h3.username {
   font-weight: 500;
   grid-row: 1;
+  font-size: clamp(0.4rem, 5vw, 0.9rem);
 }
 
 h3.character {
   grid-row: 2;
-  font-size: 0.9rem;
+  font-size: clamp(0.4rem, 5vw, 0.8rem);
   color: var(--main);
   font-weight: 500;
 }

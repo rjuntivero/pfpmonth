@@ -30,32 +30,33 @@ export default async function Page({ params }: { params: { id: string } }) {
               <Feedback color={'#d9d9d9'} />
             </button>
           </div>
-        </div>
-        <div className={styles.author}>
-          <div className={styles.authorAvatar}>
-            <Image src="/profile.webp" alt="Theme Frame" fill className={styles.avatar} />
-          </div>
-          <p className={styles.authorName}>authorName says...</p>
           <p className={styles.comment}>
             {'"'} Idk wtf this means but sure {'"'}
           </p>
         </div>
-
-        <section className={styles.participants}>
-          <h1>6 current participants:</h1>
-          <div className={styles.users}>
-            <User />
-            <User />
-            <User />
-            <User />
-            <User />
-            <User />
-          </div>
-        </section>
-        <section className={styles.stats}>
-          <Figure />
-          <Figure />
-          <Figure />
+        <section className={styles.userDetails}>
+          <section className={styles.author}>
+            <div className={styles.authorAvatar}>
+              <Image src="/profile.webp" alt="Theme Frame" fill className={styles.avatar} />
+            </div>
+            <p className={styles.authorName}>Suggested by authorname</p>
+          </section>
+          <section className={styles.participants}>
+            <h1>6 current participants:</h1>
+            <div className={styles.users}>
+              <User />
+              <User />
+              <User />
+              <User />
+              <User />
+              <User />
+            </div>
+          </section>
+          <section className={styles.stats}>
+            <Figure />
+            <Figure />
+            <Figure />
+          </section>
         </section>
       </main>
     </div>

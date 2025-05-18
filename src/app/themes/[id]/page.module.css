@@ -1,12 +1,4 @@
 .page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --text-outline: -3px -3px 0 #404040, 3px -3px 0 #404040, -3px 3px 0 #404040, 3px 3px 0 #404040;
-
   color: var(--foreground);
   min-height: 100svh;
   padding: 0% 80px 80px 80px;
@@ -28,10 +20,13 @@
 
 .main {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+
+  gap: 2rem;
+  align-items: start;
   justify-content: center;
   padding-top: 8rem;
+  padding-inline: 2rem;
+  z-index: 1;
 }
 
 .frameWrapper {
@@ -112,10 +107,11 @@
   justify-content: center;
   text-align: center;
   line-height: -2.3;
-  /* border: 1px solid red; */
-  /* border: 3px solid blue; */
+  flex: 1 1 60%;
+  flex: 2;
   width: 100%;
-  margin-bottom: 5rem;
+  flex: 1.4;
+  padding-inline: 2rem;
   & h2 {
     font-weight: 500;
     font-size: 4.5rem;
@@ -137,7 +133,7 @@
   }
   & h1 {
     text-transform: capitalize;
-    font-size: 12rem;
+    font-size: clamp(4rem, 13vw, 12rem);
     font-family: var(--font-baloo);
     color: var(--accent);
     margin-inline: auto;
@@ -146,7 +142,7 @@
     line-height: 82.46%;
     letter-spacing: -0.11em;
     text-wrap: wrap;
-    max-width: 12ch;
+    max-width: 15ch;
     /* font outline */
     text-shadow: 0px 7px 0px rgba(0, 0, 0, 0.75), -2px -2px 0 #251628, 2px -2px 0 #251628, -2px 2px 0 #251628, 2px 2px 0 #251628;
 
@@ -166,6 +162,20 @@
     color: var(--main);
     text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
   }
+  & .comment {
+    font-size: clamp(0.6rem, 5vw, 1.3rem);
+    font-weight: 600;
+    background-color: black;
+    padding: 0.5em 1em;
+    text-align: center;
+    color: white;
+    filter: brightness(1.1);
+    box-shadow: 0px 0px 8px white;
+    margin-top: 1em;
+    max-width: 40ch;
+    white-space: wrap;
+    margin-inline: auto;
+  }
 }
 
 .date span {
@@ -176,18 +186,19 @@
 .author {
   /* border: 1px solid red; */
   display: flex;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
   align-items: center;
-  gap: 1.2rem;
-  padding-bottom: 3em;
+  gap: 1rem;
   transform: translateY(0);
   opacity: 0;
-  margin-top: 2em;
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
   animation: blurDown 0.5s ease-out 1s forwards;
 
   & .authorAvatar {
-    width: 250px;
+    width: clamp(100px, 10vw, 200px);
     height: auto;
     aspect-ratio: 1/1;
     position: relative;
@@ -203,21 +214,13 @@
     font-family: var(--font-baloo);
 
     font-weight: 800;
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 7vw, 1.3rem);
     line-height: 82.46%;
     text-align: center;
 
-    color: var(--foreground);
+    color: var(--accent);
 
     text-shadow: 0px 3px 0.5px rgba(0, 0, 0, 0.75);
-  }
-
-  & .comment {
-    font-size: 2rem;
-    font-weight: 600;
-    background-color: black;
-    padding: 0.5em 1em;
-    text-align: center;
   }
 }
 
@@ -234,12 +237,14 @@
 }
 
 .stats {
-  padding: 6rem;
+  padding-inline: 6rem;
   display: flex;
   gap: 2em;
   justify-content: space-between;
   width: 100%;
   overflow-x: auto;
+  grid-column: 1;
+  grid-row: 3;
 }
 
 div.users {
@@ -250,11 +255,14 @@ div.users {
 
 .participants {
   z-index: 3;
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
   & h1 {
     text-align: center;
     padding-bottom: 0.5em;
     font-weight: 500;
-    font-size: 2rem;
+    font-size: clamp(0.5rem, 6vw, 2rem);
     text-shadow: 0px 5px 0px rgba(0, 0, 0, 1), -3px -3px 0 #251628, 3px -3px 0 #251628, -3px 3px 0 #251628, 3px 3px 0 #251628;
   }
 }
@@ -264,8 +272,7 @@ div.users {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -0.5; /* lower than content, higher than background */
-  background: linear-gradient(to bottom, transparent, black);
+  background: linear-gradient(to bottom, transparent, transparent, transparent, transparent, black);
   pointer-events: none;
 }
 
@@ -283,7 +290,17 @@ div.users {
 .image {
   object-fit: cover;
   object-position: top;
-  filter: blur(4px) contrast(75%) saturate(90%) brightness(0.6);
+  filter: blur(4px) contrast(75%) saturate(70%) brightness(0.3);
+}
+
+.userDetails {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
 }
 
 @media (max-width: 1200px) {
@@ -295,12 +312,12 @@ div.users {
   }
 
   .title {
-    margin-bottom: 5rem;
+    margin-bottom: 1rem;
+    padding-inline: 0;
+    padding-top: 3rem;
+    flex: 0;
     & h2 {
       font-size: 3.5rem;
-    }
-    & h1 {
-      font-size: 8rem;
     }
   }
   .stats {
@@ -310,13 +327,20 @@ div.users {
     width: 40px;
     height: 40px;
   }
+  .main {
+    flex-direction: column;
+    padding: 1rem;
+  }
 }
 
 @media (max-width: 600px) {
   .stats {
     padding-block: 3.5rem;
     padding-inline: 0.1em;
-    overflow-x: auto;
+    overflow: auto;
+  }
+  .main {
+    padding: 0.5rem;
   }
 
   .title {
@@ -324,22 +348,15 @@ div.users {
     & h2 {
       font-size: 2rem;
     }
-    & h1 {
-      font-size: 4rem;
-    }
   }
 
   .author {
     & .authorAvatar {
-      width: 200px;
+      width: 100px;
     }
 
     & .authorName {
       font-size: 1rem;
-    }
-
-    & .comment {
-      font-size: 1.5rem;
     }
   }
 

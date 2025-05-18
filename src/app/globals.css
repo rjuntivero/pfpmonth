@@ -6,7 +6,13 @@
   --text: #1e1e1e;
 
   ::-webkit-scrollbar {
-    display: none;
+    width: 8px;
+    background: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--main);
+    border-radius: 50px;
   }
 }
 

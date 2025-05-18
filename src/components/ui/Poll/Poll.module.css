@@ -1,3 +1,7 @@
+:root {
+  --shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+/* BASE POLL */
 .poll {
   width: 100%;
   aspect-ratio: 1/1;
@@ -13,18 +17,21 @@
   position: relative;
   box-sizing: border-box;
   background: linear-gradient(180deg, rgba(64, 64, 64, 0.3) 3.85%, rgba(64, 64, 64, 0.3) 52.4%, rgba(64, 64, 64, 0.3) 95.19%);
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow);
+  animation: slideInFromRight 0.5s ease-out, blur 0.5s ease-in-out forwards;
 }
 
 .poll::before {
   content: '';
   position: absolute;
   inset: 0;
+  opacity: 0;
   background-image: var(--bg-image);
   background-position: center;
   background-size: cover;
   filter: brightness(30%) contrast(1.2);
   transition: all 0.3s ease-in-out;
+  animation: fadeIn 0.6s ease-in-out 0.3s forwards;
 }
 
 .poll:hover:before {
@@ -65,14 +72,15 @@
   transition: all 0.2s ease-in-out;
 }
 
-.uploadContent {
+/* Upload Modal */
+.uploadModalContent {
   flex-direction: column;
   justify-content: center;
   align-items: start;
   gap: 1em;
 }
 
-.uploadGrid {
+.uploadModalContent .uploadGrid {
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: repeat(3, 1fr);
@@ -83,7 +91,7 @@
   width: 100%;
 }
 
-.uploadGrid input {
+.uploadModalContent .uploadGrid input {
   background-color: #484348;
   border: none;
   padding: 0.9em;
@@ -91,7 +99,7 @@
   font-family: var(--font-baloo);
 }
 
-.fileInput::file-selector-button {
+.uploadModalContent .fileInput::file-selector-button {
   font-family: 'ClashDisplay';
   background-color: transparent;
   border: none;
@@ -104,9 +112,132 @@
   color: var(--foreground);
 }
 
-.uploadGrid button {
+.uploadModalContent .uploadGrid button {
   background-color: var(--main);
   grid-column: 2;
   justify-self: end;
   border-radius: 50px;
+}
+
+/* Theme Modal */
+
+.themeModalContainer {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  max-height: 70vh;
+  width: 40vw;
+  min-height: fit-content;
+}
+
+.themeModalContainer h1.themeTitle {
+  color: var(--foreground);
+  font-size: clamp(1rem, 10vw, 3rem);
+  text-align: start;
+}
+
+.themeModalContainer .themeContainer {
+  display: flex;
+  align-items: stretch;
+}
+
+.themeModalContainer .themeDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.themeModalContainer .themeDetails .avatar {
+  width: 125px;
+  box-shadow: var(--shadow);
+}
+
+.themeModalContainer .themeDetails h1.themeAuthor {
+  font-weight: 400;
+  color: var(--foreground);
+  font-size: 1rem;
+}
+
+.themeModalContainer .themeDetails h1.themeVotes {
+  font-weight: 700;
+  color: var(--foreground);
+  font-size: 2rem;
+}
+
+.themeModalContainer .themeDetails h2 {
+  font-weight: 600;
+  color: var(--main);
+  font-size: 1rem;
+}
+
+.themeModalContainer .themeDetails .themeSupporters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  max-height: 150px;
+}
+
+.themeModalContainer .imageWrapper {
+  aspect-ratio: 1/ 1.2;
+  position: relative;
+  border-radius: 30px;
+  overflow: hidden;
+  padding: 1em;
+  flex: 1.3;
+}
+
+.themeModalContainer .themeImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 900px) {
+  .themeModalContainer {
+    width: 100%;
+    margin-inline: 1em;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .themeModalContainer .themeContainer {
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .themeModalContainer .imageWrapper {
+    width: 100%;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(15px);
+  }
+  to {
+    transform: translateX(0px);
+  }
+}
+
+@keyframes blur {
+  from {
+    filter: blur(10px);
+  }
+  to {
+    filter: blur(0px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

@@ -44,12 +44,12 @@ export default async function Page({ params }: { params: { id: string } }) {
           <section className={styles.participants}>
             <h1>6 current participants:</h1>
             <div className={styles.users}>
-              <User />
-              <User />
-              <User />
-              <User />
-              <User />
-              <User />
+              <User character="Princess Bubblegum" />
+              <User character="Princess Bubblegum" />
+              <User character="Princess Bubblegum" />
+              <User character="Princess Bubblegum" />
+              <User character="Princess Bubblegum" />
+              <User character="Princess Bubblegum" />
             </div>
           </section>
           <section className={styles.stats}>

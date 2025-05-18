@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import styles from './User.module.css';
 
-export default function User() {
+export default function User({ character }: { character?: string }) {
   return (
     <div className={styles.container}>
       <div className={styles.avatarContainer}>
@@ -9,7 +9,7 @@ export default function User() {
       </div>
       <div className={styles.user}>
         <h3 className={styles.username}>raipunzel</h3>
-        <h3 className={styles.character}>Princess Bubblegum</h3>
+        <h3 className={styles.character}>{character}</h3>
       </div>
     </div>
   );

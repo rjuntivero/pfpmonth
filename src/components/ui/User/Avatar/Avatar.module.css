@@ -1,0 +1,11 @@
+.avatarContainer {
+  aspect-ratio: 1/1;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.avatarContainer .avatarImage {
+  object-fit: cover;
+  object-position: center;
+}

@@ -7,17 +7,28 @@ import Image from 'next/image';
 import Avatar from '../User/Avatar/Avatar';
 import User from '../User/User';
 
+interface Poll {
+  id: string;
+  poll_id: string;
+  option_text: string;
+  vote_count: number;
+  image_url: string;
+  created_by: string;
+  server_id: string;
+  name: string;
+}
+
 const UploadThemeModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
 const ThemeDetailsModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
 
-export default function Poll({ image, type }: { image?: string; type: string }) {
+export default function Poll({ poll, type }: { poll?: Poll; type: string }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const handleVoteClick = () => setIsThemeModalOpen(true);
 
   const handleUploadClick = () => setIsUploadModalOpen(true);
-
+  console.log('POLL SELECTED:  ', poll);
   return (
     <>
       <UploadThemeModal isOpen={isUploadModalOpen} onClose={() => setIsUploadModalOpen(false)} className={styles.uploadModalContent}>
@@ -36,15 +47,15 @@ export default function Poll({ image, type }: { image?: string; type: string }) 
       </UploadThemeModal>
 
       <ThemeDetailsModal isOpen={isThemeModalOpen} onClose={() => setIsThemeModalOpen(false)} className={styles.themeModalContainer}>
-        <h1 className={styles.themeTitle}>Adventure Time</h1>
+        <h1 className={styles.themeTitle}>{poll?.name}</h1>
         <div className={styles.themeContainer}>
           <div className={styles.imageWrapper}>
-            <Image src="/adventure.jpg" alt="themeImage" fill className={styles.themeImage} />
+            <Image src={poll?.image_url || '/no-image-placeholder.jpg'} alt="themeImage" fill className={styles.themeImage} />
           </div>
           <div className={styles.themeDetails}>
             <Avatar imageURL="/bubblegum.jpg" className={styles.avatar} />
-            <h1 className={styles.themeAuthor}>untivert</h1>
-            <p className={styles.themeComment}>{'"I thought it would be cool ig"'}</p>
+            <h1 className={styles.themeAuthor}>{poll?.created_by}</h1>
+            <p className={styles.themeComment}>{poll?.option_text}</p>
             <h1 className={styles.themeVotes}>23 votes</h1>
             <LikeButton className={styles.voteBtn} />
             <h2>Supporting Users:</h2>
@@ -60,7 +71,7 @@ export default function Poll({ image, type }: { image?: string; type: string }) 
         className={styles.poll}
         style={
           {
-            '--bg-image': `${`url(${image})` || null}`,
+            '--bg-image': `${`url(${poll?.image_url})` || null}`,
           } as React.CSSProperties
         }
         onClick={type === 'theme' ? handleVoteClick : handleUploadClick}
@@ -68,9 +79,9 @@ export default function Poll({ image, type }: { image?: string; type: string }) 
         <div className={styles.content}>
           {type === 'theme' && (
             <>
-              <h1>Sinners</h1>
+              <h1>{poll?.name}</h1>
               <div className={styles.votes}>
-                <h2>97</h2>
+                <h2>{poll?.vote_count}</h2>
                 <h2>votes</h2>
                 <button onClick={(e) => e.stopPropagation()}>
                   {' '}

@@ -10,10 +10,9 @@ import Image from 'next/image';
 const navItems = [
   { name: 'Home', path: '/' },
   { name: 'Leaderboard', path: '/leaderboard' },
-  { name: 'Upload', path: '/upload' },
   { name: 'Themes', path: '/themes' },
   { name: 'Profile', path: '/profile' },
-  { name: 'Settings', path: '/settings' },
+  { name: 'Login', path: '/settings' },
 ];
 
 export default function Navbar() {

@@ -19,6 +19,7 @@
   background: linear-gradient(180deg, rgba(64, 64, 64, 0.3) 3.85%, rgba(64, 64, 64, 0.3) 52.4%, rgba(64, 64, 64, 0.3) 95.19%);
   box-shadow: var(--shadow);
   animation: slideInFromRight 0.5s ease-out, blur 0.5s ease-in-out forwards;
+  transition: all 0.3s ease-in-out;
 }
 
 .poll::before {
@@ -43,6 +44,11 @@
 .poll .content {
   z-index: 2;
   position: relative;
+}
+
+.poll:hover .content {
+  filter: brightness(1.2);
+  transition: filter 0.3s ease-in-out;
 }
 
 .poll .content h1 {
@@ -149,7 +155,6 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  overflow-y: auto;
 }
 
 .themeModalContainer .themeDetails .avatar {

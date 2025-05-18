@@ -1,7 +1,12 @@
 import Poll from '@/components/ui/Poll/Poll';
 import styles from './page.module.css';
+import { fetchPollThemes } from '@/lib/fetchPollThemes';
 
-export default function Page() {
+export default async function Page({ params }: { params: { id: string } }) {
+  const { id } = await params;
+  const pollData = await fetchPollThemes({ pollId: id });
+  console.log('POLL ID: ', id);
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -12,9 +17,13 @@ export default function Page() {
           <h2>Vote for a Theme</h2>
         </div>
         <div className={styles.polls}>
-          <Poll type="theme" image="/sinners.jpg" />
-          <Poll type="theme" image="/naruto.jpg" />
-          <Poll type="theme" image="/avatar.jpg" />
+          {pollData.pollThemes?.map((poll) => (
+            <Poll key={poll.id} type="theme" poll={poll} />
+          ))}
+          <Poll type="upload" />
+          <Poll type="upload" />
+          <Poll type="upload" />
+          <Poll type="upload" />
           <Poll type="upload" />
         </div>
       </main>

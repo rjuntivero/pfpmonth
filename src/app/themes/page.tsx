@@ -11,7 +11,7 @@ export default async function Page() {
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.heading}>
-          <ThemeBackground themeId="adventure" wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+          <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
           <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} />
           <div className={styles.title}>
             <h2>barbz</h2>
@@ -27,7 +27,7 @@ export default async function Page() {
             <h1 className={styles.year}>2025</h1>
             <button className={styles.yearNav}>{'>'}</button>
           </div>
-          <ThemeSlider themes={themes} display="none" monthClassName={styles.themesPage} />
+          <ThemeSlider slides={themes} display="none" monthClassName={styles.themesPage} />
         </div>
       </main>
     </div>

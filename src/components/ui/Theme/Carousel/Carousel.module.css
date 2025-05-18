@@ -74,6 +74,32 @@
   filter: drop-shadow(var(--shadow));
 }
 
+.voteTag,
+.tbdTag {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  gap: 0.5rem;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.voteTag {
+  background-color: gold;
+  color: black;
+}
+
+.tbdTag {
+  background-color: #444;
+  color: white;
+}
+
 .activeSlideName {
   font-weight: 500;
 }

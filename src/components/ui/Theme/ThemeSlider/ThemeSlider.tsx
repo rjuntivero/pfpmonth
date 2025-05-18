@@ -4,37 +4,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/ui/Theme/Carousel/Carousel';
-import { UUID } from 'crypto';
+import { Slide } from '@/types/Slide';
 
-interface Theme {
-  name: string;
-  start_date: string;
-  image_url: string;
-  id?: UUID;
-}
-
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-export default function ThemeSlider({ serverName, themes, display = 'both', monthClassName }: { serverName?: string; themes: Theme[]; display?: 'none' | 'date' | 'button' | 'both'; monthClassName?: string }) {
-  const currentYear = new Date().getFullYear();
+export default function ThemeSlider({ serverName, slides, display = 'both', monthClassName }: { serverName?: string; slides: Slide[]; display?: 'none' | 'date' | 'button' | 'both'; monthClassName?: string }) {
   const router = useRouter();
-
-  const completeSlides = MONTHS.map((monthName, monthIndex) => {
-    const theme = themes.find((t) => {
-      const [yearStr, monthStr] = t.start_date.split('-');
-      return Number(yearStr) === currentYear && Number(monthStr) === monthIndex + 1;
-    });
-
-    return {
-      month: monthName,
-      year: currentYear,
-      image: theme?.image_url || '/no-image-placeholder.jpg',
-      name: theme?.name || 'No Theme',
-      id: theme?.id || undefined,
-    };
-  });
-
-  const [activeSlide, setActiveSlide] = useState(completeSlides[new Date().getMonth()]);
+  const currentMonthIndex = new Date().getMonth();
+  const [activeSlide, setActiveSlide] = useState(slides[currentMonthIndex]);
 
   const showDetails = display === 'date' || display === 'both';
   const showButton = display === 'button' || display === 'both';
@@ -50,7 +25,9 @@ export default function ThemeSlider({ serverName, themes, display = 'both', mont
         <h3 className={`${styles.date} ${monthClassName || ''}`}>
           {activeSlide.month} {showDetails && activeSlide.year}
         </h3>
-        <Carousel slides={completeSlides} setActiveSlide={setActiveSlide} />
+
+        <Carousel slides={slides} setActiveSlide={setActiveSlide} />
+
         <div className={styles.fadeLeft} />
         <div className={styles.fadeRight} />
       </section>

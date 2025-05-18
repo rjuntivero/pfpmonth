@@ -2,17 +2,10 @@
 
 import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styles from './Carousel.module.css';
-import { UUID } from 'crypto';
-
-interface Slide {
-  month: string;
-  year: number;
-  image: string;
-  name: string;
-  id?: UUID;
-}
+import { Slide } from '@/types/Slide';
 
 interface Props {
   slides: Slide[];
@@ -80,13 +73,19 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
     requestAnimationFrame(() => {
       setReady(true);
     });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className={styles.carouselWrapper}>
-      <motion.div ref={trackRef} className={styles.track} style={{ x: springX, opacity: ready ? 1 : 0, transition: 'opacity 0.4s ease' }}>
+      <motion.div
+        ref={trackRef}
+        className={styles.track}
+        style={{
+          x: springX,
+          opacity: ready ? 1 : 0,
+          transition: 'opacity 0.4s ease',
+        }}
+      >
         {extendedSlides.map((slide, i) => {
           const logicalIndex = (i - CLONE_COUNT + originalLength) % originalLength;
           const isActive = logicalIndex === activeIndex;
@@ -105,11 +104,27 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
                 const clickedSlide = slides[logicalIndex];
                 const isClickingActive = logicalIndex === activeIndex;
 
-                if (isClickingActive && clickedSlide?.id) {
+                if (!isClickingActive || !clickedSlide?.id) return;
+
+                if (clickedSlide.type === 'final') {
                   router.push(`/themes/${clickedSlide.id}`);
+                } else if (clickedSlide.type === 'poll' || clickedSlide.type === 'tbd') {
+                  router.push(`/themes/${clickedSlide.id}/vote`);
                 }
               }}
-            />
+            >
+              {slide.tag === 'leading' && (
+                <div className={styles.voteTag}>
+                  <Image src="/voteTag.svg" alt="#1 vote" width={20} height={20} />
+                  <span>#1 vote</span>
+                </div>
+              )}
+              {slide.tag === 'tbd' && (
+                <div className={styles.tbdTag}>
+                  <span>TBD</span>
+                </div>
+              )}
+            </div>
           );
         })}
       </motion.div>

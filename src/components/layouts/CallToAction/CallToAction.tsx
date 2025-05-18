@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { animate, useScroll } from 'framer-motion';
 import Image from 'next/image';
 
-function StaticText({ text, startIndex = 0, balooIndices = [] }: { text: string; startIndex?: number; balooIndices?: number[] }) {
+function StaticText({ text, balooIndices = [] }: { text: string; startIndex?: number; balooIndices?: number[] }) {
   return (
     <>
       {text.split('').map((char, i) => (

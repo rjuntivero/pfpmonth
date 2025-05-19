@@ -56,7 +56,7 @@ export default function Poll({ poll, type }: { poll?: Poll; type: string }) {
             <Avatar imageURL="/bubblegum.jpg" className={styles.avatar} />
             <h1 className={styles.themeAuthor}>{poll?.created_by}</h1>
             <p className={styles.themeComment}>{poll?.option_text}</p>
-            <h1 className={styles.themeVotes}>23 votes</h1>
+            <h1 className={styles.themeVotes}>{poll?.vote_count} votes</h1>
             <LikeButton className={styles.voteBtn} />
             <h2>Supporting Users:</h2>
             <div className={styles.themeSupporters}>

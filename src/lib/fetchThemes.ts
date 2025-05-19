@@ -62,9 +62,18 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
 
   const themes = themesData as Theme[];
 
-  const { data: rawPolls = [] } = await supabase.from('polls').select('*');
-
-  const parsedPolls = rawPolls as Poll[];
+  const { data: polls = [] } = await supabase.from('polls').select(`
+      id,
+      theme_month,
+      poll_options (
+        id,
+        vote_count,
+        image_url,
+        name,
+        poll_id
+      )
+    `);
+  console.log('FETCHED POLLS ARE: ', polls);
 
   const slides: Slide[] = MONTHS.map((monthName, monthIndex) => {
     const month = String(monthIndex + 1).padStart(2, '0');
@@ -84,24 +93,28 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
       };
     }
 
-    const poll = parsedPolls.find((p) => p.theme_month.startsWith(monthDate));
+    const poll = polls?.find((p) => p.theme_month.startsWith(monthDate));
+    console.log('FOUND POLL: ', poll);
     if (poll) {
       const leading = poll.poll_options?.length > 0 ? [...poll.poll_options].sort((a, b) => b.vote_count - a.vote_count)[0] : null;
+      console.log('LEADING THEME: ', leading);
 
-      const optionTheme = leading?.themes ?? null;
+      const optionTheme = leading ?? null;
 
       const isFuture = currentYear > new Date().getFullYear() || (currentYear === new Date().getFullYear() && monthIndex > new Date().getMonth());
 
       const hasTheme = !!optionTheme?.id;
+      console.log('THIS LEADING THEME HAS THEME: ', hasTheme);
+      console.log('THIS LEADING THEME POLL ID: ', leading?.poll_id);
 
       return {
         month: monthName,
         year: currentYear,
         image: hasTheme ? optionTheme.image_url : '/no-image-placeholder.jpg',
         name: hasTheme ? optionTheme.name : 'No Theme',
-        id: hasTheme ? optionTheme.id : poll.id,
+        id: hasTheme ? optionTheme.poll_id : poll.id,
         tag: hasTheme ? 'leading' : isFuture ? 'tbd' : undefined,
-        route: hasTheme ? `/themes/${optionTheme.id}/vote` : isFuture ? `/themes/${poll.id}/vote` : null,
+        route: hasTheme ? `/themes/${optionTheme.poll_id}/vote` : isFuture ? `/themes/${poll.id}/vote` : null,
         type: hasTheme ? 'poll' : 'tbd',
       };
     }

@@ -20,15 +20,21 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
       option_text,
       vote_count,
       image_url,
-      created_by,
       server_id,
       name,
+      polls (
+        theme_month
+      ),
       poll_votes (
         user_id,
         users (
           username,
           avatar_url
         )
+      ),
+      created_by:users (
+        username,
+        avatar_url
       )
     `
     )
@@ -40,21 +46,32 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
     return { error };
   }
 
-  const pollThemes = pollOptionsData.map((option) => ({
-    id: option.id,
-    name: option.name,
-    image_url: option.image_url,
-    vote_count: option.vote_count,
-    created_by: option.created_by,
-    description: option.option_text,
-    server_id: option.server_id,
-    poll_id: option.poll_id,
-    supporters: option.poll_votes.map((vote) => ({
-      user_id: vote.user_id,
-      username: vote.users.username,
-      avatar_url: vote.users.avatar_url,
-    })),
-  }));
+  const pollThemes = pollOptionsData.map((option) => {
+    const themeMonth = option.polls?.[0]?.theme_month ?? '';
+    const [year, month] = themeMonth.split('-');
+
+    return {
+      id: option.id,
+      name: option.name,
+      image_url: option.image_url,
+      vote_count: option.vote_count,
+      created_by: {
+        username: option.created_by?.username ?? '',
+        avatar_url: option.created_by?.avatar_url ?? '',
+      },
+      description: option.option_text,
+      server_id: option.server_id,
+      poll_id: option.poll_id,
+      month: month,
+      year: year,
+      supporters:
+        option.poll_votes?.map((vote) => ({
+          user_id: vote.user_id,
+          username: vote.users?.username ?? '',
+          avatar_url: vote.users?.avatar_url ?? '',
+        })) ?? [],
+    };
+  });
 
   console.log('FETCHED POLL THEME: ', pollThemes);
 

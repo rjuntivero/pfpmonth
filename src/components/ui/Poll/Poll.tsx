@@ -1,18 +1,22 @@
 'use client';
 import styles from './Poll.module.css';
 import LikeButton from '../Button/Like/LikeButton';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Avatar from '../User/Avatar/Avatar';
-import User from '../User/User';
+import { useSearchParams } from 'next/navigation';
+// import User from '../User/User';
 
 interface Poll {
   id: string;
   description: string;
   vote_count: number;
   image_url: string;
-  created_by: string;
+  created_by: {
+    username: string;
+    avatar_url?: string;
+  };
   name: string;
   supporters: string[];
   month: string;
@@ -22,27 +26,57 @@ interface Poll {
 const UploadThemeModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
 const ThemeDetailsModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
 
-export default function Poll({ poll, type }: { poll?: Poll; type: string }) {
+export default function Poll({ poll_id, poll, type }: { poll_id: string; poll?: Poll; type: string }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const month = searchParams.get('month');
+  const year = searchParams.get('year');
 
   const handleVoteClick = () => setIsThemeModalOpen(true);
 
   const handleUploadClick = () => setIsUploadModalOpen(true);
-  console.log('POLL OPTION SELECTED:  ', poll);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    const form = formRef.current;
+    if (!form) return;
+
+    const formData = new FormData(form);
+
+    formData.append('poll_id', poll_id as string);
+    formData.append('server_id', '1369912474324697139');
+    formData.append('month', month as string);
+    formData.append('year', year as string);
+
+    const res = await fetch('/api/polls', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const result = await res.json();
+    if (!res.ok) {
+      alert('Upload failed: ' + result.error);
+    } else {
+      alert('Theme uploaded!');
+      setIsUploadModalOpen(false);
+    }
+  }
   return (
     <>
       <UploadThemeModal isOpen={isUploadModalOpen} onClose={() => setIsUploadModalOpen(false)} className={styles.uploadModalContent}>
         <h1 className={styles.uploadTitle}>
           <span>Enter a New</span> Theme
         </h1>
-        <form action="" className={styles.uploadGrid}>
+        <form ref={formRef} onSubmit={handleSubmit} className={styles.uploadGrid}>
           <label htmlFor="theme-name">Theme Name*: </label>
-          <input type="text" id="theme-name" />
-          <label htmlFor="theme-background">Theme Background*: </label>
-          <input type="file" id="theme-background" className={styles.fileInput} />
+          <input type="text" id="theme-name" name="theme-name" />
+          <label htmlFor="theme-image">Theme Image: </label>
+          <input type="file" id="theme-image" name="theme-image" className={styles.fileInput} />
           <label htmlFor="theme-description">Description: </label>
-          <input type="textfield" id="theme-description" placeholder="ex: Adventure Time TV Series" />
+          <input type="text" id="theme-description" name="theme-description" placeholder="ex: Adventure Time TV Series" />
           <button type="submit">Submit</button>
         </form>
       </UploadThemeModal>
@@ -55,7 +89,7 @@ export default function Poll({ poll, type }: { poll?: Poll; type: string }) {
           </div>
           <div className={styles.themeDetails}>
             <Avatar imageURL="/bubblegum.jpg" className={styles.avatar} />
-            <h1 className={styles.themeAuthor}>{poll?.created_by}</h1>
+            <h1 className={styles.themeAuthor}>{poll?.created_by?.username}</h1>
             <p className={styles.themeComment}>{poll?.description}</p>
             <h1 className={styles.themeVotes}>{poll?.vote_count} votes</h1>
             <LikeButton className={styles.voteBtn} />

@@ -22,11 +22,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
           {pollData.pollThemes?.map((poll) => (
             <Poll key={poll.id} type="theme" poll={poll} />
           ))}
-          <Poll type="upload" />
-          <Poll type="upload" />
-          <Poll type="upload" />
-          <Poll type="upload" />
-          <Poll type="upload" />
+          <Poll type="upload" poll_id={id} />
         </div>
       </main>
     </div>

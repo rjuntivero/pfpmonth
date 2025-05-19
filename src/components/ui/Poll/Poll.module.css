@@ -103,6 +103,8 @@
   padding: 0.9em;
   width: 100%;
   font-family: var(--font-baloo);
+  color: var(--foreground);
+  font-size: 1.2rem;
 }
 
 .uploadModalContent .fileInput::file-selector-button {

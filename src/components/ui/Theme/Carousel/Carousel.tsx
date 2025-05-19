@@ -106,10 +106,11 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
 
                 if (!isClickingActive || !clickedSlide?.id) return;
 
+                // navigation
                 if (clickedSlide.type === 'final') {
                   router.push(`/themes/${clickedSlide.id}`);
                 } else if (clickedSlide.type === 'poll' || clickedSlide.type === 'tbd') {
-                  router.push(`/themes/${clickedSlide.id}/vote`);
+                  router.push(clickedSlide.route as string);
                 }
               }}
             >

@@ -16,9 +16,13 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
     .select(
       `
       id,
-      name,
-      image_url,
+      poll_id,
+      option_text,
       vote_count,
+      image_url,
+      created_by,
+      server_id,
+      name,
       poll_votes (
         user_id,
         users (
@@ -41,6 +45,10 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
     name: option.name,
     image_url: option.image_url,
     vote_count: option.vote_count,
+    created_by: option.created_by,
+    description: option.option_text,
+    server_id: option.server_id,
+    poll_id: option.poll_id,
     supporters: option.poll_votes.map((vote) => ({
       user_id: vote.user_id,
       username: vote.users.username,

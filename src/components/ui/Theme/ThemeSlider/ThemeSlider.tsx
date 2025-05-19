@@ -27,9 +27,6 @@ export default function ThemeSlider({ serverName, slides, display = 'both', mont
         </h3>
 
         <Carousel slides={slides} setActiveSlide={setActiveSlide} />
-
-        <div className={styles.fadeLeft} />
-        <div className={styles.fadeRight} />
       </section>
 
       {showButton && (

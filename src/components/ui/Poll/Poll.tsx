@@ -9,13 +9,14 @@ import User from '../User/User';
 
 interface Poll {
   id: string;
-  poll_id: string;
-  option_text: string;
+  description: string;
   vote_count: number;
   image_url: string;
   created_by: string;
-  server_id: string;
   name: string;
+  supporters: string[];
+  month: string;
+  year: string;
 }
 
 const UploadThemeModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
@@ -28,7 +29,7 @@ export default function Poll({ poll, type }: { poll?: Poll; type: string }) {
   const handleVoteClick = () => setIsThemeModalOpen(true);
 
   const handleUploadClick = () => setIsUploadModalOpen(true);
-  console.log('POLL SELECTED:  ', poll);
+  console.log('POLL OPTION SELECTED:  ', poll);
   return (
     <>
       <UploadThemeModal isOpen={isUploadModalOpen} onClose={() => setIsUploadModalOpen(false)} className={styles.uploadModalContent}>
@@ -55,14 +56,17 @@ export default function Poll({ poll, type }: { poll?: Poll; type: string }) {
           <div className={styles.themeDetails}>
             <Avatar imageURL="/bubblegum.jpg" className={styles.avatar} />
             <h1 className={styles.themeAuthor}>{poll?.created_by}</h1>
-            <p className={styles.themeComment}>{poll?.option_text}</p>
+            <p className={styles.themeComment}>{poll?.description}</p>
             <h1 className={styles.themeVotes}>{poll?.vote_count} votes</h1>
             <LikeButton className={styles.voteBtn} />
             <h2>Supporting Users:</h2>
             <div className={styles.themeSupporters}>
+              {/* {poll?.supporters.map((user) => {
+                <User key={user} user={user.} />;
+              })} */}
+              {/* <User />
               <User />
-              <User />
-              <User />
+              <User /> */}
             </div>
           </div>
         </div>
@@ -84,7 +88,6 @@ export default function Poll({ poll, type }: { poll?: Poll; type: string }) {
                 <h2>{poll?.vote_count}</h2>
                 <h2>votes</h2>
                 <button onClick={(e) => e.stopPropagation()}>
-                  {' '}
                   <LikeButton className={styles.voteBtn} />
                 </button>
               </div>

@@ -2,17 +2,19 @@ import Poll from '@/components/ui/Poll/Poll';
 import styles from './page.module.css';
 import { fetchPollThemes } from '@/lib/fetchPollThemes';
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params, searchParams }: { params: { id: string }; searchParams: { month?: string; year?: string } }) {
   const { id } = await params;
+  const { month, year } = await searchParams;
   const pollData = await fetchPollThemes({ pollId: id });
   console.log('POLL ID: ', id);
+  console.log('POLL DATA: ', pollData);
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.header}>
           <h1>
-            February <span>2025</span>
+            {month || `${new Date().toLocaleString('default', { month: 'long' })}`} <span>{year || `${new Date().getFullYear()}`}</span>
           </h1>
           <h2>Vote for a Theme</h2>
         </div>

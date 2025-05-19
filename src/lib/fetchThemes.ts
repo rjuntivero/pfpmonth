@@ -114,7 +114,7 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
         name: hasTheme ? optionTheme.name : 'No Theme',
         id: hasTheme ? optionTheme.poll_id : poll.id,
         tag: hasTheme ? 'leading' : isFuture ? 'tbd' : undefined,
-        route: hasTheme ? `/themes/${optionTheme.poll_id}/vote` : isFuture ? `/themes/${poll.id}/vote` : null,
+        route: hasTheme ? `/themes/${optionTheme.poll_id}/vote?month=${monthName}&year=${currentYear}` : isFuture ? `/themes/${poll.id}/vote?month=${monthName}&year=${currentYear}` : null,
         type: hasTheme ? 'poll' : 'tbd',
       };
     }

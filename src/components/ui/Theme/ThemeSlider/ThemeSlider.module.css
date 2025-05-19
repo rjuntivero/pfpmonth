@@ -65,14 +65,3 @@
   pointer-events: none;
   z-index: 20;
 }
-
-.fadeLeft {
-  left: 0;
-  background-color: black;
-  /* background: linear-gradient(to right, var(--background, #1a1a1a), transparent); */
-}
-
-.fadeRight {
-  right: 0;
-  background: linear-gradient(to left, var(--background, #1a1a1a), transparent);
-}

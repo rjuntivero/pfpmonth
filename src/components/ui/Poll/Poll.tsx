@@ -26,7 +26,7 @@ interface Poll {
 const UploadThemeModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
 const ThemeDetailsModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
 
-export default function Poll({ poll_id, poll, type }: { poll_id: string; poll?: Poll; type: string }) {
+export default function Poll({ poll_id, poll, type, onUploadSuccess }: { poll_id: string; poll?: Poll; type: string; onUploadSuccess?: () => void }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const searchParams = useSearchParams();
@@ -60,8 +60,8 @@ export default function Poll({ poll_id, poll, type }: { poll_id: string; poll?: 
     if (!res.ok) {
       alert('Upload failed: ' + result.error);
     } else {
-      alert('Theme uploaded!');
       setIsUploadModalOpen(false);
+      onUploadSuccess?.();
     }
   }
   return (

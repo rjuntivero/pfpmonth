@@ -18,8 +18,7 @@
 .drape {
   width: 50%;
   height: 100%;
-  background: repeating-linear-gradient(to right, #211e21 0%, #272327 1.5%, #211e21 3%, #272327 4.5%, #211e21 6%);
-  z-index: 3;
+  background: repeating-linear-gradient(to right, #211e21 0%, #272327 1.5%, #211e21 5%, #272327 7.5%, #211e21 9%);
 }
 
 .drape.left {

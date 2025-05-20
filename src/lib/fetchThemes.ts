@@ -5,7 +5,7 @@ import { Theme, ThemeSliderResult } from '@/types/Theme';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
+export async function fetchThemesAndServer(selectedYear: number): Promise<ThemeSliderResult> {
   const supabase = await createClient();
 
   const {
@@ -16,13 +16,12 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
   await createFuturePolls();
 
   const { data: userServer } = await supabase.from('user_servers').select('server_id, servers (name)').eq('user_id', user.id).maybeSingle();
-
   const serverName = userServer?.servers?.name ?? null;
   const serverId = userServer?.server_id ?? null;
 
-  if (!serverId) return { serverName, serverId, themes: [] };
+  // if (!serverId) return { serverName, serverId, themes: [] };
 
-  const currentYear = new Date().getFullYear();
+  const currentYear = selectedYear;
 
   const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, start_date').eq('server_id', serverId);
 
@@ -49,6 +48,9 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
   const slides: Slide[] = MONTHS.map((monthName, monthIndex) => {
     const month = String(monthIndex + 1).padStart(2, '0');
     const monthDate = `${currentYear}-${month}`;
+    console.log('MONTH DATE: ', monthDate);
+
+    console.log('THEMES TO COMPARE: ', themes);
 
     const theme = themes.find((t) => t.start_date.startsWith(monthDate));
     if (theme) {

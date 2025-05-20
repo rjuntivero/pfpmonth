@@ -81,6 +81,8 @@
   flex-direction: column;
   padding: 4rem;
   position: relative;
+  min-height: 70vh;
+  width: 100%;
 }
 
 .details {
@@ -93,9 +95,9 @@
 .curtainsTop {
   position: absolute;
   top: 0;
+  left: 0;
   width: 100%;
   height: auto;
-  aspect-ratio: 110/1;
 }
 
 /* Year */

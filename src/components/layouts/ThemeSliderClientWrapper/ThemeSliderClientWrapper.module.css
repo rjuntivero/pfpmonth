@@ -1,0 +1,38 @@
+.navBtn {
+  width: 15px;
+  height: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text);
+  padding: 0.85em;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: var(--text-shadow);
+}
+
+.yearNav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  height: 100%;
+}
+
+@media (max-width: 500px) {
+  .titleWrapper {
+    aspect-ratio: 3/1;
+  }
+
+  .year {
+    font-size: 2.75rem;
+  }
+
+  .yearNav {
+    font-size: 0.9em;
+  }
+
+  .themesPage {
+    font-size: 1.75rem !important;
+  }
+}

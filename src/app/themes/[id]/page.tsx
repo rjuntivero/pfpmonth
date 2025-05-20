@@ -11,7 +11,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <ThemeBackground themeImage={themeData.themeImage} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+        <ThemeBackground themeImage={themeData.theme?.image_url} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
         <div className={styles.fadeOverlay} />
 
         <div className={styles.frameWrapper}>
@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
         <div className={styles.title}>
           <h2>Theme</h2>
-          <h1>{themeData.themeName}</h1>
+          <h1>{themeData.theme?.name || 'null'}</h1>
           <button className={styles.joinBtn}>Join Theme</button>
           <div className={styles.reviews}>
             <button className={`${styles.dislikesBtn} ${styles.btn}`}>
@@ -31,25 +31,22 @@ export default async function Page({ params }: { params: { id: string } }) {
             </button>
           </div>
           <p className={styles.comment}>
-            {'"'} Idk wtf this means but sure {'"'}
+            {'"'} {themeData.theme?.description} {'"'}
           </p>
         </div>
         <section className={styles.userDetails}>
           <section className={styles.author}>
             <div className={styles.authorAvatar}>
-              <Image src="/profile.webp" alt="Theme Frame" fill className={styles.avatar} />
+              <Image src={themeData.theme?.created_by.avatar_url || '/no-image-placeholder.jpg'} alt="Theme Frame" fill className={styles.avatar} />
             </div>
-            <p className={styles.authorName}>Suggested by authorname</p>
+            <p className={styles.authorName}>Suggested by {themeData.theme?.created_by.username}</p>
           </section>
           <section className={styles.participants}>
-            <h1>6 current participants:</h1>
+            <h1>{themeData.theme?.participants.length} users participated:</h1>
             <div className={styles.users}>
-              <User character="Princess Bubblegum" />
-              <User character="Princess Bubblegum" />
-              <User character="Princess Bubblegum" />
-              <User character="Princess Bubblegum" />
-              <User character="Princess Bubblegum" />
-              <User character="Princess Bubblegum" />
+              {themeData.theme?.participants.map((participant, i) => (
+                <User key={`${participant.username}-${i}`} character={participant.character_name} />
+              ))}
             </div>
           </section>
           <section className={styles.stats}>

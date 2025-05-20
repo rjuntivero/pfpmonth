@@ -1,3 +1,5 @@
+export const revalidate = 10;
+
 import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackground';
 import styles from './page.module.css';
 import Image from 'next/image';

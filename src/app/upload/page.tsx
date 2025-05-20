@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import styles from './page.module.css';
-import supabase from '@/utils/supabase';
+import { createClient } from '@/utils/supabase';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -10,6 +10,8 @@ export default function Upload() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [file, setFile] = useState<File | null>(null);
+
+  const supabase = createClient();
 
   const uploadTheme = async () => {
     if (!file || !name || !month || !year) return alert('Missing data');

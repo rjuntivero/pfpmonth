@@ -74,25 +74,45 @@
   filter: drop-shadow(var(--shadow));
 }
 
-.voteTag,
-.tbdTag {
+.tagStack {
   position: absolute;
   top: 1rem;
   left: 1rem;
-  padding: 0.4rem 0.75rem;
-  border-radius: 999px;
-  font-weight: 600;
   display: flex;
-  align-items: center;
-  font-size: 0.85rem;
+  flex-direction: column;
   gap: 0.5rem;
-  z-index: 10;
-  backdrop-filter: blur(4px);
+  z-index: 20;
 }
 
-.voteTag {
+.leadingTag {
   background-color: gold;
-  color: black;
+}
+
+.recentTag {
+  background-color: var(--accent);
+}
+
+.leadingTag,
+.recentTag {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+  box-shadow: var(--shadow);
+  color: var(--text);
+}
+
+.tagIcon {
+  width: 1.5em;
+  height: 1.5em;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
 }
 
 .tbdTag {

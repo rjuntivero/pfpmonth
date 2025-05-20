@@ -1,43 +1,9 @@
 import { createClient } from '@/utils/supabaseSSR';
 import { createFuturePolls } from './createFuturePolls';
+import { Slide } from '@/types/Slide';
+import { Theme, ThemeSliderResult } from '@/types/Theme';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-interface Theme {
-  id: string;
-  name: string;
-  image_url: string;
-  start_date: string;
-}
-
-interface PollOption {
-  vote_count: number;
-  theme_id: string;
-  themes: Theme | null;
-}
-
-interface Poll {
-  id: string;
-  theme_month: string;
-  poll_options: PollOption[];
-}
-
-interface Slide {
-  month: string;
-  year: number;
-  image: string;
-  name: string;
-  id?: string;
-  tag?: 'leading' | 'tbd';
-  route: string | null;
-  type: 'final' | 'poll' | 'tbd';
-}
-
-interface ThemeSliderResult {
-  serverName: string | null;
-  serverId: string | null;
-  themes: Slide[];
-}
 
 export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
   const supabase = await createClient();
@@ -62,7 +28,10 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
 
   const themes = themesData as Theme[];
 
-  const { data: polls = [] } = await supabase.from('polls').select(`
+  const { data: polls = [] } = await supabase
+    .from('polls')
+    .select(
+      `
       id,
       theme_month,
       poll_options (
@@ -70,10 +39,12 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
         vote_count,
         image_url,
         name,
-        poll_id
+        poll_id,
+        created_at
       )
-    `);
-  console.log('FETCHED POLLS ARE: ', polls);
+    `
+    )
+    .order('created_at', { referencedTable: 'poll_options', ascending: false });
 
   const slides: Slide[] = MONTHS.map((monthName, monthIndex) => {
     const month = String(monthIndex + 1).padStart(2, '0');
@@ -87,25 +58,46 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
         image: theme.image_url,
         name: theme.name,
         id: theme.id,
-        tag: undefined,
+        tag: [],
         route: `/themes/${theme.id}`,
         type: 'final',
       };
     }
 
     const poll = polls?.find((p) => p.theme_month.startsWith(monthDate));
-    console.log('FOUND POLL: ', poll);
     if (poll) {
-      const leading = poll.poll_options?.length > 0 ? [...poll.poll_options].sort((a, b) => b.vote_count - a.vote_count)[0] : null;
-      console.log('LEADING THEME: ', leading);
+      const options = poll.poll_options ?? [];
 
-      const optionTheme = leading ?? null;
+      const maxVotes = Math.max(...options.map((opt) => opt.vote_count ?? 0));
+      const topVoted = options.filter((opt) => opt.vote_count === maxVotes);
 
+      // Sort ties by created_at DESC (newest wins)
+      topVoted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      const optionTheme = topVoted[0] ?? null;
       const isFuture = currentYear > new Date().getFullYear() || (currentYear === new Date().getFullYear() && monthIndex > new Date().getMonth());
 
       const hasTheme = !!optionTheme?.id;
-      console.log('THIS LEADING THEME HAS THEME: ', hasTheme);
-      console.log('THIS LEADING THEME POLL ID: ', leading?.poll_id);
+
+      const tags: Slide['tag'][] = [];
+
+      if (hasTheme) {
+        const isTied = topVoted.length > 1;
+
+        if (isTied) {
+          tags.push('most_recent');
+        } else {
+          tags.push('leading');
+
+          // check if it's also the most recent overall
+          const isMostRecent = options[0]?.id === optionTheme.id;
+
+          console.log('JAKE IS THE MOST RECENT: ', isMostRecent);
+          if (isMostRecent) tags.push('most_recent');
+        }
+      } else if (isFuture) {
+        tags.push('tbd');
+      }
 
       return {
         month: monthName,
@@ -113,7 +105,7 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
         image: hasTheme ? optionTheme.image_url : '/no-image-placeholder.jpg',
         name: hasTheme ? optionTheme.name : 'No Theme',
         id: hasTheme ? optionTheme.poll_id : poll.id,
-        tag: hasTheme ? 'leading' : isFuture ? 'tbd' : undefined,
+        tag: tags,
         route: hasTheme ? `/themes/${optionTheme.poll_id}/vote?month=${monthName}&year=${currentYear}` : isFuture ? `/themes/${poll.id}/vote?month=${monthName}&year=${currentYear}` : null,
         type: hasTheme ? 'poll' : 'tbd',
       };
@@ -124,7 +116,7 @@ export async function fetchThemesAndServer(): Promise<ThemeSliderResult> {
       year: currentYear,
       image: '/no-image-placeholder.jpg',
       name: 'No Theme',
-      tag: undefined,
+      tag: [],
       route: null,
       type: 'tbd',
     };

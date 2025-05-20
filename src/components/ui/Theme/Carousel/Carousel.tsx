@@ -106,7 +106,6 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
 
                 if (!isClickingActive || !clickedSlide?.id) return;
 
-                // navigation
                 if (clickedSlide.type === 'final') {
                   router.push(`/themes/${clickedSlide.id}`);
                 } else if (clickedSlide.type === 'poll' || clickedSlide.type === 'tbd') {
@@ -114,17 +113,26 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
                 }
               }}
             >
-              {slide.tag === 'leading' && (
-                <div className={styles.voteTag}>
-                  <Image src="/voteTag.svg" alt="#1 vote" width={20} height={20} />
-                  <span>#1 vote</span>
-                </div>
-              )}
-              {slide.tag === 'tbd' && (
-                <div className={styles.tbdTag}>
-                  <span>TBD</span>
-                </div>
-              )}
+              <div className={styles.tagStack}>
+                {slide.tag?.includes('leading') && (
+                  <div className={styles.leadingTag}>
+                    <Image src="/Star.svg" alt="Leading" width={20} height={20} className={styles.tagIcon} />
+                    <span>#1 vote</span>
+                  </div>
+                )}
+                {slide.tag?.includes('most_recent') && (
+                  <div className={styles.recentTag}>
+                    <Image src="/Clock.svg" alt="Most Recent" width={20} height={20} className={styles.tagIcon} />
+                    <span>Most Recent</span>
+                  </div>
+                )}
+
+                {slide.tag?.includes('tbd') && (
+                  <div className={styles.tbdTag}>
+                    <span>TBD</span>
+                  </div>
+                )}
+              </div>
             </div>
           );
         })}

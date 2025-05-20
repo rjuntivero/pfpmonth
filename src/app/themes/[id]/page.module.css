@@ -164,7 +164,7 @@
   }
   & .comment {
     font-size: clamp(0.6rem, 5vw, 1.3rem);
-    font-weight: 600;
+    font-weight: 400;
     background-color: black;
     padding: 0.5em 1em;
     text-align: center;
@@ -175,6 +175,7 @@
     max-width: 40ch;
     white-space: wrap;
     margin-inline: auto;
+    font-family: Inter;
   }
 }
 

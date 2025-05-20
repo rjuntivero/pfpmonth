@@ -1,13 +1,9 @@
-import Poll from '@/components/ui/Poll/Poll';
 import styles from './page.module.css';
-import { fetchPollThemes } from '@/lib/fetchPollThemes';
+import PollList from '@/components/ui/Poll/PollList/PollList';
 
 export default async function Page({ params, searchParams }: { params: { id: string }; searchParams: { month?: string; year?: string } }) {
   const { id } = await params;
   const { month, year } = await searchParams;
-  const pollData = await fetchPollThemes({ pollId: id });
-  console.log('POLL ID: ', id);
-  console.log('POLL DATA: ', pollData);
 
   return (
     <div className={styles.page}>
@@ -19,10 +15,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
           <h2>Vote for a Theme</h2>
         </div>
         <div className={styles.polls}>
-          {pollData.pollThemes?.map((poll) => (
-            <Poll key={poll.id} type="theme" poll={poll} />
-          ))}
-          <Poll type="upload" poll_id={id} />
+          <PollList pollId={id} />
         </div>
       </main>
     </div>

@@ -4,7 +4,7 @@ export interface Slide {
   image: string;
   name: string;
   id?: string;
-  tag?: 'leading' | 'tbd';
+  tag?: 'leading' | 'tbd' | 'most_recent';
   route: string | null;
   type: 'final' | 'poll' | 'tbd';
 }

@@ -5,7 +5,8 @@ import ThemeSlider from '@/components/ui/Theme/ThemeSlider/ThemeSlider';
 import { fetchThemesAndServer } from '@/lib/fetchThemes';
 
 export default async function Page() {
-  const { serverName, themes } = await fetchThemesAndServer();
+  const currentYear = new Date().getFullYear();
+  const { serverName, themes } = await fetchThemesAndServer(currentYear);
 
   return (
     <div className={styles.page}>

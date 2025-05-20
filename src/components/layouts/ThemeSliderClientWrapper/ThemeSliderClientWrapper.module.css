@@ -11,12 +11,27 @@
   box-shadow: var(--text-shadow);
 }
 
-.yearNav {
+.navWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  align-self: flex-start;
   gap: 1em;
-  height: 100%;
+}
+
+.yearNav {
+  display: flex;
+  justify-content: center;
+  align-items: top;
+  gap: 1em;
+  font-size: 1.25rem;
+}
+
+.loadingSpinner {
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+  text-align: center;
 }
 
 @media (max-width: 500px) {
@@ -30,9 +45,5 @@
 
   .yearNav {
     font-size: 0.9em;
-  }
-
-  .themesPage {
-    font-size: 1.75rem !important;
   }
 }

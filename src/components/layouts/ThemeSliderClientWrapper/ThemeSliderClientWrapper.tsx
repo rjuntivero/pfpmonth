@@ -36,15 +36,17 @@ export default function ThemeSliderClientWrapper({ initialYear, initialSlides, i
   return (
     <>
       <div className={styles.yearNav}>
-        <button className={styles.navBtn} onClick={() => setYear((y) => y - 1)}>
-          {'<'}
-        </button>
-        <h1 className={styles.year}>{year}</h1>
-        <button className={styles.navBtn} onClick={() => setYear((y) => y + 1)}>
-          {'>'}
-        </button>
+        <div className={styles.navWrapper}>
+          <button className={styles.navBtn} onClick={() => setYear((y) => y - 1)}>
+            {'<'}
+          </button>
+          <h1 className={styles.year}>{year}</h1>
+          <button className={styles.navBtn} onClick={() => setYear((y) => y + 1)}>
+            {'>'}
+          </button>
+        </div>
       </div>
-      {loading ? <div style={{ minHeight: '50vh' }}>Loading themes…</div> : <ThemeSlider slides={slides} display="none" monthClassName={styles.themesPage} />}
+      {loading ? <div className={styles.loadingSpinner}>Loading themes…</div> : <ThemeSlider slides={slides} display="none" monthClassName={styles.themesPage} />}
     </>
   );
 }

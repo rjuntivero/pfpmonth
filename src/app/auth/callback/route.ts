@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabaseSSR';
-import { updateSupabaseTables } from '@/utils/dbUserData';
+import { updateSupabaseTables } from '@/lib/dbUserData';
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);

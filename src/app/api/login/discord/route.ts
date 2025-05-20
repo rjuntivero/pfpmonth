@@ -25,10 +25,6 @@ export async function GET(req: NextRequest) {
     provider: 'discord',
     options: {
       redirectTo: redirectTo,
-      // queryParams: {
-      //   server_name: server_name as string,
-      //   server_icon: server_icon as string,
-      // },
     },
   });
 

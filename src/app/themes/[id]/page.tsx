@@ -5,6 +5,7 @@ import Figure from '@/components/ui/Figure/Figure';
 import User from '@/components/ui/User/User';
 import Feedback from '@/components/ui/LikeButton/LikeButton';
 import { fetchThemeData } from '@/lib/fetchTheme';
+import JoinThemeWrapper from '@/components/Wrappers/JoinThemeWrapper/JoinThemeWrapper';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const themeData = await fetchThemeData({ themeId: params.id });
@@ -21,7 +22,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <div className={styles.title}>
           <h2>Theme</h2>
           <h1>{themeData.theme?.name || 'null'}</h1>
-          <button className={styles.joinBtn}>Join Theme</button>
+          <JoinThemeWrapper />
           <div className={styles.reviews}>
             <button className={`${styles.dislikesBtn} ${styles.btn}`}>
               <Feedback color={'#d9d9d9'} />

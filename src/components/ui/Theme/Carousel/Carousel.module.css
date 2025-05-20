@@ -123,6 +123,8 @@
 
 .activeSlideName {
   font-weight: 500;
+  max-width: 8ch;
+  pointer-events: none;
 }
 
 .inactive {
@@ -133,6 +135,8 @@
 .controls {
   display: flex;
   justify-content: center;
+  align-items: top;
+
   gap: 1.5rem;
   & button {
     font-size: 2rem;
@@ -141,6 +145,8 @@
 
 .controls button {
   padding: 0;
+  display: flex;
+  align-items: top;
 }
 
 @media (max-width: 600px) {

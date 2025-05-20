@@ -46,7 +46,13 @@ export default function ThemeSliderClientWrapper({ initialYear, initialSlides, i
           </button>
         </div>
       </div>
-      {loading ? <div className={styles.loadingSpinner}>Loading themes…</div> : <ThemeSlider slides={slides} display="none" monthClassName={styles.themesPage} />}
+      {loading ? (
+        <div className={styles.loaderWrapper}>
+          <div className={styles.loader}></div>
+        </div>
+      ) : (
+        <ThemeSlider slides={slides} display="none" monthClassName={styles.themesPage} />
+      )}
     </>
   );
 }

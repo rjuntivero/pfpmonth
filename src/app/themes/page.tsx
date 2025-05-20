@@ -5,7 +5,7 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import { fetchThemesAndServer } from '@/lib/fetchThemes';
 import { CurtainDrapes } from '@/components/ui/CurtainDrapes/CurtainDrapes';
-import ThemeSliderClientWrapper from '@/components/layouts/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
+import ThemeSliderClientWrapper from '@/components/Wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
 
 export default async function Page() {
   const currentYear = new Date().getFullYear();

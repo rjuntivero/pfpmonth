@@ -5,7 +5,7 @@ import { Theme, ThemeSliderResult } from '@/types/Theme';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export async function fetchThemesAndServer(selectedYear: number): Promise<ThemeSliderResult> {
+export async function fetchThemesAndServer(selectedYear: number, serverIdFromCookie?: string): Promise<ThemeSliderResult> {
   const supabase = await createClient();
 
   const {
@@ -15,15 +15,27 @@ export async function fetchThemesAndServer(selectedYear: number): Promise<ThemeS
   if (!user) return { serverName: null, serverId: null, themes: [] };
   await createFuturePolls();
 
-  const { data: userServer } = await supabase.from('user_servers').select('server_id, servers (name)').eq('user_id', user.id).maybeSingle();
-  const serverName = userServer?.servers?.name ?? null;
-  const serverId = userServer?.server_id ?? null;
+  let serverName: string | null = null;
+  let resolvedServerId = serverIdFromCookie ?? null;
+
+  if (!resolvedServerId) {
+    const { data: userServer } = await supabase.from('user_servers').select('server_id, servers (name)').eq('user_id', user.id).maybeSingle();
+
+    resolvedServerId = userServer?.server_id ?? null;
+    serverName = userServer?.servers?.name ?? null;
+  } else {
+    const { data: server } = await supabase.from('servers').select('name').eq('id', resolvedServerId).single();
+
+    serverName = server?.name ?? null;
+  }
+
+  if (!resolvedServerId) return { serverName, serverId: null, themes: [] };
 
   // if (!serverId) return { serverName, serverId, themes: [] };
 
   const currentYear = selectedYear;
 
-  const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, start_date').eq('server_id', serverId);
+  const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, start_date').eq('server_id', resolvedServerId);
 
   const themes = themesData as Theme[];
 
@@ -43,6 +55,7 @@ export async function fetchThemesAndServer(selectedYear: number): Promise<ThemeS
       )
     `
     )
+    .eq('server_id', resolvedServerId)
     .order('created_at', { referencedTable: 'poll_options', ascending: false });
 
   const slides: Slide[] = MONTHS.map((monthName, monthIndex) => {
@@ -124,5 +137,5 @@ export async function fetchThemesAndServer(selectedYear: number): Promise<ThemeS
     };
   });
 
-  return { serverName, serverId, themes: slides };
+  return { serverName, serverId: resolvedServerId, themes: slides };
 }

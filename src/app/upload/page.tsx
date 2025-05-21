@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 import { createClient } from '@/utils/supabase';
+import getCookie from '@/lib/getClientCookie';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -10,6 +11,7 @@ export default function Upload() {
   const [month, setMonth] = useState('');
   const [year, setYear] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const serverId = getCookie('server_id');
 
   const supabase = createClient();
 
@@ -19,7 +21,7 @@ export default function Upload() {
     const monthIndex = MONTHS.findIndex((m) => m.toLowerCase() === month.toLowerCase());
     if (monthIndex === -1) return alert('Invalid month name');
 
-    const filePath = `themes/1369912474324697139/${year}-${month.padStart(2, '0')}`;
+    const filePath = `themes/${serverId}/${year}-${month.padStart(2, '0')}`;
     const { error: uploadError } = await supabase.storage.from('theme-images').upload(filePath, file, { upsert: true });
 
     if (uploadError) {
@@ -35,7 +37,7 @@ export default function Upload() {
         name,
         start_date: parsedStart.toISOString().split('T')[0],
         image_url: publicUrlData.publicUrl,
-        server_id: '1369912474324697139',
+        server_id: serverId,
       },
       {
         onConflict: 'server_id, start_date',

@@ -3,10 +3,12 @@ import styles from './page.module.css';
 import CallToAction from '@/components/layouts/CallToAction/CallToAction';
 import ThemeSlider from '@/components/ui/Theme/ThemeSlider/ThemeSlider';
 import { fetchThemesAndServer } from '@/lib/fetchThemes';
+import { cookies } from 'next/headers';
 
 export default async function Page() {
   const currentYear = new Date().getFullYear();
-  const { serverName, themes } = await fetchThemesAndServer(currentYear);
+  const serverId = (await cookies()).get('server_id')?.value;
+  const { serverName, themes } = await fetchThemesAndServer(currentYear, serverId);
 
   return (
     <div className={styles.page}>

@@ -2,6 +2,33 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabaseSSR';
 import { updateSupabaseTables } from '@/lib/dbUserData';
 
+type Metadata = {
+  discord_id?: string;
+  server_id?: string;
+  server_name?: string;
+  server_icon?: string;
+};
+
+function setCookies(response: NextResponse, { server_id, server_name, server_icon }: Metadata) {
+  const maxAge = 60 * 60 * 24 * 7; // 7 days
+  response.cookies.set('server_id', server_id ?? '', {
+    path: '/',
+    maxAge,
+    sameSite: 'lax',
+  });
+  response.cookies.set('server_name', server_name ?? '', {
+    path: '/',
+    maxAge,
+    sameSite: 'lax',
+  });
+  response.cookies.set('server_icon', server_icon ?? '', {
+    path: '/',
+    maxAge,
+    sameSite: 'lax',
+  });
+  return response;
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get('code');
@@ -20,12 +47,6 @@ export async function GET(request: Request) {
     console.error('Failed to parse data param:', e);
   }
 
-  const { discord_id, server_id, server_name, server_icon } = metadata;
-  console.log('DISCORD ID: ', discord_id);
-  console.log('SERVER ID: ', server_id);
-  console.log('SERVER NAME: ', server_name);
-  console.log('SERVER ICON: ', server_icon);
-
   if (code) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
@@ -43,11 +64,24 @@ export async function GET(request: Request) {
 
       if (isLocalEnv) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}`);
+        const redirectUrl = `${origin}${next}`;
+        const response = NextResponse.redirect(redirectUrl);
+
+        // set cookies
+        setCookies(response, metadata);
+
+        return response;
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
+        const redirectUrl = `https://${forwardedHost}${next}`;
+        const response = NextResponse.redirect(redirectUrl);
+        // set cookies
+        setCookies(response, metadata);
+        return response;
       } else {
-        return NextResponse.redirect(`${origin}${next}`);
+        const redirectUrl = `${origin}${next}`;
+        const response = NextResponse.redirect(redirectUrl);
+        // set cookies
+        setCookies(response, metadata);
       }
     }
   }

@@ -22,20 +22,30 @@ export default function Navbar() {
   const containerRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    function updateUnderline() {
+      if (!containerRef.current) return;
 
-    const activeLink = Array.from(containerRef.current.querySelectorAll('a')).find((link) => {
-      const basePath = link.getAttribute('data-path');
-      return pathname === basePath || pathname.startsWith(basePath + '/');
-    });
-    if (activeLink) {
-      const rect = activeLink.getBoundingClientRect();
-      const containerRect = containerRef.current.getBoundingClientRect();
-      setUnderlineProps({
-        left: rect.left - containerRect.left,
-        width: rect.width,
+      const activeLink = Array.from(containerRef.current.querySelectorAll('a')).find((link) => {
+        const basePath = link.getAttribute('data-path');
+        return pathname === basePath || pathname.startsWith(basePath + '/');
       });
+
+      if (activeLink) {
+        const rect = activeLink.getBoundingClientRect();
+        const containerRect = containerRef.current.getBoundingClientRect();
+        setUnderlineProps({
+          left: rect.left - containerRect.left,
+          width: rect.width,
+        });
+      }
     }
+
+    updateUnderline(); // initial on load or pathname change
+    window.addEventListener('resize', updateUnderline); // watch for resizes
+
+    return () => {
+      window.removeEventListener('resize', updateUnderline); // clean up
+    };
   }, [pathname]);
 
   return (

@@ -26,6 +26,7 @@ function setCookies(response: NextResponse, { server_id, server_name, server_ico
     maxAge,
     sameSite: 'lax',
   });
+
   return response;
 }
 

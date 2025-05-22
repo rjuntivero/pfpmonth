@@ -2,10 +2,10 @@ import { createClient } from '@/utils/supabaseSSR';
 
 const MONTHS = Array.from({ length: 12 }, (_, i) => i);
 
-export async function createFuturePolls(): Promise<void> {
+export async function createFuturePolls(serverId: string): Promise<void> {
   const supabase = await createClient();
 
-  const { data: existingPolls = [] } = await supabase.from('polls').select('theme_month');
+  const { data: existingPolls = [] } = await supabase.from('polls').select('theme_month').eq('server_id', serverId);
 
   const existingMonths = new Set(existingPolls?.map((p) => p.theme_month.split('T')[0]));
 
@@ -22,6 +22,7 @@ export async function createFuturePolls(): Promise<void> {
 
     return {
       theme_month: dateStr,
+      server_id: serverId,
     };
   }).filter(Boolean);
 

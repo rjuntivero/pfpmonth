@@ -13,7 +13,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
   } = await supabase.auth.getUser();
 
   if (!user) return { serverName: null, serverId: null, themes: [] };
-  await createFuturePolls();
+  await createFuturePolls(serverIdFromCookie as string);
 
   let serverName: string | null = null;
   let resolvedServerId = serverIdFromCookie ?? null;
@@ -30,8 +30,6 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
   }
 
   if (!resolvedServerId) return { serverName, serverId: null, themes: [] };
-
-  // if (!serverId) return { serverName, serverId, themes: [] };
 
   const currentYear = selectedYear;
 
@@ -58,12 +56,10 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
     .eq('server_id', resolvedServerId)
     .order('created_at', { referencedTable: 'poll_options', ascending: false });
 
+  // fetch past/present themes (polls)
   const slides: Slide[] = MONTHS.map((monthName, monthIndex) => {
     const month = String(monthIndex + 1).padStart(2, '0');
     const monthDate = `${currentYear}-${month}`;
-    console.log('MONTH DATE: ', monthDate);
-
-    console.log('THEMES TO COMPARE: ', themes);
 
     const theme = themes.find((t) => t.start_date.startsWith(monthDate));
     if (theme) {
@@ -79,6 +75,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
       };
     }
 
+    // fetch future themes (polls)
     const poll = polls?.find((p) => p.theme_month.startsWith(monthDate));
     if (poll) {
       const options = poll.poll_options ?? [];
@@ -86,7 +83,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
       const maxVotes = Math.max(...options.map((opt) => opt.vote_count ?? 0));
       const topVoted = options.filter((opt) => opt.vote_count === maxVotes);
 
-      // Sort ties by created_at DESC (newest wins)
+      // sort ties by created_at DESC
       topVoted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
       const optionTheme = topVoted[0] ?? null;
@@ -107,7 +104,6 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
           // check if it's also the most recent overall
           const isMostRecent = options[0]?.id === optionTheme.id;
 
-          console.log('JAKE IS THE MOST RECENT: ', isMostRecent);
           if (isMostRecent) tags.push('most_recent');
         }
       } else if (isFuture) {

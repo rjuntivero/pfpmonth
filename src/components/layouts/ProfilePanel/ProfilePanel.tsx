@@ -1,0 +1,20 @@
+'use client';
+
+import styles from './ProfilePanel.module.css';
+
+interface ProfilePanelProps {
+  heading?: string;
+  children: React.ReactNode;
+  className?: string;
+  headingClassName?: string;
+  contentClassName?: string;
+}
+
+export default function ProfilePanel({ heading, children, className = '', headingClassName = '', contentClassName = '' }: ProfilePanelProps) {
+  return (
+    <section className={`${styles.panel} ${className}`}>
+      {heading && <h2 className={`${styles.heading} ${headingClassName}`}>{heading}</h2>}
+      <div className={`${styles.content} ${contentClassName}`}>{children}</div>
+    </section>
+  );
+}

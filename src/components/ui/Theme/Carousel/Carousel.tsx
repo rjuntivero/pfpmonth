@@ -104,13 +104,9 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
                 const clickedSlide = slides[logicalIndex];
                 const isClickingActive = logicalIndex === activeIndex;
 
-                if (!isClickingActive || !clickedSlide?.id) return;
+                if (!isClickingActive || !clickedSlide?.route) return;
 
-                if (clickedSlide.type === 'final') {
-                  router.push(`/themes/${clickedSlide.id}`);
-                } else if (clickedSlide.type === 'poll' || clickedSlide.type === 'tbd') {
-                  router.push(clickedSlide.route as string);
-                }
+                router.push(clickedSlide.route as string);
               }}
             >
               <div className={styles.tagStack}>

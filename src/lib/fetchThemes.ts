@@ -56,10 +56,14 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
     .eq('server_id', resolvedServerId)
     .order('created_at', { referencedTable: 'poll_options', ascending: false });
 
-  // fetch past/present themes (polls)
+  // fetch past/present themes
   const slides: Slide[] = MONTHS.map((monthName, monthIndex) => {
     const month = String(monthIndex + 1).padStart(2, '0');
     const monthDate = `${currentYear}-${month}`;
+
+    const now = new Date();
+    const currentMonthDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const isCurrentMonth = monthDate === currentMonthDate;
 
     const theme = themes.find((t) => t.start_date.startsWith(monthDate));
     if (theme) {
@@ -72,6 +76,18 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
         tag: [],
         route: `/themes/${theme.id}`,
         type: 'final',
+      };
+    }
+
+    if (isCurrentMonth && !theme) {
+      return {
+        month: monthName,
+        year: currentYear,
+        image: '/no-image-placeholder.jpg',
+        name: 'No Theme',
+        tag: ['active'],
+        route: '/themes/upload?month=May&year=2025',
+        type: 'tbd',
       };
     }
 
@@ -115,9 +131,9 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
         year: currentYear,
         image: hasTheme ? optionTheme.image_url : '/no-image-placeholder.jpg',
         name: hasTheme ? optionTheme.name : 'No Theme',
-        id: hasTheme ? optionTheme.poll_id : poll.id,
+        id: hasTheme && poll.id,
         tag: tags,
-        route: hasTheme ? `/themes/${optionTheme.poll_id}/vote?month=${monthName}&year=${currentYear}` : isFuture ? `/themes/${poll.id}/vote?month=${monthName}&year=${currentYear}` : null,
+        route: hasTheme || isFuture ? `/themes/${poll.id}/vote?month=${monthName}&year=${currentYear}` : null,
         type: hasTheme ? 'poll' : 'tbd',
       };
     }

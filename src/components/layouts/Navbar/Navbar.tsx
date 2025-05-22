@@ -13,7 +13,6 @@ const navItems = [
   { name: 'Themes', path: '/themes' },
   { name: 'Profile', path: '/profile' },
   { name: 'Login', path: '/settings' },
-  { name: 'Upload', path: '/upload' },
 ];
 
 export default function Navbar() {

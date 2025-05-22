@@ -1,9 +1,9 @@
 import { createClient } from '@/utils/supabaseSSR';
 import { error } from 'console';
 
-export async function fetchThemeData({ themeId }: { themeId: string }) {
+export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
   const supabase = await createClient();
-  console.log('THEME ID TO FETCH: ', themeId);
+  console.log('THEME ID TO FETCH: ', themeMonth);
 
   const {
     data: { user },
@@ -20,7 +20,6 @@ export async function fetchThemeData({ themeId }: { themeId: string }) {
       id, 
       name, 
       description, 
-      start_date,
       image_url,
       status, 
       created_by ( 
@@ -42,7 +41,7 @@ export async function fetchThemeData({ themeId }: { themeId: string }) {
       )
     `
     )
-    .eq('id', themeId)
+    .eq('theme_month', themeMonth)
     .single();
   console.log('THEME FETCHED: ', themeData);
 
@@ -63,7 +62,7 @@ export async function fetchThemeData({ themeId }: { themeId: string }) {
       name: themeData?.name,
       description: themeData?.description,
       image_url: themeData?.image_url,
-      start_date: themeData?.start_date,
+      theme_month: themeMonth,
       status: themeData?.status,
       created_by: {
         username: themeData?.created_by?.username,

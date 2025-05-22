@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import styles from './page.module.css';
+import styles from './SuggestionPage.module.css';
 import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackground';
 import Figure from '@/components/ui/Figure/Figure';
 import User from '@/components/ui/User/User';
@@ -7,8 +7,8 @@ import Feedback from '@/components/ui/LikeButton/LikeButton';
 import { fetchThemeData } from '@/lib/fetchTheme';
 import JoinThemeWrapper from '@/components/Wrappers/JoinThemeWrapper/JoinThemeWrapper';
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const themeData = await fetchThemeData({ themeId: params.id });
+export default async function SuggestionPage({ slug }: { slug: { themeMonth: string } }) {
+  const themeData = await fetchThemeData({ themeMonth: slug.themeMonth });
   return (
     <div className={styles.page}>
       <main className={styles.main}>

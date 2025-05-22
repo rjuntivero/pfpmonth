@@ -5,6 +5,7 @@ export interface Theme {
   name: string;
   image_url: string;
   start_date: string;
+  theme_month: string;
 }
 
 export interface ThemeSliderResult {

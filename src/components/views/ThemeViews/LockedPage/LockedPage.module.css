@@ -1,0 +1,363 @@
+.page {
+  color: var(--foreground);
+  min-height: 100svh;
+  padding: 0% 80px 80px 80px;
+  background-color: var(--background);
+  background-size: cover;
+  position: relative;
+}
+
+@media (prefers-color-scheme: dark) {
+  .page {
+    --gray-rgb: 255, 255, 255;
+    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
+    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
+
+    --button-primary-hover: #ccc;
+    --button-secondary-hover: #1a1a1a;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2rem;
+  align-items: start;
+  justify-content: center;
+  padding-top: 8rem;
+  padding-inline: 2rem;
+  z-index: 1;
+}
+
+.frameWrapper {
+  position: absolute;
+  top: -60;
+  left: 0;
+  width: 100vw;
+  height: auto;
+  aspect-ratio: 1606 / 552;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.frame {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.reviews {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.5em;
+  gap: 1rem;
+
+  & .likesBtn {
+    color: green;
+  }
+  & .dislikesBtn {
+    fill: red;
+    transform: rotate(180deg);
+  }
+}
+
+.btn svg {
+  width: 55px;
+  height: 55px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.btn {
+  background-color: black;
+  padding: 1.3em;
+  border-radius: 50%;
+}
+
+.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  line-height: -2.3;
+  flex: 1 1 60%;
+  flex: 2;
+  width: 100%;
+  flex: 1.4;
+  padding-inline: 2rem;
+  & h2 {
+    font-weight: 500;
+    font-size: 4.5rem;
+    line-height: 82.46%;
+    /* or 51px */
+    text-align: center;
+    letter-spacing: -0.11em;
+    white-space: wrap;
+
+    color: var(--foreground);
+    text-shadow: var(--text-outline);
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    margin: -7px 0px;
+  }
+  & h1 {
+    text-transform: capitalize;
+    font-size: clamp(4rem, 13vw, 12rem);
+    font-family: var(--font-baloo);
+    color: var(--accent);
+    margin-inline: auto;
+
+    font-weight: 600;
+    line-height: 82.46%;
+    letter-spacing: -0.11em;
+    text-wrap: wrap;
+    max-width: 15ch;
+    /* font outline */
+    text-shadow: 0px 7px 0px rgba(0, 0, 0, 0.75), -2px -2px 0 #251628, 2px -2px 0 #251628, -2px 2px 0 #251628, 2px 2px 0 #251628;
+
+    flex: none;
+    align-self: stretch;
+    flex-grow: 0;
+  }
+
+  & .date {
+    font-size: 1.5rem;
+    top: 0;
+    margin-bottom: 0.5em;
+    letter-spacing: -0.22px;
+    padding-bottom: 0.5em;
+    text-shadow: none;
+    font-weight: 700;
+    color: var(--main);
+    text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
+  }
+  & .comment {
+    font-size: clamp(0.6rem, 5vw, 1.3rem);
+    font-weight: 400;
+    background-color: black;
+    padding: 0.5em 1em;
+    text-align: center;
+    color: white;
+    filter: brightness(1.1);
+    box-shadow: 0px 0px 8px white;
+    margin-top: 1em;
+    max-width: 40ch;
+    white-space: wrap;
+    margin-inline: auto;
+    font-family: Inter;
+  }
+}
+
+.date span {
+  color: var(--main);
+  font-family: 'ClashDisplay';
+}
+
+.author {
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transform: translateY(0);
+  opacity: 0;
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  animation: blurDown 0.5s ease-out 1s forwards;
+
+  & .authorAvatar {
+    width: clamp(100px, 10vw, 200px);
+    height: auto;
+    aspect-ratio: 1/1;
+    position: relative;
+    background-color: #1a1a1a;
+    border-radius: 50%;
+    border: 2px solid var(--foreground);
+    overflow: hidden;
+    display: flex;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+  }
+
+  & .authorName {
+    font-family: var(--font-baloo);
+
+    font-weight: 800;
+    font-size: clamp(1rem, 7vw, 1.3rem);
+    line-height: 82.46%;
+    text-align: center;
+
+    color: var(--accent);
+
+    text-shadow: 0px 3px 0.5px rgba(0, 0, 0, 0.75);
+  }
+}
+
+.avatar {
+  object-fit: cover;
+  object-position: center;
+}
+
+.users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+  justify-content: center;
+}
+
+.stats {
+  padding-inline: 6rem;
+  display: flex;
+  gap: 2em;
+  justify-content: space-between;
+  width: 100%;
+  overflow-x: auto;
+  grid-column: 1;
+  grid-row: 3;
+}
+
+div.users {
+  overflow-y: auto;
+  max-height: 500px;
+  padding-block: 0.5em;
+}
+
+.participants {
+  z-index: 3;
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+  & h1 {
+    text-align: center;
+    padding-bottom: 0.5em;
+    font-weight: 500;
+    font-size: clamp(0.5rem, 6vw, 2rem);
+    text-shadow: 0px 5px 0px rgba(0, 0, 0, 1), -3px -3px 0 #251628, 3px -3px 0 #251628, -3px 3px 0 #251628, 3px 3px 0 #251628;
+  }
+}
+.fadeOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to bottom, transparent, transparent, transparent, transparent, black);
+  pointer-events: none;
+}
+
+/* Theme Background */
+.backgroundWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.image {
+  object-fit: cover;
+  object-position: top;
+  filter: blur(4px) contrast(75%) saturate(70%) brightness(0.3);
+}
+
+.userDetails {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+  flex: 1;
+}
+
+@media (max-width: 1200px) {
+  .main {
+    padding-top: 1rem;
+  }
+  .page {
+    padding: 0.7em;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+    padding-inline: 0;
+    padding-top: 3rem;
+    flex: 0;
+    & h2 {
+      font-size: 3.5rem;
+    }
+  }
+  .stats {
+    justify-content: center;
+  }
+  .btn svg {
+    width: 40px;
+    height: 40px;
+  }
+  .main {
+    flex-direction: column;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .stats {
+    padding-block: 3.5rem;
+    padding-inline: 0.1em;
+    overflow: auto;
+  }
+  .main {
+    padding: 0.5rem;
+  }
+
+  .title {
+    margin-bottom: 1rem;
+    & h2 {
+      font-size: 2rem;
+    }
+  }
+
+  .author {
+    & .authorAvatar {
+      width: 100px;
+    }
+
+    & .authorName {
+      font-size: 1rem;
+    }
+  }
+
+  .joinBtn {
+    margin-top: 1em;
+    font-size: 1em;
+  }
+
+  .title h2.date {
+    font-size: 1rem;
+    text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.25);
+  }
+}
+
+@keyframes blurDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

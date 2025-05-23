@@ -9,7 +9,6 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
   if (!user) {
     return { error: 'Not authenticated' };
   }
-  console.log('POLL ID', pollId);
 
   const { data: pollOptionsData, error } = await supabase
     .from('poll_options')
@@ -22,9 +21,6 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
       image_url,
       server_id,
       name,
-      polls (
-        theme_month
-      ),
       poll_votes (
         user_id,
         users (
@@ -47,9 +43,6 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
   }
 
   const pollThemes = pollOptionsData.map((option) => {
-    const themeMonth = option.polls?.[0]?.theme_month ?? '';
-    const [year, month] = themeMonth.split('-');
-
     return {
       id: option.id,
       name: option.name,
@@ -62,8 +55,6 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
       description: option.option_text,
       server_id: option.server_id,
       poll_id: option.poll_id,
-      month: month,
-      year: year,
       supporters:
         option.poll_votes?.map((vote) => ({
           user_id: vote.user_id,

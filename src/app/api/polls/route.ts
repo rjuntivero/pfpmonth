@@ -2,8 +2,6 @@ import { createClient } from '@/utils/supabaseSSR';
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadThemeImage } from '@/lib/uploadImage';
 
-export const revalidate = 10;
-
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const {
@@ -24,18 +22,20 @@ export async function POST(req: NextRequest) {
   const poll_id = form.get('poll_id')?.toString();
   const name = form.get('theme-name')?.toString();
   const option_text = form.get('theme-description')?.toString();
-  const month = form.get('month')?.toString();
-  const year = form.get('year')?.toString();
   const serverId = form.get('server_id')?.toString();
 
-  if (!poll_id || !name || !option_text || !month || !year || !serverId) {
+  if (!poll_id || !name || !option_text || !serverId) {
     return NextResponse.json({ error: 'Missing required form fields' }, { status: 400 });
   }
 
-  const yearMonth = `${year}-${month}`;
+  console.log('FETCHED POLL ID: ', poll_id);
+  console.log('FETCHED POLL NAME: ', name);
+  console.log('FETCHED POLL OPTION TEXT: ', option_text);
+  console.log('FETCHED POLL SERVER ID: ', serverId);
+
   const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-  const image_url = await uploadThemeImage({ fileName: file.name, fileBuffer, serverId, yearMonth });
+  const image_url = await uploadThemeImage({ fileName: file.name, fileBuffer, serverId });
 
   const { error } = await supabase.from('poll_options').insert([{ poll_id, created_by: user.id, name, option_text, image_url }]);
 
@@ -101,8 +101,8 @@ export async function GET(req: NextRequest) {
       avatar_url: option.users?.avatar_url || '',
     },
     description: option.option_text,
-    month: '', // fill from query or elsewhere if needed
-    year: '', // same here
+    month: '',
+    year: '',
     supporters: (option.poll_votes || []).map((vote) => ({
       user_id: vote.user_id,
       username: vote.users?.username || '',

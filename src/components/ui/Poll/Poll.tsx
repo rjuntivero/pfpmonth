@@ -5,37 +5,23 @@ import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Avatar from '../User/Avatar/Avatar';
-import { useSearchParams } from 'next/navigation';
+import getCookie from '@/lib/getClientCookie';
+import { Poll as PollType } from '@/types/Polls';
 // import User from '../User/User';
-
-interface Poll {
-  id: string;
-  description: string;
-  vote_count: number;
-  image_url: string;
-  created_by: {
-    username: string;
-    avatar_url?: string;
-  };
-  name: string;
-  supporters: string[];
-  month: string;
-  year: string;
-}
 
 const UploadThemeModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
 const ThemeDetailsModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
 
-export default function Poll({ poll_id, poll, type, onUploadSuccess }: { poll_id: string; poll?: Poll; type: string; onUploadSuccess?: () => void }) {
+export default function Poll({ poll, type, onUploadSuccess }: { poll?: PollType; type: string; onUploadSuccess?: () => void }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const searchParams = useSearchParams();
-  const month = searchParams.get('month');
-  const year = searchParams.get('year');
+
+  const serverId = getCookie('server_id');
 
   const handleVoteClick = () => setIsThemeModalOpen(true);
 
   const handleUploadClick = () => setIsUploadModalOpen(true);
+
   const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -46,10 +32,8 @@ export default function Poll({ poll_id, poll, type, onUploadSuccess }: { poll_id
 
     const formData = new FormData(form);
 
-    formData.append('poll_id', poll_id as string);
-    formData.append('server_id', '1369912474324697139');
-    formData.append('month', month as string);
-    formData.append('year', year as string);
+    formData.append('poll_id', poll?.id as string);
+    formData.append('server_id', serverId as string);
 
     const res = await fetch('/api/polls', {
       method: 'POST',

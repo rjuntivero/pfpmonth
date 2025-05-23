@@ -1,21 +1,25 @@
+import { fetchServerPoll } from '@/lib/fetchServerPoll';
 import styles from './page.module.css';
 import PollList from '@/components/ui/Poll/PollList/PollList';
+import { cookies } from 'next/headers';
 
-export default async function Page({ params, searchParams }: { params: { id: string }; searchParams: { month?: string; year?: string } }) {
-  const { id } = await params;
-  const { month, year } = await searchParams;
+export default async function Page() {
+  const serverId = (await cookies()).get('server_id')?.value;
+  const serverName = (await cookies()).get('server_name')?.value;
+  const poll = await fetchServerPoll(serverId as string);
+  console.log('POLL IS: ', poll);
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.header}>
           <h1>
-            {month || `${new Date().toLocaleString('default', { month: 'long' })}`} <span>{year || `${new Date().getFullYear()}`}</span>
+            <span>{serverName}</span>
           </h1>
           <h2>Vote for a Theme</h2>
         </div>
         <div className={styles.polls}>
-          <PollList pollId={id} />
+          <PollList poll={poll} />
         </div>
       </main>
     </div>

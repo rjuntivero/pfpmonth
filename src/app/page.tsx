@@ -31,7 +31,7 @@ export default async function Page() {
         <section>
           <TrendingThemes />
         </section>
-        <ThemeSlider serverName={serverName} slides={themes ?? []} />
+        <ThemeSlider serverName={serverName as string} slides={themes ?? []} />
         <section className={styles.CallToAction}>
           <CallToAction />
         </section>

@@ -26,6 +26,7 @@
   align-items: center;
   aspect-ratio: 5 / 1;
   top: 0;
+  padding: 4rem;
 }
 
 /* Theme Background (absolute fill behind everything) */

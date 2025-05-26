@@ -4,6 +4,7 @@ import styles from './CallToAction.module.css';
 import { useEffect, useRef } from 'react';
 import { animate, useScroll } from 'framer-motion';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 function StaticText({ text, balooIndices = [] }: { text: string; startIndex?: number; balooIndices?: number[] }) {
   return (
@@ -25,6 +26,12 @@ export default function CallToAction() {
     target: buttonRef,
     offset: ['start 100%', 'end 50%'],
   });
+
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/themes/vote');
+  };
 
   useEffect(() => {
     if (!buttonRef.current) return;
@@ -67,7 +74,7 @@ export default function CallToAction() {
 
       <Image src="/CallToActionChasm.svg" className={styles.chasm} alt="Chasm" width={1068} height={566} priority />
 
-      <button ref={buttonRef} className={styles.voteBtn}>
+      <button ref={buttonRef} className={styles.voteBtn} onClick={handleClick}>
         <span className={styles.voteLabel}>Vote here</span>
       </button>
     </section>

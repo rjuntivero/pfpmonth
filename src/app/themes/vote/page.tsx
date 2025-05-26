@@ -13,9 +13,7 @@ export default async function Page() {
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.header}>
-          <h1>
-            <span>{serverName}</span>
-          </h1>
+          <h1>{serverName}</h1>
           <h2>Vote for a Theme</h2>
         </div>
         <div className={styles.polls}>

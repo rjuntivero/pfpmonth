@@ -23,7 +23,7 @@ export default function ThemeSlider({ serverName, slides, display = 'both', mont
 
       <section className={styles.sliderSection}>
         <h3 className={`${styles.date} ${monthClassName || ''}`}>
-          {activeSlide.month} {showDetails && activeSlide.year}
+          {activeSlide?.month} {showDetails && activeSlide?.year}
         </h3>
 
         <Carousel slides={slides} setActiveSlide={setActiveSlide} />

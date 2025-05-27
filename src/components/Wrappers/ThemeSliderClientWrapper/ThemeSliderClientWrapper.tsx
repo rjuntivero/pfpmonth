@@ -4,20 +4,27 @@
 import { useEffect, useRef, useState } from 'react';
 import ThemeSlider from '@/components/ui/Theme/ThemeSlider/ThemeSlider';
 import styles from './ThemeSliderClientWrapper.module.css';
+import { useDispatch } from 'react-redux';
+import { setThemeYear } from '@/features/themeSlice';
 import { Slide } from '@/types/Slide';
+import { useAppSelector } from '@/state/hooks';
 
 interface Props {
-  initialYear: number;
   initialSlides: Slide[];
   initialRender: boolean;
   serverId: string;
 }
 
-export default function ThemeSliderClientWrapper({ initialYear, initialSlides, initialRender, serverId }: Props) {
-  const [year, setYear] = useState(initialYear);
+export default function ThemeSliderClientWrapper({ initialSlides, initialRender, serverId }: Props) {
   const [slides, setSlides] = useState(initialSlides);
   const [loading, setLoading] = useState(false);
   const hasFetchedOnce = useRef(initialRender);
+  const year = useAppSelector((state) => state.theme.year);
+  const dispatch = useDispatch();
+
+  const handleYearUpdate = (updatedYear: number) => {
+    dispatch(setThemeYear(updatedYear));
+  };
 
   useEffect(() => {
     if (hasFetchedOnce.current === false) {
@@ -37,11 +44,11 @@ export default function ThemeSliderClientWrapper({ initialYear, initialSlides, i
     <>
       <div className={styles.yearNav}>
         <div className={styles.navWrapper}>
-          <button className={styles.navBtn} onClick={() => setYear((y) => y - 1)}>
+          <button className={styles.navBtn} onClick={() => handleYearUpdate(year - 1)}>
             {'<'}
           </button>
           <h1 className={styles.year}>{year}</h1>
-          <button className={styles.navBtn} onClick={() => setYear((y) => y + 1)}>
+          <button className={styles.navBtn} onClick={() => handleYearUpdate(year + 1)}>
             {'>'}
           </button>
         </div>

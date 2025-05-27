@@ -7,4 +7,5 @@ export interface Slide {
   tag?: 'leading' | 'tbd' | 'most_recent';
   route: string | null;
   type: 'final' | 'poll' | 'tbd';
+  description?: string;
 }

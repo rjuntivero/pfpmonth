@@ -27,10 +27,10 @@ export default async function Page() {
         <div className={styles.themes}>
           <CurtainDrapes />
           <Image src="/curtainsTop.svg" alt="curtain top container" width={1472} height={36} className={styles.curtainsTop} />
-          <ThemeSliderClientWrapper initialYear={currentYear} initialSlides={themes} initialRender={false} serverId={serverId as string} />
+          <ThemeSliderClientWrapper initialSlides={themes} initialRender={false} serverId={serverId as string} />
         </div>
       </main>
-      <ThemeOverviewPanel themes={themes}></ThemeOverviewPanel>
+      <ThemeOverviewPanel initialYear={currentYear} initialThemes={themes} serverId={serverId as string} />
     </div>
   );
 }

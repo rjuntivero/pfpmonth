@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google-cloud/aiplatform": "^4.2.0",
+    "@google/genai": "^1.1.0",
+    "@google/generative-ai": "^0.24.1",
     "@next/font": "^14.2.15",
     "@reduxjs/toolkit": "^2.8.2",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.49.4",
+    "google-auth-library": "^9.15.1",
     "motion": "^12.10.4",
     "next": "15.3.2",
     "react": "^19.0.0",

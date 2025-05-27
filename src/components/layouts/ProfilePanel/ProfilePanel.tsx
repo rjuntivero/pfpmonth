@@ -12,9 +12,11 @@ interface ProfilePanelProps {
 
 export default function ProfilePanel({ heading, children, className = '', headingClassName = '', contentClassName = '' }: ProfilePanelProps) {
   return (
-    <section className={`${styles.panel} ${className}`}>
+    <>
       {heading && <h2 className={`${styles.heading} ${headingClassName}`}>{heading}</h2>}
-      <div className={`${styles.content} ${contentClassName}`}>{children}</div>
-    </section>
+      <section className={`${styles.panel} ${className}`}>
+        <div className={`${styles.content} ${contentClassName}`}>{children}</div>
+      </section>
+    </>
   );
 }

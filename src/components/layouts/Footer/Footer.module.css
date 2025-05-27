@@ -9,6 +9,7 @@
   padding-block: 6rem;
   background-color: black;
   z-index: 100;
+  color: var(--foreground);
 }
 
 .wrapper .footerContent ul {
@@ -21,7 +22,6 @@
 
 .wrapper ul li {
   font-weight: 300;
-  color: var(--foreground);
   cursor: pointer;
 }
 

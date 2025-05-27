@@ -35,15 +35,19 @@ export default function ThemeCard({ theme, onEdit, onReset, onClaim, index = 0 }
         <p>{theme.description || 'No Description'}</p>
       </div>
       <div className={styles.controls}>
-        <Button variant="theme-card" onClick={() => onEdit?.(theme)}>
-          edit
-        </Button>
-        <Button variant="theme-card" onClick={() => onReset?.(theme)}>
-          reset
-        </Button>
-        <Button variant="theme-card" onClick={() => onClaim?.(theme)}>
-          claim
-        </Button>
+        {theme.tag !== 'inactive' && (
+          <>
+            <Button variant="theme-card" onClick={() => onEdit?.(theme)}>
+              edit
+            </Button>
+            <Button variant="theme-card" onClick={() => onReset?.(theme)}>
+              reset
+            </Button>
+            <Button variant="theme-card" onClick={() => onClaim?.(theme)}>
+              claim
+            </Button>
+          </>
+        )}
       </div>
     </motion.div>
   );

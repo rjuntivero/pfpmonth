@@ -49,10 +49,17 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
     setIsSidebarOpen((prev) => !prev);
   };
 
+  const currentDate = new Date();
+
+  const editableThemes = themes.filter((theme) => {
+    const themeDate = new Date(`${theme.month} 1, ${theme.year}`);
+    return themeDate >= new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+  });
+
   return (
     <>
       <Button variant="theme-sidebar" onClick={handleClick}>
-        open
+        edit themes
       </Button>
       <div className={styles.wrapper} style={{ transform: isSidebarOpen ? 'translateX(0)' : 'translateX(100%)' }}>
         <div className={styles.header}>
@@ -63,8 +70,10 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
             <div className={styles.loaderWrapper}>
               <div className={styles.loader}></div>
             </div>
+          ) : editableThemes.length >= 1 ? (
+            editableThemes.map((theme, index) => <ThemeCard index={index} key={index} theme={theme} onEdit={handleEdit} onReset={handleReset} onClaim={handleClaim} />)
           ) : (
-            themes.map((theme, index) => <ThemeCard index={index} key={index} theme={theme} onEdit={handleEdit} onReset={handleReset} onClaim={handleClaim} />)
+            <div>No editable themes...</div>
           )}
         </div>
         <div className={styles.footer}>

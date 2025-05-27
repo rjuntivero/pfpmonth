@@ -77,7 +77,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
         year: currentYear,
         image: '/no-image-placeholder.jpg',
         name: 'No Theme',
-        tag: ['active'],
+        tag: 'active',
         route: `/themes/month/${slug}`,
         type: 'tbd',
       };
@@ -85,15 +85,17 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
 
     const suggestionIndex = monthIndex - now.getMonth() - 1;
     const suggestion = suggestionIndex >= 0 ? suggestions[suggestionIndex] : null;
+    const isFuture = currentYear > now.getFullYear() || (currentYear === now.getFullYear() && monthIndex > now.getMonth());
 
-    if (suggestion) {
+    // return theme slide for poll themes
+    if (suggestion || isFuture) {
       return {
         month: monthName,
         year: currentYear,
-        image: suggestion.image_url ?? '/no-image-placeholder.jpg',
-        name: suggestion.name,
-        id: suggestion.id,
-        tag: ['suggested'],
+        image: suggestion?.image_url ?? '/no-image-placeholder.jpg',
+        name: suggestion?.name,
+        id: suggestion?.id,
+        tag: 'suggested',
         route: `/themes/month/${slug}`,
         type: 'suggestion',
       };
@@ -104,7 +106,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
       year: currentYear,
       image: '/no-image-placeholder.jpg',
       name: 'No Theme',
-      tag: [],
+      tag: 'inactive',
       route: `/themes/month/${slug}`,
       type: 'tbd',
     };

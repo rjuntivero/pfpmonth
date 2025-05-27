@@ -30,7 +30,7 @@ export default async function Page() {
           <ThemeSliderClientWrapper initialSlides={themes} initialRender={false} serverId={serverId as string} />
         </div>
       </main>
-      <ThemeOverviewPanel initialYear={currentYear} initialThemes={themes} serverId={serverId as string} />
+      <ThemeOverviewPanel initialThemes={themes} serverId={serverId as string} />
     </div>
   );
 }

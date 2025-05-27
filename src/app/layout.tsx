@@ -5,8 +5,6 @@ import './globals.css';
 import Navbar from '@/components/layouts/Navbar/Navbar';
 import Footer from '@/components/layouts/Footer/Footer';
 import { Inter } from 'next/font/google';
-import { Provider } from 'react-redux';
-import { store } from '@/state/store';
 import { ReduxProvider } from './ReduxProvider';
 
 const clashDisplay = localFont({

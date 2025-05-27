@@ -58,7 +58,15 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
         <div className={styles.header}>
           <h2>Theme Overview</h2>
         </div>
-        <div className={styles.content}>{loading ? <p>Loading...</p> : themes.map((theme, index) => <ThemeCard key={index} theme={theme} onEdit={handleEdit} onReset={handleReset} onClaim={handleClaim} />)}</div>
+        <div className={styles.content}>
+          {loading ? (
+            <div className={styles.loaderWrapper}>
+              <div className={styles.loader}></div>
+            </div>
+          ) : (
+            themes.map((theme, index) => <ThemeCard index={index} key={index} theme={theme} onEdit={handleEdit} onReset={handleReset} onClaim={handleClaim} />)
+          )}
+        </div>
         <div className={styles.footer}>
           <Button>Save</Button>
         </div>

@@ -10,7 +10,6 @@
   height: 100%;
   padding: 1.5rem;
   align-items: center;
-  border: 1px solid rgba(159, 157, 157, 0.5);
   gap: 1rem;
   transition: 0.3s ease-in-out;
 }
@@ -27,4 +26,41 @@
 
 .content::-webkit-scrollbar {
   background: transparent;
+}
+
+.loaderWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.loader {
+  width: 40px;
+  aspect-ratio: 1;
+  --c: linear-gradient(var(--main) 0 0);
+  --r1: radial-gradient(farthest-side at bottom, var(--main) 93%, var(--main));
+  --r2: radial-gradient(farthest-side at top, var(--main) 93%, var(--main));
+  background: var(--c), var(--r1), var(--r2), var(--c), var(--r1), var(--r2), var(--c), var(--r1), var(--r2);
+  background-repeat: no-repeat;
+  animation: l2 1s infinite alternate;
+}
+@keyframes l2 {
+  0%,
+  25% {
+    background-size: 8px 0, 8px 4px, 8px 4px, 8px 0, 8px 4px, 8px 4px, 8px 0, 8px 4px, 8px 4px;
+    background-position: 0 50%, 0 calc(50% - 2px), 0 calc(50% + 2px), 50% 50%, 50% calc(50% - 2px), 50% calc(50% + 2px), 100% 50%, 100% calc(50% - 2px), 100% calc(50% + 2px);
+  }
+  50% {
+    background-size: 8px 100%, 8px 4px, 8px 4px, 8px 0, 8px 4px, 8px 4px, 8px 0, 8px 4px, 8px 4px;
+    background-position: 0 50%, 0 calc(0% - 2px), 0 calc(100% + 2px), 50% 50%, 50% calc(50% - 2px), 50% calc(50% + 2px), 100% 50%, 100% calc(50% - 2px), 100% calc(50% + 2px);
+  }
+  75% {
+    background-size: 8px 100%, 8px 4px, 8px 4px, 8px 100%, 8px 4px, 8px 4px, 8px 0, 8px 4px, 8px 4px;
+    background-position: 0 50%, 0 calc(0% - 2px), 0 calc(100% + 2px), 50% 50%, 50% calc(0% - 2px), 50% calc(100% + 2px), 100% 50%, 100% calc(50% - 2px), 100% calc(50% + 2px);
+  }
+  95%,
+  100% {
+    background-size: 8px 100%, 8px 4px, 8px 4px, 8px 100%, 8px 4px, 8px 4px, 8px 100%, 8px 4px, 8px 4px;
+    background-position: 0 50%, 0 calc(0% - 2px), 0 calc(100% + 2px), 50% 50%, 50% calc(0% - 2px), 50% calc(100% + 2px), 100% 50%, 100% calc(0% - 2px), 100% calc(100% + 2px);
+  }
 }

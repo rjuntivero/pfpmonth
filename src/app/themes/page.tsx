@@ -7,6 +7,7 @@ import { fetchThemesAndServer } from '@/lib/fetchThemes';
 import { CurtainDrapes } from '@/components/ui/CurtainDrapes/CurtainDrapes';
 import ThemeSliderClientWrapper from '@/components/Wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
 import { cookies } from 'next/headers';
+import ThemeOverviewPanel from '@/components/layouts/ThemeOverviewPanel/ThemeOverviewPanel';
 
 export default async function Page() {
   const currentYear = new Date().getFullYear();
@@ -29,6 +30,7 @@ export default async function Page() {
           <ThemeSliderClientWrapper initialYear={currentYear} initialSlides={themes} initialRender={false} serverId={serverId as string} />
         </div>
       </main>
+      <ThemeOverviewPanel themes={themes}></ThemeOverviewPanel>
     </div>
   );
 }

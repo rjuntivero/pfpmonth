@@ -36,7 +36,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
   const currentYear = selectedYear;
 
   // Fetch official themes
-  const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, theme_month').eq('server_id', resolvedServerId);
+  const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, theme_month, description').eq('server_id', resolvedServerId);
 
   const themes = themesData as Theme[];
   console.log('FETCHED THEMES NOW: ', themes);
@@ -64,6 +64,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
         image: theme.image_url,
         name: theme.name,
         id: theme.id,
+        description: theme.description,
         tag: [],
         route: `/themes/month/${slug}`,
         type: 'final',

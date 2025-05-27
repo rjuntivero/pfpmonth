@@ -20,9 +20,43 @@
   filter: contrast(1.3) brightness(0.9);
 }
 
+.theme-sidebar {
+  position: fixed;
+  top: -10;
+  left: 30;
+  height: 3rem;
+  background-color: var(--main);
+  color: var(--background);
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 99;
+  transition: all 0.25s ease-in-out;
+}
+.theme-sidebar:hover {
+  transform: scale(1.03) translateY(10px);
+  transition: all 0.25s ease-in-out;
+}
+
+.theme-card {
+  font-size: 1rem;
+  background-color: var(--main);
+  border-radius: 50px;
+}
+
 @media (max-width: 600px) {
   .primary {
     margin-top: 1em;
     font-size: 1em;
+  }
+}
+
+@media (max-width: 900px) {
+  .theme-slider {
+    right: -150;
   }
 }

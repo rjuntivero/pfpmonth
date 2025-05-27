@@ -11,15 +11,34 @@
   z-index: 100;
 }
 
-.wrapper ul {
+.wrapper .footerContent ul {
   list-style: none;
   display: flex;
-  justify-content: space-around;
-  width: 100%;
+  flex-direction: column;
+  width: 300px;
+  gap: 0.5rem;
 }
 
 .wrapper ul li {
   font-weight: 300;
   color: var(--foreground);
   cursor: pointer;
+}
+
+.wrapper ul h1 span {
+  color: var(--main) !important;
+}
+
+.footerContent {
+  display: flex;
+  align-items: start;
+  justify-content: space-around;
+  width: 100%;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding-inline: 1.5rem;
+  }
 }

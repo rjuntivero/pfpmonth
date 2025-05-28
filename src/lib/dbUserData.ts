@@ -52,3 +52,4 @@ export async function updateSupabaseTables(supabase: SupabaseClient, user: User,
     if (linkInsertError) console.error('❌ Upsert user-server failed:', linkInsertError.message);
   }
 }
+

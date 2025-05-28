@@ -93,7 +93,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
         month: monthName,
         year: currentYear,
         image: suggestion?.image_url ?? '/no-image-placeholder.jpg',
-        name: suggestion?.name,
+        name: suggestion?.name || 'No Theme',
         id: suggestion?.id,
         tag: 'suggested',
         route: `/themes/month/${slug}`,

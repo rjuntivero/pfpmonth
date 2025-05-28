@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import styles from './ThemeSearch.module.css';
 
 const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY!);
 export default function ThemeSearch() {
@@ -9,7 +10,8 @@ export default function ThemeSearch() {
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
+  const handleSearch = async (e) => {
+    e.preventDefault();
     setLoading(true);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });
 
@@ -34,13 +36,13 @@ export default function ThemeSearch() {
   };
 
   return (
-    <div>
-      <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search themes…" />
-      <button onClick={handleSearch} disabled={loading}>
-        {loading ? 'Searching…' : 'Search'}
-      </button>
+    <div className={styles.container}>
+      <form onSubmit={handleSearch}>
+        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search themes…" />
+        <button disabled={loading}>{loading ? 'Searching…' : 'Search'}</button>
+      </form>
 
-      <ul>
+      <ul className={styles.results}>
         {results.map((item, i) => (
           <li key={i}>{item}</li>
         ))}

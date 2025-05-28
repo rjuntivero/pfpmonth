@@ -1,8 +1,10 @@
+'use client';
 import Button from '../../Button/Button';
 import styles from './ThemeCard.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Slide } from '@/types/Slide';
+import { useState } from 'react';
 
 interface Props {
   theme: Slide;
@@ -13,6 +15,7 @@ interface Props {
 }
 
 export default function ThemeCard({ theme, onEdit, onReset, onClaim, index = 0 }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, y: 25, filter: 'blur(7px)' }}
@@ -22,32 +25,37 @@ export default function ThemeCard({ theme, onEdit, onReset, onClaim, index = 0 }
         delay: index * 0.1,
         ease: 'easeOut',
       }}
-      className={styles.wrapper}
+      className={`${styles.container} ${isOpen ? styles.open : ''}`}
     >
       <div className={styles.imageWrapper}>
-        <Image alt="Theme image" src={theme.image || '/no-image-placeholder.jpg'} width={100} height={100} className={styles.themeImage} />
+        <Image alt="Theme image" src={theme.image || '/no-image-placeholder.jpg'} width={300} height={300} className={styles.themeImage} />
       </div>
-      <div className={styles.header}>
-        <h2>{theme.month}</h2>
-        <h3>{theme.name}</h3>
-      </div>
-      <div className={styles.body}>
-        <p>{theme.description || 'No Description'}</p>
-      </div>
-      <div className={styles.controls}>
-        {theme.tag !== 'inactive' && (
-          <>
-            <Button variant="theme-card" onClick={() => onEdit?.(theme)}>
-              edit
-            </Button>
-            <Button variant="theme-card" onClick={() => onReset?.(theme)}>
-              reset
-            </Button>
-            <Button variant="theme-card" onClick={() => onClaim?.(theme)}>
-              claim
-            </Button>
-          </>
-        )}
+      <div className={styles.themeDetails}>
+        <div className={styles.header}>
+          <h2>{theme.month}</h2>
+          <h3>{theme.name}</h3>
+          <button onClick={() => setIsOpen(!isOpen)}>+</button>
+        </div>
+        <div className={`${styles.wrapper} ${isOpen ? styles.open : ''}`}>
+          <div className={styles.content}>
+            <p>{theme.description || 'No Description'}</p>
+            <div className={styles.controls}>
+              {theme.tag !== 'inactive' && (
+                <>
+                  <Button variant="theme-card" onClick={() => onEdit?.(theme)}>
+                    edit
+                  </Button>
+                  <Button variant="theme-card" onClick={() => onReset?.(theme)}>
+                    reset
+                  </Button>
+                  <Button variant="theme-card" onClick={() => onClaim?.(theme)}>
+                    claim
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

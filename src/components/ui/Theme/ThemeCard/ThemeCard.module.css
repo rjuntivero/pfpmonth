@@ -1,30 +1,71 @@
-.wrapper {
-  padding: 1rem;
+.container {
   background-color: var(--background);
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(62, 62, 62, 0.75);
+  padding: 1rem;
+  border-radius: 20px;
+  grid-template-rows: auto;
+  grid-template-columns: 0fr 3fr;
+  grid-auto-rows: none;
+  display: grid;
+  gap: 1em;
+  transition: grid-template-columns 500ms;
+}
+
+.container.open {
+  grid-template-columns: 1fr 3fr;
+
+  transition: grid-template-columns 500ms;
+}
+.wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 500ms;
+}
+
+.wrapper.open {
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 500ms;
+}
+
+.content {
+  margin-top: 1em;
   display: grid;
   grid-template-columns: 1fr 2.5fr;
-  grid-template-rows: repeat(3, auto);
+  grid-template-rows: repeat(2, auto);
   gap: 1rem;
-  border-radius: 20px;
   color: var(--foreground);
-  border: 1px solid rgba(62, 62, 62, 0.75);
+  overflow: hidden;
 }
 
-.wrapper .header h2 {
+.header {
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-rows: repeat(2, auto);
+}
+
+.header h2 {
   color: var(--accent);
+  grid-row: 1;
 }
 
-.wrapper .header h3 {
+.header h3 {
   font-weight: 600;
 }
-.wrapper .imageWrapper {
-  object-fit: cover;
+
+.header button {
+  grid-row: 1;
+}
+
+.imageWrapper {
+  position: relative;
   width: 100%;
   height: 100%;
-  grid-row: 1 / span 3;
-
-  object-position: top;
+  aspect-ratio: 1 / 1;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: height 0.5s ease;
 }
 
 .themeImage {
@@ -35,16 +76,12 @@
   border-radius: 15px;
 }
 
-.wrapper .header {
-  grid-row: 1 / span 1;
+.body {
+  grid-row: 1;
 }
 
-.wrapper .body {
+.controls {
   grid-row: 2 / span 1;
-}
-
-.wrapper .controls {
-  grid-row: 3 / span 1;
   display: flex;
   align-items: center;
   gap: 1rem;

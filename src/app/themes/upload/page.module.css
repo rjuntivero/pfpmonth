@@ -33,7 +33,3 @@
   background-color: var(--main);
   border-radius: 50px;
 }
-
-.main label.fileUpload {
-  font-family: 'ClashDisplay';
-}

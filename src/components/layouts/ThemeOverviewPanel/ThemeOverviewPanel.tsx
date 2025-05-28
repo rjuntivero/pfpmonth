@@ -56,6 +56,10 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
     return themeDate >= new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
   });
 
+  editableThemes.forEach((theme) => {
+    console.log('FETCHED THEME DETAILS', theme);
+  });
+
   return (
     <>
       <Button variant="theme-sidebar" onClick={handleClick}>

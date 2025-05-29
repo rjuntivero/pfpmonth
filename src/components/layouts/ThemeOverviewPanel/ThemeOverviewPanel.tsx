@@ -5,6 +5,8 @@ import ThemeCard from '@/components/ui/Theme/ThemeCard/ThemeCard';
 import { useEffect, useRef, useState } from 'react';
 import { Slide } from '@/types/Slide';
 import { useAppSelector } from '@/state/hooks';
+import { useDispatch } from 'react-redux';
+import { setThemes } from '@/features/themeSlice';
 
 interface Props {
   initialThemes: Slide[];
@@ -13,51 +15,42 @@ interface Props {
 
 export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
   const year = useAppSelector((state) => state.theme.year);
-  const [themes, setThemes] = useState<Slide[]>(initialThemes);
+  const themes = useAppSelector((state) => state.theme.themes);
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  const hasFetchedOnce = useRef(false);
+
+  const didMountRef = useRef(false);
 
   useEffect(() => {
-    if (!hasFetchedOnce.current) {
-      hasFetchedOnce.current = true;
-      return;
+    if (!didMountRef.current) {
+      dispatch(setThemes(initialThemes));
+      didMountRef.current = true;
     }
+  }, [initialThemes, dispatch]);
 
+  useEffect(() => {
     setLoading(true);
     fetch(`/api/themes?serverId=${serverId}&year=${year}`)
       .then((res) => res.json())
       .then((data) => {
-        setThemes(data.slides);
+        dispatch(setThemes(data.slides));
         setLoading(false);
       });
-  }, [year, serverId]);
+  }, [year, serverId, dispatch]);
 
-  const handleEdit = (theme: Slide) => {
-    console.log('Editing', theme);
-  };
-
-  const handleReset = (theme: Slide) => {
-    console.log('Resetting', theme);
-  };
-
-  const handleClaim = (theme: Slide) => {
-    console.log('Claiming', theme);
+  const refetchThemes = async () => {
+    const res = await fetch(`/api/themes?serverId=${serverId}&year=${year}`);
+    const data = await res.json();
+    dispatch(setThemes(data.slides));
   };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const handleClick = () => {
-    setIsSidebarOpen((prev) => !prev);
-  };
+  const handleClick = () => setIsSidebarOpen((prev) => !prev);
 
   const currentDate = new Date();
-
   const editableThemes = themes.filter((theme) => {
     const themeDate = new Date(`${theme.month} 1, ${theme.year}`);
     return themeDate >= new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-  });
-
-  editableThemes.forEach((theme) => {
-    console.log('FETCHED THEME DETAILS', theme);
   });
 
   return (
@@ -75,13 +68,10 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
               <div className={styles.loader}></div>
             </div>
           ) : editableThemes.length >= 1 ? (
-            editableThemes.map((theme, index) => <ThemeCard index={index} key={index} theme={theme} onEdit={handleEdit} onReset={handleReset} onClaim={handleClaim} />)
+            editableThemes.map((theme, index) => <ThemeCard onUpdate={refetchThemes} index={index} key={index} theme={theme} onReset={() => {}} onClaim={() => {}} />)
           ) : (
             <div>No editable themes...</div>
           )}
-        </div>
-        <div className={styles.footer}>
-          <Button>Save</Button>
         </div>
       </div>
     </>

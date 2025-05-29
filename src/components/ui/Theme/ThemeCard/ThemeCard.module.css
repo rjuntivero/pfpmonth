@@ -14,7 +14,6 @@
 
 .container.open {
   grid-template-columns: 1fr 3fr;
-
   transition: grid-template-columns 500ms;
 }
 .wrapper {
@@ -38,6 +37,11 @@
   overflow: hidden;
 }
 
+.header.noTheme h3 {
+  color: var(--main);
+  font-weight: 500;
+}
+
 .header {
   display: grid;
   align-items: center;
@@ -56,6 +60,13 @@
 
 .header button {
   grid-row: 1;
+  transform: rotate(0deg);
+  transition: all 500ms;
+}
+
+.header button.open {
+  transform: rotate(45deg) scale(1.35);
+  transition: all 500ms;
 }
 
 .imageWrapper {
@@ -74,6 +85,26 @@
   object-fit: cover;
   object-position: top;
   border-radius: 15px;
+}
+
+.themeImageUpload {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 500ms;
+}
+
+.themeImageUpload:hover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 15px;
+  filter: brightness(110%) contrast(0.5);
+  transition: all 500ms;
 }
 
 .body {

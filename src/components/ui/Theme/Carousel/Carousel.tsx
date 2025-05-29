@@ -73,7 +73,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
     requestAnimationFrame(() => {
       setReady(true);
     });
-  }, []);
+  }, [slides]);
 
   return (
     <div className={styles.carouselWrapper}>

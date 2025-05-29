@@ -1,5 +1,3 @@
-export const revalidate = 10;
-
 import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackground';
 import styles from './page.module.css';
 import Image from 'next/image';
@@ -27,7 +25,7 @@ export default async function Page() {
         <div className={styles.themes}>
           <CurtainDrapes />
           <Image src="/curtainsTop.svg" alt="curtain top container" width={1472} height={36} className={styles.curtainsTop} />
-          <ThemeSliderClientWrapper initialSlides={themes} initialRender={false} serverId={serverId as string} />
+          <ThemeSliderClientWrapper initialRender={false} serverId={serverId as string} />
         </div>
       </main>
       <ThemeOverviewPanel initialThemes={themes} serverId={serverId as string} />

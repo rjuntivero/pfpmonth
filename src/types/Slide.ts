@@ -8,4 +8,5 @@ export interface Slide {
   route: string | null;
   type: 'final' | 'poll' | 'tbd';
   description?: string;
+  theme_month: string;
 }

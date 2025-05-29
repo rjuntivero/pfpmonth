@@ -56,6 +56,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
     const isCurrentMonth = now.getFullYear() === currentYear && now.getMonth() === monthIndex;
 
     const theme = themes.find((t) => t.theme_month?.startsWith(`${currentYear}-${month}`));
+    const themeMonth = `${currentYear}-${month}-01`;
 
     if (theme) {
       return {
@@ -68,6 +69,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
         tag: [],
         route: `/themes/month/${slug}`,
         type: 'final',
+        theme_month: themeMonth,
       };
     }
 
@@ -80,6 +82,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
         tag: 'active',
         route: `/themes/month/${slug}`,
         type: 'tbd',
+        theme_month: themeMonth,
       };
     }
 
@@ -98,6 +101,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
         tag: 'suggested',
         route: `/themes/month/${slug}`,
         type: 'suggestion',
+        theme_month: themeMonth,
       };
     }
 
@@ -109,6 +113,7 @@ export async function fetchThemesAndServer(selectedYear: number, serverIdFromCoo
       tag: 'inactive',
       route: `/themes/month/${slug}`,
       type: 'tbd',
+      theme_month: themeMonth,
     };
   });
 

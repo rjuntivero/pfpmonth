@@ -21,7 +21,8 @@
   gap: 0.5rem;
   flex: 1;
   width: 100%;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .content::-webkit-scrollbar {

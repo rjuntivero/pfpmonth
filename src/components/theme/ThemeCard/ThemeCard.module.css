@@ -8,7 +8,7 @@
   grid-template-columns: 0fr 3fr;
   grid-auto-rows: none;
   display: grid;
-  gap: 1em;
+  gap: 1.5em;
   transition: grid-template-columns 500ms;
 }
 
@@ -116,4 +116,35 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.nameInput {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9em;
+  font-weight: 600;
+  & input {
+    font-family: var(--font-baloo);
+    padding: 0.25em 0.75em;
+    background-color: transparent;
+    box-shadow: none;
+    border: 1px solid grey;
+
+    color: var(--foreground);
+  }
+}
+
+.descriptionInput {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  font-size: 0.9em;
+  font-family: var(--font-baloo);
+  font-weight: 600;
+  & textarea {
+    padding: 0.25em 0.75em;
+    background-color: transparent;
+    color: var(--foreground);
+    resize: none;
+  }
 }

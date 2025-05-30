@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styles from './EmptyPage.module.css';
-import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackground';
+import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
 // import Feedback from '@/components/ui/LikeButton/LikeButton';
 // import JoinThemeWrapper from '@/components/Wrappers/JoinThemeWrapper/JoinThemeWrapper';
 

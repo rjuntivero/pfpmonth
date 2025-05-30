@@ -1,16 +1,16 @@
-import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackground';
+import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
 import styles from './page.module.css';
 import Image from 'next/image';
-import { fetchThemesAndServer } from '@/lib/fetchThemes';
-import { CurtainDrapes } from '@/components/ui/CurtainDrapes/CurtainDrapes';
-import ThemeSliderClientWrapper from '@/components/Wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
+import { fetchThemes } from '@/lib/api/theme/fetchThemes';
+import { CurtainDrapes } from '@/components/theme/CurtainDrapes/CurtainDrapes';
+import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
 import { cookies } from 'next/headers';
-import ThemeOverviewPanel from '@/components/layouts/ThemeOverviewPanel/ThemeOverviewPanel';
+import ThemeOverviewPanel from '@/components/layout/ThemeOverviewPanel/ThemeOverviewPanel';
 
 export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
-  const { themes } = await fetchThemesAndServer(currentYear, serverId);
+  const { themes } = await fetchThemes(currentYear, serverId);
   return (
     <div className={styles.page}>
       <main className={styles.main}>

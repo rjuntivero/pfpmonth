@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabaseSSR';
+import { createClient } from '@/lib/utils/supabaseSSR';
 
 export async function uploadThemeImage({ fileName, fileBuffer, serverId }: { fileName: string; fileBuffer: Buffer; serverId: string }) {
   const supabase = await createClient();

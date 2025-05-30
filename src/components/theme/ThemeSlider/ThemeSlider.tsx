@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './ThemeSlider.module.css';
-import Carousel from '@/components/ui/Theme/Carousel/Carousel';
+import Carousel from '@/components/theme/Carousel/Carousel';
 import { Slide } from '@/types/Slide';
 
 export default function ThemeSlider({ serverName, slides, display = 'both', monthClassName }: { serverName?: string; slides: Slide[]; display?: 'none' | 'date' | 'button' | 'both'; monthClassName?: string }) {

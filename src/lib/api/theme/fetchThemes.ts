@@ -1,12 +1,12 @@
-import { createClient } from '@/utils/supabaseSSR';
-import { createPolls } from './createPolls';
+import { createClient } from '@/lib/utils/supabaseSSR';
+import { createPolls } from '../poll/createPolls';
 import { Slide } from '@/types/Slide';
 import { Theme, ThemeSliderResult } from '@/types/Theme';
-import { toSlug } from '@/utils/utils';
+import { toSlug } from '@/lib/utils/utils';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-export async function fetchThemesAndServer(selectedYear: number, serverIdFromCookie?: string): Promise<ThemeSliderResult> {
+export async function fetchThemes(selectedYear: number, serverIdFromCookie?: string): Promise<ThemeSliderResult> {
   const supabase = await createClient();
 
   const {

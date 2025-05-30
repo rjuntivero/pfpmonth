@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabaseSSR';
+import { createClient } from '@/lib/utils/supabaseSSR';
 import { redirect } from 'next/navigation';
 
 export async function GET(req: NextRequest) {

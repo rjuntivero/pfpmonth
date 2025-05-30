@@ -1,16 +1,16 @@
 'use client';
 import styles from './Poll.module.css';
-import LikeButton from '../Button/Like/LikeButton';
+import LikeButton from '../../shared/Button/Like/LikeButton';
 import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import Avatar from '../User/Avatar/Avatar';
-import getCookie from '@/lib/getClientCookie';
+import Avatar from '../../user/Avatar/Avatar';
+import getCookie from '@/lib/utils/getClientCookie';
 import { Poll as PollType } from '@/types/Polls';
 // import User from '../User/User';
 
-const UploadThemeModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
-const ThemeDetailsModal = dynamic(() => import('../Modal/BaseModal'), { ssr: false });
+const UploadThemeModal = dynamic(() => import('../../shared/Modal/BaseModal'), { ssr: false });
+const ThemeDetailsModal = dynamic(() => import('../../shared/Modal/BaseModal'), { ssr: false });
 
 export default function Poll({ poll, type, onUploadSuccess }: { poll?: PollType; type: string; onUploadSuccess?: () => void }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);

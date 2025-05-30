@@ -1,4 +1,4 @@
-import ThemeSearch from '@/components/ui/Theme/ThemeSearch/ThemeSearch';
+import ThemeSearch from '@/components/theme/ThemeSearch/ThemeSearch';
 import styles from './page.module.css';
 
 export default function Leaderboard() {

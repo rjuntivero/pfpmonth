@@ -1,14 +1,14 @@
-import TrendingThemes from '@/components/ui/Theme/TrendingThemes/TrendingThemes';
+import TrendingThemes from '@/components/theme/TrendingThemes/TrendingThemes';
 import styles from './page.module.css';
-import CallToAction from '@/components/layouts/CallToAction/CallToAction';
-import ThemeSlider from '@/components/ui/Theme/ThemeSlider/ThemeSlider';
-import { fetchThemesAndServer } from '@/lib/fetchThemes';
+import CallToAction from '@/components/layout/CallToAction/CallToAction';
+import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
+import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import { cookies } from 'next/headers';
 
 export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
-  const { serverName, themes } = await fetchThemesAndServer(currentYear, serverId);
+  const { serverName, themes } = await fetchThemes(currentYear, serverId);
 
   return (
     <div className={styles.page}>

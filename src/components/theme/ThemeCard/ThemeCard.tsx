@@ -1,12 +1,12 @@
 'use client';
-import Button from '../../Button/Button';
+import Button from '../../shared/Button/Button';
 import styles from './ThemeCard.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Slide } from '@/types/Slide';
 import { useState } from 'react';
-import { createTheme, updateTheme, uploadThemeImage } from '@/lib/themeActions';
-import getCookie from '@/lib/getClientCookie';
+import { createTheme, updateTheme, uploadThemeImage } from '@/lib/api/theme/themeActions';
+import getCookie from '@/lib/utils/getClientCookie';
 
 interface Props {
   theme: Slide;
@@ -97,7 +97,14 @@ export default function ThemeCard({ theme, onReset, onClaim, index = 0, onUpdate
       <div className={styles.themeDetails}>
         <div className={`${styles.header} ${!theme.description && styles.noTheme}`}>
           <h2>{theme.month}</h2>
-          {editing ? <input className={styles.input} value={tempData.name} onChange={(e) => setTempData({ ...tempData, name: e.target.value })} /> : <h3>{theme.name}</h3>}
+          {editing ? (
+            <div className={styles.nameInput}>
+              <label htmlFor="name">Theme name:</label>
+              <input placeholder="type here..." id="name" className={styles.input} value={tempData.name} onChange={(e) => setTempData({ ...tempData, name: e.target.value })} />
+            </div>
+          ) : (
+            <h3>{theme.name}</h3>
+          )}
 
           <button onClick={() => setIsOpen(!isOpen)} className={`${isOpen ? styles.open : ''}`} disabled={editing}>
             +
@@ -105,7 +112,14 @@ export default function ThemeCard({ theme, onReset, onClaim, index = 0, onUpdate
         </div>
         <div className={`${styles.wrapper} ${isOpen ? styles.open : ''}`}>
           <div className={styles.content}>
-            {editing ? <textarea className={styles.input} value={tempData.description} onChange={(e) => setTempData({ ...tempData, description: e.target.value })} /> : <p>{theme.description || 'No Description'}</p>}
+            {editing ? (
+              <div className={styles.descriptionInput}>
+                <label htmlFor="description">Description:</label>
+                <textarea placeholder="type here..." id="description" className={styles.input} value={tempData.description} onChange={(e) => setTempData({ ...tempData, description: e.target.value })} />
+              </div>
+            ) : (
+              <p>{theme.description || 'No Description'}</p>
+            )}
             <div className={styles.controls}>
               {theme.tag !== 'inactive' && (
                 <>

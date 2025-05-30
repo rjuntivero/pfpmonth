@@ -1,10 +1,10 @@
-import { fetchThemesAndServer } from '@/lib/fetchThemes';
+import { fetchThemesAndServer } from '@/lib/api/theme/fetchThemes';
 import styles from './page.module.css';
 import { cookies } from 'next/headers';
-import ThemeSlider from '@/components/ui/Theme/ThemeSlider/ThemeSlider';
-import Avatar from '@/components/ui/User/Avatar/Avatar';
+import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
+import Avatar from '@/components/user/Avatar/Avatar';
 import fetchUser from '@/lib/fetchUser';
-import ProfilePanel from '@/components/layouts/ProfilePanel/ProfilePanel';
+import ProfilePanel from '@/components/layout/ProfilePanel/ProfilePanel';
 
 export default async function Profile() {
   const currentYear = new Date().getFullYear();

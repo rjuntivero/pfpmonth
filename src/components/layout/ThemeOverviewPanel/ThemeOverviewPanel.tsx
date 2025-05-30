@@ -1,7 +1,7 @@
 'use client';
-import Button from '@/components/ui/Button/Button';
+import Button from '@/components/shared/Button/Button';
 import styles from './ThemeOverviewPanel.module.css';
-import ThemeCard from '@/components/ui/Theme/ThemeCard/ThemeCard';
+import ThemeCard from '@/components/theme/ThemeCard/ThemeCard';
 import { useEffect, useRef, useState } from 'react';
 import { Slide } from '@/types/Slide';
 import { useAppSelector } from '@/state/hooks';

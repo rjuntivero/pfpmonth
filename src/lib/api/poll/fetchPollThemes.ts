@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabaseSSR';
+import { createClient } from '@/lib/utils/supabaseSSR';
 
 export async function fetchPollThemes({ pollId }: { pollId: string }) {
   const supabase = await createClient();

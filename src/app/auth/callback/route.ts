@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabaseSSR';
+import { createClient } from '@/lib/utils/supabaseSSR';
 import { updateSupabaseTables } from '@/lib/dbUserData';
 
 type Metadata = {

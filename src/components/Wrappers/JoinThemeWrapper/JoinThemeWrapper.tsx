@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Button from '@/components/ui/Button/Button';
-import BaseModal from '@/components/ui/Modal/BaseModal';
+import Button from '@/components/shared/Button/Button';
+import BaseModal from '@/components/shared/Modal/BaseModal';
 import styles from './JoinThemeWrapper.module.css';
 
 export default function JoinThemeWrapper() {

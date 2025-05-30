@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import styles from './SuggestionPage.module.css';
-import ThemeBackground from '@/components/ui/Theme/ThemeBackground/ThemeBackground';
-import Figure from '@/components/ui/Figure/Figure';
-import User from '@/components/ui/User/User';
-import Feedback from '@/components/ui/LikeButton/LikeButton';
-import { fetchThemeData } from '@/lib/fetchTheme';
-import JoinThemeWrapper from '@/components/Wrappers/JoinThemeWrapper/JoinThemeWrapper';
+import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
+import Figure from '@/components/shared/Figure/Figure';
+import User from '@/components/user/User';
+import Feedback from '@/components/shared/LikeButton/LikeButton';
+import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
+import JoinThemeWrapper from '@/components/wrappers/JoinThemeWrapper/JoinThemeWrapper';
 
 export default async function SuggestionPage({ slug }: { slug: { themeMonth: string } }) {
   const themeData = await fetchThemeData({ themeMonth: slug.themeMonth });

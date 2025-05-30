@@ -1,6 +1,6 @@
 import { fetchServerPoll } from '@/lib/fetchServerPoll';
 import styles from './page.module.css';
-import PollList from '@/components/ui/Poll/PollList/PollList';
+import PollList from '@/components/poll/Poll/PollList/PollList';
 import { cookies } from 'next/headers';
 
 export default async function Page() {

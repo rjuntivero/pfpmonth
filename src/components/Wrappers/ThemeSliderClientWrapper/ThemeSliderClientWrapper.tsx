@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import ThemeSlider from '@/components/ui/Theme/ThemeSlider/ThemeSlider';
+import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
 import styles from './ThemeSliderClientWrapper.module.css';
 import { useDispatch } from 'react-redux';
 import { setThemeYear, setThemes } from '@/features/themeSlice';

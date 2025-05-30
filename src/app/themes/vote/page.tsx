@@ -1,4 +1,4 @@
-import { fetchServerPoll } from '@/lib/fetchServerPoll';
+import { fetchServerPoll } from '@/lib/api/poll/fetchServerPoll';
 import styles from './page.module.css';
 import PollList from '@/components/poll/Poll/PollList/PollList';
 import { cookies } from 'next/headers';

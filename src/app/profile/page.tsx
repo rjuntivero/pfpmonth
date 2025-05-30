@@ -1,7 +1,5 @@
-import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import styles from './page.module.css';
 import { cookies } from 'next/headers';
-import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
 import Avatar from '@/components/user/Avatar/Avatar';
 import fetchUser from '@/lib/api/user/fetchUser';
 import ProfilePanel from '@/components/layout/ProfilePanel/ProfilePanel';
@@ -63,7 +61,8 @@ export default async function Profile() {
                 <h1>
                   May <span>{currentYear}</span>
                 </h1>
-                <Image src={'/naruto.jpg' || '/no-image-placeholder.jpg'} alt="theme image" width={400} height={550} className={styles.themeImage} />
+                <Image src={'/naruto.jpg' || '/no-image-placeholder.jpg'} alt="theme image" width={330} height={480} className={styles.themeImage} />
+                <h2>Naruto</h2>
               </ProfilePanel>
             </div>
           </section>

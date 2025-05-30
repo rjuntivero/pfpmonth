@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/utils/supabaseSSR';
 import { NextRequest, NextResponse } from 'next/server';
-import { uploadThemeImage } from '@/lib/uploadImage';
+import { uploadThemeImage } from '@/lib/api/theme/uploadImage';
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();

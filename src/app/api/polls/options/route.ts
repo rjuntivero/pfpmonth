@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/utils/supabaseSSR';
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchPollThemes } from '@/lib/fetchPollThemes';
+import { fetchPollThemes } from '@/lib/api/poll/fetchPollThemes';
 
 export async function GET(req: NextRequest) {
   const supabase = await createClient();

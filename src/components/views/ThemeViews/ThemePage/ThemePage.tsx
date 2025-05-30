@@ -7,6 +7,7 @@ import Feedback from '@/components/shared/LikeButton/LikeButton';
 import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
 import JoinThemeWrapper from '@/components/wrappers/JoinThemeWrapper/JoinThemeWrapper';
 import { Theme } from '@/types/Theme';
+import Avatar from '@/components/user/Avatar/Avatar';
 
 export default async function ThemePage({ theme }: { theme: Theme }) {
   const themeData = await fetchThemeData({ themeMonth: theme.theme_month });

@@ -1,0 +1,32 @@
+.container {
+  --selected: 0px 4px 1.6px #716174;
+  padding: 1em;
+  border-radius: 20px;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+
+  cursor: pointer;
+}
+
+.selected {
+  box-shadow: var(--selected);
+  background: var(--main);
+  border: 1px solid #0d0d0d;
+}
+
+.serverImage {
+  object-fit: cover;
+  object-position: top;
+  border-radius: 50%;
+}
+
+.serverName {
+  font-weight: 500;
+  font-size: 1.2rem;
+  font-family: var(--font-baloo);
+}

@@ -1,18 +1,16 @@
 import Image from 'next/image';
 import styles from './SuggestionPage.module.css';
 import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
-import Figure from '@/components/shared/Figure/Figure';
-import User from '@/components/user/User';
 import Feedback from '@/components/shared/LikeButton/LikeButton';
-import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
+// import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
 import JoinThemeWrapper from '@/components/wrappers/JoinThemeWrapper/JoinThemeWrapper';
 
-export default async function SuggestionPage({ slug }: { slug: { themeMonth: string } }) {
-  const themeData = await fetchThemeData({ themeMonth: slug.themeMonth });
+export default async function SuggestionPage({ suggestion, slug }: { suggestion: any; slug: { themeMonth: string } }) {
+  // const themeData = await fetchThemeData({ themeMonth: slug.themeMonth });
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <ThemeBackground themeImage={themeData.theme?.image_url} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+        <ThemeBackground themeImage={suggestion.image_url || '/no-image-placeholder.jpg'} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
         <div className={styles.fadeOverlay} />
 
         <div className={styles.frameWrapper}>
@@ -21,7 +19,7 @@ export default async function SuggestionPage({ slug }: { slug: { themeMonth: str
 
         <div className={styles.title}>
           <h2>Theme</h2>
-          <h1>{themeData.theme?.name || 'null'}</h1>
+          <h1>{suggestion.name || 'null'}</h1>
           <JoinThemeWrapper />
           <div className={styles.reviews}>
             <button className={`${styles.dislikesBtn} ${styles.btn}`}>
@@ -32,29 +30,20 @@ export default async function SuggestionPage({ slug }: { slug: { themeMonth: str
             </button>
           </div>
           <p className={styles.comment}>
-            {'"'} {themeData.theme?.description} {'"'}
+            {'"'} {suggestion.year} {'"'}
           </p>
         </div>
         <section className={styles.userDetails}>
           <section className={styles.author}>
             <div className={styles.authorAvatar}>
-              <Image src={themeData.theme?.created_by.avatar_url || '/no-image-placeholder.jpg'} alt="Theme Frame" fill className={styles.avatar} />
+              <Image src={'/no-image-placeholder.jpg'} alt="Theme Frame" fill className={styles.avatar} />
             </div>
-            <p className={styles.authorName}>Suggested by {themeData.theme?.created_by.username}</p>
+            <p className={styles.authorName}>Suggested by </p>
           </section>
           <section className={styles.participants}>
-            <h1>{themeData.theme?.participants.length} users participated:</h1>
-            <div className={styles.users}>
-              {themeData.theme?.participants.map((participant, i) => (
-                <User key={`${participant.username}-${i}`} character={participant.character_name} />
-              ))}
-            </div>
+            <div className={styles.users}></div>
           </section>
-          <section className={styles.stats}>
-            <Figure />
-            <Figure />
-            <Figure />
-          </section>
+          <section className={styles.stats}></section>
         </section>
       </main>
     </div>

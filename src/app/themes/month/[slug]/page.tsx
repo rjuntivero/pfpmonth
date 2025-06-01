@@ -21,22 +21,36 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   // past months get a locked view (no suggestion/upload)
   const isPast = dateObj instanceof Date && (dateObj.getFullYear() < nowUTC.getFullYear() || (dateObj.getFullYear() === nowUTC.getFullYear() && dateObj.getMonth() < nowUTC.getMonth()));
-  console.log('THE CURRENT MONTH STRING IS: ', dateString);
-  console.log('THE CURRENT MONTH IS: ', dateObj?.toString());
-  console.log('THE CURRENT MONTH RN IS: ', nowUTC.toString());
-  console.log('THE CURRENT MONTH IS IN THE PAST: ', isPast);
+  // console.log('THE CURRENT MONTH STRING IS: ', dateString);
+  // console.log('THE CURRENT MONTH IS: ', dateObj?.toString());
+  // console.log('THE CURRENT MONTH RN IS: ', nowUTC.toString());
+  // console.log('THE CURRENT MONTH IS IN THE PAST: ', isPast);
 
   if (isPast) return <LockedPage slug={params.slug} />;
 
   // no theme, not past — check for suggestion
-  const { data: centralPoll } = await supabase.from('polls').select(`id, poll_options(*)`).is('theme_month', null).maybeSingle();
+  const { data: centralPoll } = await supabase.from('polls').select('id, poll_options(*)').maybeSingle();
 
-  const suggestions = centralPoll?.poll_options ?? [];
-  const monthIndex = dateObj instanceof Date ? dateObj.getMonth() : -1;
-  const suggestion = suggestions[monthIndex];
+  const suggestions = centralPoll?.poll_options?.sort((a, b) => a.index - b.index) ?? [];
+  const usedSuggestions = new Set(); // You could persist this in memory if needed
 
-  if (suggestion) {
-    return <SuggestionPage suggestion={suggestion} slug={params.slug} />;
+  const isFuture = dateObj instanceof Date && (dateObj.getFullYear() > nowUTC.getFullYear() || (dateObj.getFullYear() === nowUTC.getFullYear() && dateObj.getMonth() > nowUTC.getMonth()));
+
+  // Future month and no theme — try using a suggestion
+  if (isFuture && suggestions.length > 0) {
+    const suggestion = suggestions.find((s) => !usedSuggestions.has(s.id));
+    if (suggestion) {
+      usedSuggestions.add(suggestion.id);
+
+      const suggestionData = {
+        id: suggestion.id,
+        name: suggestion.name || 'No Theme',
+        image_url: suggestion.image_url ?? '/no-image-placeholder.jpg',
+        theme_month: dateString,
+      };
+
+      return <SuggestionPage suggestion={suggestionData} slug={{ themeMonth: params.slug }} />;
+    }
   }
 
   // No suggestion = Empty page

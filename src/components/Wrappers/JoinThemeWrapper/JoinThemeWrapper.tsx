@@ -4,9 +4,14 @@ import { useState } from 'react';
 import Button from '@/components/shared/Button/Button';
 import BaseModal from '@/components/shared/Modal/BaseModal';
 import styles from './JoinThemeWrapper.module.css';
+import Avatar from '@/components/user/Avatar/Avatar';
+import CharacterSearch from '@/components/character/CharacterSearch/CharacterSearch';
+import { Participant } from '@/types/Participant';
+import User from '@/components/user/User';
 
-export default function JoinThemeWrapper() {
+export default function JoinThemeWrapper({ themeTitle, participants, username }: { themeTitle?: string; participants?: Participant[]; username?: string }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [characterName, setCharacterName] = useState('No Character');
 
   return (
     <>
@@ -14,8 +19,21 @@ export default function JoinThemeWrapper() {
         Join Theme
       </Button>
       <BaseModal isOpen={isOpen} onClose={() => setIsOpen(false)} className={styles.joinModal}>
-        <h1>Join this theme</h1>
-        <p>Modal content goes here.</p>
+        <h1 className={styles.themeTitle}>{themeTitle}</h1>
+        <div className={styles.content}>
+          <div className={styles.actions}>
+            <Avatar imageURL={'/no-image-placeholder.jpg'} className={styles.avatar} />
+            <h2 className={styles.username}>{username}</h2>
+            <h2 className={styles.characterName}>{characterName}</h2>
+            <CharacterSearch />
+            <p>Unlisted Character? Enter it manually</p>
+            <input type="text" />
+          </div>
+          <div className={styles.participants}>
+            <h1 className={styles.participantTitle}>Claimed Characters</h1>
+            {participants?.length > 0 ? participants?.map((participant) => <User character={participant.name} key={participant.name} />) : 'No current participants'}
+          </div>
+        </div>
       </BaseModal>
     </>
   );

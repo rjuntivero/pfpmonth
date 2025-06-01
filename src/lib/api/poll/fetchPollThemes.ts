@@ -36,8 +36,6 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
     )
     .eq('poll_id', pollId);
 
-  console.log('THESE POLLS WERE SELECTED ', pollOptionsData);
-
   if (error || !pollOptionsData) {
     return { error };
   }
@@ -63,8 +61,6 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
         })) ?? [],
     };
   });
-
-  console.log('FETCHED POLL THEME: ', pollThemes);
 
   return { pollThemes };
 }

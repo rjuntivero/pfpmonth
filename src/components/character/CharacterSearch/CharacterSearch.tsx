@@ -1,0 +1,56 @@
+'use client';
+
+import { useState } from 'react';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import styles from './CharacterSearch.module.css';
+import Button from '@/components/shared/Button/Button';
+
+const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY!);
+export default function CharacterSearch({ themeTitle }: { themeTitle?: string }) {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });
+
+    const prompt = `You are helping someone choose a pop culture character for a profile picture event. Given a pop culture franchise like "Adventure Time" or a generic theme like "Vampire", 
+    return a list of all possible characters within the given franchise (upwards to about 100). If given a generic theme, only return around 20 characters. 
+    Only respond with the names of the character.
+    Do not generate original or creative names.
+    Do not explain anything.
+    I want a VERY LARGE list of characters, only limit the amount to around 100 or if the franchise/theme no longer has any characters to list.
+    Just return the list of character names. Heres the given franchise or theme "${query}"`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+
+    const parsed = text
+      .split(/[\n,-]+/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    setResults(parsed);
+    setLoading(false);
+  };
+
+  return (
+    <div className={styles.container}>
+      <form onSubmit={handleSearch}>
+        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search for a Character..." />
+        <button disabled={loading}>{loading ? 'Searching…' : 'Search'}</button>
+      </form>
+
+      <ul className={styles.results}>
+        {results.map((item, i) => (
+          <li key={i}>
+            <Button variant="character-result">{item}</Button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

@@ -8,9 +8,12 @@ import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
 import JoinThemeWrapper from '@/components/wrappers/JoinThemeWrapper/JoinThemeWrapper';
 import { Theme } from '@/types/Theme';
 import Avatar from '@/components/user/Avatar/Avatar';
+import fetchUser from '@/lib/api/user/fetchUser';
 
 export default async function ThemePage({ theme }: { theme: Theme }) {
   const themeData = await fetchThemeData({ themeMonth: theme.theme_month });
+
+  const user = await fetchUser();
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -24,7 +27,7 @@ export default async function ThemePage({ theme }: { theme: Theme }) {
         <div className={styles.title}>
           <h2>Theme</h2>
           <h1>{themeData.theme?.name || 'null'}</h1>
-          <JoinThemeWrapper />
+          <JoinThemeWrapper username={user?.username} themeTitle={themeData.theme?.name} participants={themeData.theme?.participants} />
           <div className={styles.reviews}>
             <button className={`${styles.dislikesBtn} ${styles.btn}`}>
               <Feedback color={'#d9d9d9'} />

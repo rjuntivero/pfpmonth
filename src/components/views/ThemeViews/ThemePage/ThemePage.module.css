@@ -85,8 +85,6 @@
   justify-content: center;
   text-align: center;
   line-height: -2.3;
-  flex: 1 1 60%;
-  flex: 2;
   width: 100%;
   flex: 1.4;
   padding-inline: 2rem;
@@ -111,7 +109,7 @@
   }
   & h1 {
     text-transform: capitalize;
-    font-size: clamp(4rem, 13vw, 12rem);
+    font-size: clamp(4rem, 13vw, 10rem);
     font-family: var(--font-baloo);
     color: var(--accent);
     margin-inline: auto;

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styles from './EmptyPage.module.css';
 import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
+import Button from '@/components/shared/Button/Button';
 // import Feedback from '@/components/ui/LikeButton/LikeButton';
 // import JoinThemeWrapper from '@/components/Wrappers/JoinThemeWrapper/JoinThemeWrapper';
 
@@ -23,13 +24,7 @@ export default async function EmptyPage({ slug }: { slug: string }) {
             {'"'}Masky compels you to come up with a theme! {'"'}
           </p>
           <div className={styles.reviews}>
-            <button>Upload Theme</button>
-            {/* <button className={`${styles.dislikesBtn} ${styles.btn}`}>
-              <Feedback color={'#d9d9d9'} />
-            </button>
-            <button className={`${styles.likesBtn} ${styles.btn}`}>
-              <Feedback color={'#d9d9d9'} />
-            </button> */}
+            <Button>Upload Theme</Button>
           </div>
         </div>
         <section className={styles.userDetails}>

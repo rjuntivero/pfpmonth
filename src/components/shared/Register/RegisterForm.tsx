@@ -7,9 +7,6 @@ export default function RegisterForm() {
     const form = e.currentTarget;
     const email = form.login - email.value;
     const password = form['login-password'].value;
-
-    // your Supabase login logic here
-    console.log(email, password);
   };
 
   return (

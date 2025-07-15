@@ -20,7 +20,6 @@ export async function updateTheme(themeId: string, updatedData: { name: string; 
 
 export async function uploadThemeImage(serverId: string, file: File, month: string, year: string): Promise<string> {
   const supabase = createClient();
-  console.log('FILE NAME: ', file);
 
   const monthPadded = month.padStart(2, '0');
   const timestamp = `${year}-${monthPadded}`;

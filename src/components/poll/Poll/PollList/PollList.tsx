@@ -12,7 +12,6 @@ export default function PollList({ poll }: { poll: PollType }) {
   useEffect(() => {
     async function fetchPolls() {
       const res = await fetch(`/api/polls/options?pollId=${poll.id}`);
-      console.log('DATA: ', res);
       const data = await res.json();
 
       const sorted = (data.pollThemes || []).sort((a: PollType, b: PollType) => {
@@ -29,9 +28,7 @@ export default function PollList({ poll }: { poll: PollType }) {
 
       setPolls(sorted);
       setPolls(sorted);
-      console.log('FETCHED POLLS: ', polls);
     }
-    console.log('FETCHED DONE POLLS: ', polls);
 
     fetchPolls();
     //eslint-disable-next-line

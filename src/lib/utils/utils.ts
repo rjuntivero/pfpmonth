@@ -18,6 +18,5 @@ export function parseSlug(slug: string): [string, Date] | null {
   const utcDate = new Date(Date.UTC(Number(year), monthIndex, 1));
   const dateString = utcDate.toISOString().split('T')[0];
 
-  console.log('✅ Parsed slug to UTC Date:', utcDate.toISOString());
   return [dateString, utcDate];
 }

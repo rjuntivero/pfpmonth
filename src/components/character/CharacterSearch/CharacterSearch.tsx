@@ -10,8 +10,9 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const characterList = [] as string[];
 
-  const handleSearch = async (e) => {
+  const generateCharacters = async (e) => {
     e.preventDefault();
     setLoading(true);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });
@@ -22,7 +23,7 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
     Do not generate original or creative names.
     Do not explain anything.
     I want a VERY LARGE list of characters, only limit the amount to around 100 or if the franchise/theme no longer has any characters to list.
-    Just return the list of character names. Heres the given franchise or theme "${query}"`;
+    Just return the list of character names. Heres the given franchise or theme "${themeTitle}"`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
@@ -36,6 +37,13 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
     setResults(parsed);
     setLoading(false);
   };
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    return characterList.filter((character) => character.toLowerCase().includes(query.toLowerCase()));
+  };
+
+  generateCharacters(themeTitle);
 
   return (
     <div className={styles.container}>

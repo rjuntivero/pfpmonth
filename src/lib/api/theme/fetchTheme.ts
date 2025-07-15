@@ -3,7 +3,6 @@ import { error } from 'console';
 
 export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
   const supabase = await createClient();
-  console.log('THEME ID TO FETCH: ', themeMonth);
 
   const {
     data: { user },
@@ -43,7 +42,6 @@ export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
     )
     .eq('theme_month', themeMonth)
     .single();
-  console.log('THEME FETCHED: ', themeData);
 
   if (!themeData) return { error };
 

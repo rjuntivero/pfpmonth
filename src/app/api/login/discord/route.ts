@@ -19,8 +19,6 @@ export async function GET(req: NextRequest) {
 
   const redirectTo = `http://localhost:8080/auth/callback?data=${payload}`;
 
-  console.log('[Login Route] 🔁 redirectTo:', redirectTo);
-
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'discord',
     options: {

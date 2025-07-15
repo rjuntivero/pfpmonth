@@ -12,7 +12,6 @@ interface ThemeProps {
 
 export default function ThemeBackground({ themeImage, wrapperClassName = '', imageClassName = '', style = {} }: ThemeProps) {
   const safeThemeImage = themeImage ? encodeURI(themeImage) : '/no-image-placeholder.jpg';
-  console.log('THE THEME IMAGE IS ', themeImage);
 
   return (
     <div className={`${wrapperClassName}  ${styles.fadeInZoom}`} style={style}>

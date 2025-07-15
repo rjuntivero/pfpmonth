@@ -21,10 +21,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   // past months get a locked view (no suggestion/upload)
   const isPast = dateObj instanceof Date && (dateObj.getFullYear() < nowUTC.getFullYear() || (dateObj.getFullYear() === nowUTC.getFullYear() && dateObj.getMonth() < nowUTC.getMonth()));
-  // console.log('THE CURRENT MONTH STRING IS: ', dateString);
-  // console.log('THE CURRENT MONTH IS: ', dateObj?.toString());
-  // console.log('THE CURRENT MONTH RN IS: ', nowUTC.toString());
-  // console.log('THE CURRENT MONTH IS IN THE PAST: ', isPast);
 
   if (isPast) return <LockedPage slug={params.slug} />;
 

@@ -7,7 +7,6 @@ export default async function fetchUser() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log('FETCHING USER: ', user);
   if (!user) return { serverName: null, serverId: null, themes: [] };
 
   const avatar_url = user.user_metadata.avatar_url;

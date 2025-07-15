@@ -28,11 +28,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing required form fields' }, { status: 400 });
   }
 
-  console.log('FETCHED POLL ID: ', poll_id);
-  console.log('FETCHED POLL NAME: ', name);
-  console.log('FETCHED POLL OPTION TEXT: ', option_text);
-  console.log('FETCHED POLL SERVER ID: ', serverId);
-
   const fileBuffer = Buffer.from(await file.arrayBuffer());
 
   const image_url = await uploadThemeImage({ fileName: file.name, fileBuffer, serverId });

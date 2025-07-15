@@ -13,14 +13,11 @@ export async function GET(req: NextRequest) {
   }
   const pollId = req.nextUrl.searchParams.get('pollId');
 
-  console.log('POLL ID TO BE FETCHED: ', pollId);
-
   if (!pollId) {
     return NextResponse.json({ error: 'Missing pollId' }, { status: 400 });
   }
 
   const { pollThemes } = await fetchPollThemes({ pollId });
-  console.log('POLL THEMES: ', pollThemes);
 
   return NextResponse.json({ pollThemes });
 }

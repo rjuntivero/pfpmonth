@@ -56,14 +56,11 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
 
   // Fetch centralized poll
   const { data: centralPoll } = await supabase.from('polls').select(`id, poll_options ( id, vote_count, image_url, name, poll_id, created_at )`).eq('server_id', resolvedServerId).maybeSingle();
-  console.log('CENTRAL POLL: ', centralPoll);
 
   const suggestions = (centralPoll?.poll_options ?? []).sort((a, b) => {
     const voteDiff = (b.vote_count ?? 0) - (a.vote_count ?? 0);
     return voteDiff !== 0 ? voteDiff : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
-
-  console.log('suggestions: ', suggestions);
 
   // avoid reusing suggestions
   const usedSuggestions = new Set<string>();

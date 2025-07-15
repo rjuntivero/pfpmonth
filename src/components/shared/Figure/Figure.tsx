@@ -1,10 +1,5 @@
 import styles from './Figure.module.css';
-// import { motion } from 'framer-motion';
 import Image from 'next/image';
-
-// interface FigureProps {
-//   stat: string;
-// }
 
 export default function Figure() {
   return (

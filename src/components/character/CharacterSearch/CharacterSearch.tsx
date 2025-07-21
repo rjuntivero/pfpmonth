@@ -12,6 +12,7 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
   const [loading, setLoading] = useState(false);
   const characterList = [] as string[];
 
+  //generate list of characters
   const generateCharacters = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -22,6 +23,7 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
     Only respond with the names of the character.
     Do not generate original or creative names.
     Do not explain anything.
+    Start with the most popular or well-known characters first, and then list the rest in no particular order.
     I want a VERY LARGE list of characters, only limit the amount to around 100 or if the franchise/theme no longer has any characters to list.
     Just return the list of character names. Heres the given franchise or theme "${themeTitle}"`;
 
@@ -38,10 +40,33 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
     setLoading(false);
   };
 
+  //search through cached character list
   const handleSearch = async (e) => {
     e.preventDefault();
     return characterList.filter((character) => character.toLowerCase().includes(query.toLowerCase()));
   };
+
+  // //retrieve cache
+
+  // const cacheKey = `theme:${themeTitle?.toLowerCase()}`;
+
+  // // try redis
+  // let characters = await redis.get(cacheKey);
+  // if (!characters) {
+  //   // try supabase
+  //   const supabase = createClient();
+  //   const { data, error } = await supabase.from('characters').select('name').eq('theme', themeTitle?.toLowerCase()).single();
+
+  //   if (data?.characters) {
+  //   } else {
+  //     characters = await generateCharacters();
+  //     await redis.set(cacheKey, JSON.stringify(characters), 'EX', 60 * 60 * 24); // cache for 24 hours
+  //     await supabase.from('character_cache').insert({
+  //       theme: themeTitle?.toLowerCase(),
+  //       characters,
+  //     });
+  //   }
+  // }
 
   generateCharacters(themeTitle);
 

@@ -8,7 +8,7 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const characterList = [] as string[];
+  const [filteredResults, setFilteredResults] = useState<string[]>([]);
 
   //generate list of characters
   useEffect(() => {
@@ -22,6 +22,7 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
 
       if (res.ok) {
         setResults(data.characters);
+        setFilteredResults(data.characters);
       } else {
         console.error('Error fetching characters:', data.error);
       }
@@ -35,30 +36,11 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
   //search through cached character list
   const handleSearch = async (e) => {
     e.preventDefault();
-    return characterList.filter((character) => character.toLowerCase().includes(query.toLowerCase()));
+    const filtered = results.filter((character) => {
+      return character.toLowerCase().includes(query.toLowerCase());
+    });
+    setFilteredResults(filtered);
   };
-
-  // //retrieve cache
-
-  // const cacheKey = `theme:${themeTitle?.toLowerCase()}`;
-
-  // // try redis
-  // let characters = await redis.get(cacheKey);
-  // if (!characters) {
-  //   // try supabase
-  //   const supabase = createClient();
-  //   const { data, error } = await supabase.from('characters').select('name').eq('theme', themeTitle?.toLowerCase()).single();
-
-  //   if (data?.characters) {
-  //   } else {
-  //     characters = await generateCharacters();
-  //     await redis.set(cacheKey, JSON.stringify(characters), 'EX', 60 * 60 * 24); // cache for 24 hours
-  //     await supabase.from('character_cache').insert({
-  //       theme: themeTitle?.toLowerCase(),
-  //       characters,
-  //     });
-  //   }
-  // }
 
   return (
     <div className={styles.container}>
@@ -68,7 +50,7 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
       </form>
 
       <ul className={styles.results}>
-        {results.map((item, i) => (
+        {filteredResults.map((item, i) => (
           <li key={i}>
             <Button variant="character-result">{item}</Button>
           </li>

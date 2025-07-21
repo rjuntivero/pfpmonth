@@ -20,15 +20,7 @@ export default async function SuggestionPage({ suggestion, slug }: { suggestion:
         <div className={styles.title}>
           <h2>Theme</h2>
           <h1>{suggestion.name || 'null'}</h1>
-          <JoinThemeWrapper />
-          <div className={styles.reviews}>
-            <button className={`${styles.dislikesBtn} ${styles.btn}`}>
-              <Feedback color={'#d9d9d9'} />
-            </button>
-            <button className={`${styles.likesBtn} ${styles.btn}`}>
-              <Feedback color={'#d9d9d9'} />
-            </button>
-          </div>
+          <div className={styles.reviews}></div>
           <p className={styles.comment}>
             {'"'} {suggestion.year} {'"'}
           </p>

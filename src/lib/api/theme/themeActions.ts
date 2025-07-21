@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/utils/supabase';
+import { createClient } from '@/lib/supabase/supabase';
 
 export async function createTheme(data: { name: string; description: string; image_url: string; server_id: string; theme_month: string }): Promise<{ id: string }> {
   const supabase = createClient();

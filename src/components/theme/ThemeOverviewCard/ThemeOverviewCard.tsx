@@ -1,6 +1,6 @@
 'use client';
 import Button from '../../shared/Button/Button';
-import styles from './ThemeCard.module.css';
+import styles from './ThemeOverviewCard.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Slide } from '@/types/Slide';
@@ -16,7 +16,7 @@ interface Props {
   onUpdate: () => void;
 }
 
-export default function ThemeCard({ theme, onReset, onClaim, index = 0, onUpdate }: Props) {
+export default function ThemeOverviewCard({ theme, onReset, onClaim, index = 0, onUpdate }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -28,6 +28,7 @@ export default function ThemeCard({ theme, onReset, onClaim, index = 0, onUpdate
     image_url: theme.image,
   });
 
+  // handle theme image upload
   function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;

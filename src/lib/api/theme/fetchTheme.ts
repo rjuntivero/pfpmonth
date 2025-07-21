@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/utils/supabaseSSR';
+import { createClient } from '@/lib/supabase/supabaseSSR';
 import { error } from 'console';
 
 export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {

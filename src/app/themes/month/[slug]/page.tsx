@@ -3,7 +3,7 @@ import ThemePage from '@/components/views/ThemeViews/ThemePage/ThemePage';
 import SuggestionPage from '@/components/views/ThemeViews/SuggestionPage/SuggeestionPage';
 import EmptyPage from '@/components/views/ThemeViews/EmptyPage/EmptyPage';
 import LockedPage from '@/components/views/ThemeViews/LockedPage/LockedPage';
-import { createClient } from '@/lib/utils/supabaseSSR';
+import { createClient } from '@/lib/supabase/supabaseSSR';
 import { Theme } from '@/types/Theme';
 
 export default async function Page({ params }: { params: { slug: string } }) {

@@ -1,12 +1,13 @@
 'use client';
 import Button from '@/components/shared/Button/Button';
 import styles from './ThemeOverviewPanel.module.css';
-import ThemeCard from '@/components/theme/ThemeCard/ThemeCard';
+import ThemeOverviewCard from '@/components/theme/ThemeOverviewCard/ThemeOverviewCard';
 import { useEffect, useRef, useState } from 'react';
 import { Slide } from '@/types/Slide';
 import { useAppSelector } from '@/state/hooks';
 import { useDispatch } from 'react-redux';
 import { setThemes } from '@/features/themeSlice';
+import { updateTheme } from '@/lib/api/theme/themeActions';
 
 interface Props {
   initialThemes: Slide[];
@@ -44,6 +45,26 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
     dispatch(setThemes(data.slides));
   };
 
+  const resetTheme = async (themeId: string) => {
+    const confirmed = window.confirm('Are you sure you want to reset this theme? This will delete it entirely from the database.');
+
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`/api/themes/${themeId}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to delete theme');
+      }
+
+      await refetchThemes();
+    } catch (err) {
+      console.error('Error resetting theme:', err);
+    }
+  };
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const handleClick = () => setIsSidebarOpen((prev) => !prev);
 
@@ -68,7 +89,7 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
               <div className={styles.loader}></div>
             </div>
           ) : editableThemes.length >= 1 ? (
-            editableThemes.map((theme, index) => <ThemeCard onUpdate={refetchThemes} index={index} key={index} theme={theme} onReset={() => {}} onClaim={() => {}} />)
+            editableThemes.map((theme, index) => <ThemeOverviewCard onUpdate={refetchThemes} index={index} key={index} theme={theme} onReset={() => resetTheme(theme.id as string)} onClaim={() => {}} />)
           ) : (
             <div>No editable themes...</div>
           )}

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/utils/supabaseSSR';
-import { updateSupabaseTables } from '@/lib/dbUserData';
+import { createClient } from '@/lib/supabase/supabaseSSR';
+import { updateSupabaseTables } from '@/lib/api/user/dbUserData';
 
 type Metadata = {
   discord_id?: string;

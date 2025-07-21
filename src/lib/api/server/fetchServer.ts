@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/utils/supabaseSSR';
+import { createClient } from '@/lib/supabase/supabaseSSR';
 
 export async function fetchServer() {
   const supabase = await createClient();

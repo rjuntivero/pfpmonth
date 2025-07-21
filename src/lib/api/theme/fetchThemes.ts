@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/utils/supabaseSSR';
+import { createClient } from '@/lib/supabase/supabaseSSR';
 import { createPolls } from '../poll/createPolls';
 import { Slide } from '@/types/Slide';
 import { Theme, ThemeSliderResult } from '@/types/Theme';

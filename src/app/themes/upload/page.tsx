@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import styles from './page.module.css';
-import { createClient } from '@/lib/utils/supabase';
+import { createClient } from '@/lib/supabase/supabase';
 import getCookie from '@/lib/utils/getClientCookie';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/utils/supabaseSSR';
+import { createClient } from '@/lib/supabase/supabaseSSR';
 
 export default async function fetchUser() {
   const supabase = await createClient();

@@ -1,5 +1,5 @@
 import { Poll } from '@/types/Polls';
-import { createClient } from '@/lib/utils/supabase';
+import { createClient } from '@/lib/supabase/supabase';
 
 export async function fetchServerPoll(serverId: string): Promise<Poll> {
   const supabase = createClient();

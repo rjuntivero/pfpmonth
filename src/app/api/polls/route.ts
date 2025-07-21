@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/utils/supabaseSSR';
+import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextRequest, NextResponse } from 'next/server';
 import { uploadThemeImage } from '@/lib/api/theme/uploadImage';
 

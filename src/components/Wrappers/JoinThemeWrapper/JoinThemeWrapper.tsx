@@ -25,7 +25,7 @@ export default function JoinThemeWrapper({ themeTitle, participants, username }:
             <Avatar imageURL={'/no-image-placeholder.jpg'} className={styles.avatar} />
             <h2 className={styles.username}>{username}</h2>
             <h2 className={styles.characterName}>{characterName}</h2>
-            <CharacterSearch />
+            <CharacterSearch themeTitle={themeTitle} />
             <p>Unlisted Character? Enter it manually</p>
             <input type="text" />
           </div>

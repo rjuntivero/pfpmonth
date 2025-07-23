@@ -2,13 +2,14 @@ import Image from 'next/image';
 import styles from './ThemePage.module.css';
 import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
 // import Figure from '@/components/ui/Figure/Figure';
+// import Avatar from '@/components/user/Avatar/Avatar';
 import User from '@/components/user/User';
 import Feedback from '@/components/shared/LikeButton/LikeButton';
 import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
-import JoinThemeWrapper from '@/components/wrappers/JoinThemeWrapper/JoinThemeWrapper';
+import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 import { Theme } from '@/types/Theme';
-import Avatar from '@/components/user/Avatar/Avatar';
 import fetchUser from '@/lib/api/user/fetchUser';
+import JoinThemeModal from '@/components/shared/Modal/JoinThemeModal/JoinThemeModal';
 
 interface Props {
   theme: Theme;
@@ -32,7 +33,14 @@ export default async function ThemePage({ theme, inPast }: Props) {
         <div className={styles.title}>
           <h2>Theme</h2>
           <h1>{themeData.theme?.name || 'null'}</h1>
-          {!inPast && <JoinThemeWrapper username={user?.username} themeTitle={themeData.theme?.name} participants={themeData?.theme?.participants} />}
+          {!inPast && (
+            <ButtonModalWrapper
+              modalContent={<JoinThemeModal themeTitle={themeData?.theme?.name} participants={themeData?.theme?.participants} username={themeData.theme?.created_by.username} characterName="No Character" />}
+              modalClassName="joinModal"
+            >
+              Join Theme
+            </ButtonModalWrapper>
+          )}
           <div className={styles.reviews}>
             <button className={`${styles.dislikesBtn} ${styles.btn}`}>
               <Feedback color={'#d9d9d9'} />

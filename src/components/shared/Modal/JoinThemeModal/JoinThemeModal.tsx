@@ -1,9 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import Button from '@/components/shared/Button/Button';
-import BaseModal from '@/components/shared/Modal/BaseModal';
-import styles from './JoinThemeWrapper.module.css';
+import styles from './JoinThemeModal.module.css';
 import Avatar from '@/components/user/Avatar/Avatar';
 import CharacterSearch from '@/components/character/CharacterSearch/CharacterSearch';
 import { Participant } from '@/types/Participant';
@@ -13,18 +10,13 @@ interface Props {
   themeTitle?: string;
   participants?: Participant[] | undefined;
   username?: string;
+  characterName?: string;
 }
 
-export default function JoinThemeWrapper({ themeTitle, participants, username }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [characterName, setCharacterName] = useState('No Character');
-
+export default function JoinThemeModal({ themeTitle, participants, username, characterName }: Props) {
   return (
     <>
-      <Button variant="primary" onClick={() => setIsOpen(true)}>
-        Join Theme
-      </Button>
-      <BaseModal isOpen={isOpen} onClose={() => setIsOpen(false)} className={styles.joinModal}>
+      <div className={styles.modalWrapper}>
         <h1 className={styles.themeTitle}>{themeTitle}</h1>
         <div className={styles.content}>
           <div className={styles.actions}>
@@ -37,10 +29,10 @@ export default function JoinThemeWrapper({ themeTitle, participants, username }:
           </div>
           <div className={styles.participants}>
             <h1 className={styles.participantTitle}>Claimed Characters</h1>
-            {participants?.length > 0 ? participants?.map((participant) => <User character={participant.name} key={participant.name} />) : 'No current participants'}
+            {participants && participants?.length > 0 ? participants?.map((participant) => <User character={participant.name} key={participant.name} />) : 'No current participants'}
           </div>
         </div>
-      </BaseModal>
+      </div>
     </>
   );
 }

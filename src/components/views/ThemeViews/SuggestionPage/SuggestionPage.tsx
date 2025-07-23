@@ -3,7 +3,8 @@ import styles from './SuggestionPage.module.css';
 import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
 // import Feedback from '@/components/shared/LikeButton/LikeButton';
 // import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
-import Button from '@/components/shared/Button/Button';
+import ConfirmModal from '@/components/shared/Modal/ConfirmModal/ConfirmModal';
+import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 
 export default async function SuggestionPage({ suggestion, slug }: { suggestion: any; slug: { themeMonth: string } }) {
   // const themeData = await fetchThemeData({ themeMonth: slug.themeMonth });
@@ -25,7 +26,9 @@ export default async function SuggestionPage({ suggestion, slug }: { suggestion:
             {'"'} {'"'}
           </p>
           <div>
-            <Button>Confirm Theme?</Button>
+            <ButtonModalWrapper modalContent={<ConfirmModal />} modalClassName="confirmModal">
+              Confirm Theme?
+            </ButtonModalWrapper>
           </div>
         </div>
         <section className={styles.userDetails}>

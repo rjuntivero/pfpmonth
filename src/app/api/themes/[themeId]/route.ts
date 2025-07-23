@@ -17,3 +17,39 @@ export async function DELETE(req: Request, { params }: { params: { themeId: stri
   }
   return NextResponse.json({ success: true });
 }
+
+export async function POST(req: Request, { params }: { params: { themeId: string } }) {
+  const { themeId } = params;
+
+  const body = await req.json();
+  const { name, description, image_url, server_id, created_by, theme_month } = body;
+
+  if (!themeId || !name || !server_id || !created_by || !theme_month) {
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+  }
+
+  const supabase = await createClient();
+
+  // insert poll option entry into themes table
+  const { error: insertError } = await supabase.from('themes').insert({
+    name,
+    description,
+    image_url,
+    server_id,
+    created_by,
+    theme_month,
+    created_at: new Date().toISOString(),
+  });
+
+  if (insertError) {
+    console.log('Error deleting theme:', insertError);
+    return NextResponse.json({ error: insertError.message }, { status: 500 });
+  }
+
+  // delete poll option entry
+  const { error: deleteError } = await supabase.from('poll_options').delete().eq('id', themeId);
+  if (deleteError) {
+    console.warn('Inserted theme, but failed to delete poll_option:', deleteError);
+  }
+  return NextResponse.json({ success: true });
+}

@@ -110,22 +110,14 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
               }}
             >
               <div className={styles.tagStack}>
-                {slide.tag?.includes('leading') && (
-                  <div className={styles.leadingTag}>
-                    <Image src="/Star.svg" alt="Leading" width={20} height={20} className={styles.tagIcon} />
-                    <span>#1 vote</span>
-                  </div>
-                )}
-                {slide.tag?.includes('most_recent') && (
-                  <div className={styles.recentTag}>
-                    <Image src="/Clock.svg" alt="Most Recent" width={20} height={20} className={styles.tagIcon} />
-                    <span>Most Recent</span>
-                  </div>
-                )}
-
                 {slide.tag?.includes('tbd') && (
                   <div className={styles.tbdTag}>
                     <span>TBD</span>
+                  </div>
+                )}
+                {slide.tag?.includes('suggested') && (
+                  <div className={styles.suggestedTag}>
+                    <span>Suggested</span>
                   </div>
                 )}
               </div>

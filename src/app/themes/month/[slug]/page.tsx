@@ -8,9 +8,11 @@ import { Theme } from '@/types/Theme';
 import { fetchServer } from '@/lib/api/server/fetchServer';
 
 export default async function Page({ params }: { params: { slug: string } }) {
+  const { slug } = await params;
   const supabase = await createClient();
-  const parsed = parseSlug(params.slug);
+  const parsed = parseSlug(slug);
   const discordServer = fetchServer();
+  // parsed date from URL
   const [dateString, dateObj] = parsed ?? ['', null];
 
   const now = new Date();
@@ -20,18 +22,17 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   // Try to fetch a final theme
   const { data: theme } = await supabase.from('themes').select('*').eq('theme_month', themeMonth).maybeSingle<Theme>();
-
-  if (theme) {
-    return <ThemePage theme={theme} />;
-  }
-
   // Check if date is in past or future
   const isPast = dateObj instanceof Date && (dateObj.getFullYear() < nowUTC.getFullYear() || (dateObj.getFullYear() === nowUTC.getFullYear() && dateObj.getMonth() < nowUTC.getMonth()));
 
   const isFuture = dateObj instanceof Date && (dateObj.getFullYear() > nowUTC.getFullYear() || (dateObj.getFullYear() === nowUTC.getFullYear() && dateObj.getMonth() > nowUTC.getMonth()));
 
-  if (isPast) {
-    return <LockedPage slug={params.slug} />;
+  if (theme) {
+    return <ThemePage inPast={isPast} theme={theme} />;
+  }
+
+  if (!theme && isPast) {
+    return <LockedPage slug={slug} />;
   }
 
   // Check poll suggestions if future
@@ -70,9 +71,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
       };
 
       console.log('Returning suggestion page with data:', suggestionData);
-      return <SuggestionPage suggestion={suggestionData} slug={{ themeMonth: params.slug }} />;
+      return <SuggestionPage suggestion={suggestionData} slug={{ themeMonth: slug }} />;
     }
   }
 
-  return <EmptyPage slug={await params.slug} />;
+  return <EmptyPage slug={slug} />;
 }

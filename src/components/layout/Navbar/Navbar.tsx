@@ -12,7 +12,6 @@ const navItems = [
   { name: 'Leaderboard', path: '/leaderboard' },
   { name: 'Themes', path: '/themes' },
   { name: 'Profile', path: '/profile' },
-  { name: 'Login', path: '/settings' },
 ];
 
 export default function Navbar() {

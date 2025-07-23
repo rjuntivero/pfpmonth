@@ -6,8 +6,7 @@ import { toSlug } from '@/lib/utils/utils';
 import { fetchServerPoll } from '../poll/fetchServerPoll';
 import { fetchPollThemes } from '../poll/fetchPollThemes';
 import { fetchServer } from '../server/fetchServer';
-
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+import { MONTHS } from '@/lib/utils/utils';
 
 export async function fetchThemes(selectedYear: number, serverIdFromCookie?: string): Promise<ThemeSliderResult> {
   const supabase = await createClient();
@@ -23,6 +22,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
     await createPolls(serverIdFromCookie as string);
   }
 
+  // fetch existing poll themes
   const pollExists = await fetchServerPoll(serverIdFromCookie as string);
   if (pollExists) {
     const pollOptionsExist = await fetchPollThemes({ pollId: pollExists.poll_id as string });
@@ -34,6 +34,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   let serverName: string | null = null;
   let resolvedServerId = serverIdFromCookie ?? null;
 
+  // fetch serverId from cookie or user server
   if (!resolvedServerId) {
     const { data: userServer } = await fetchServer();
 
@@ -50,11 +51,11 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   const now = new Date();
   const currentYear = selectedYear;
 
-  // Fetch official themes
+  // fetch official themes
   const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, theme_month, description').eq('server_id', resolvedServerId);
   const themes = themesData as Theme[];
 
-  // Fetch centralized poll
+  // fetch centralized poll
   const { data: centralPoll } = await supabase.from('polls').select(`id, poll_options ( id, vote_count, image_url, name, poll_id, created_at )`).eq('server_id', resolvedServerId).maybeSingle();
 
   const suggestions = (centralPoll?.poll_options ?? []).sort((a, b) => {
@@ -105,7 +106,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
 
     const isFuture = currentYear > now.getFullYear() || (currentYear === now.getFullYear() && monthIndex > now.getMonth());
 
-    // 2. If future month and theme is missing, use suggestion if available
+    // If future month and theme is missing, use suggestion if available
     if (isFuture && suggestions.length > 0) {
       const suggestion = suggestions.find((s) => !usedSuggestions.has(s.id));
       if (suggestion) {

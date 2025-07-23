@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import styles from './SuggestionPage.module.css';
 import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
-import Feedback from '@/components/shared/LikeButton/LikeButton';
+// import Feedback from '@/components/shared/LikeButton/LikeButton';
 // import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
-import JoinThemeWrapper from '@/components/wrappers/JoinThemeWrapper/JoinThemeWrapper';
+import Button from '@/components/shared/Button/Button';
 
 export default async function SuggestionPage({ suggestion, slug }: { suggestion: any; slug: { themeMonth: string } }) {
   // const themeData = await fetchThemeData({ themeMonth: slug.themeMonth });
@@ -22,8 +22,11 @@ export default async function SuggestionPage({ suggestion, slug }: { suggestion:
           <h1>{suggestion.name || 'null'}</h1>
           <div className={styles.reviews}></div>
           <p className={styles.comment}>
-            {'"'} {suggestion.year} {'"'}
+            {'"'} {'"'}
           </p>
+          <div>
+            <Button>Confirm Theme?</Button>
+          </div>
         </div>
         <section className={styles.userDetails}>
           <section className={styles.author}>

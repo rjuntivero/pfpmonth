@@ -17,15 +17,17 @@ export default async function Page() {
         <div className={styles.heading}>
           <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
           <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} />
+          {/* <div className={styles.titleContainer}> */}
           <div className={styles.title}>
             <h2>barbz</h2>
             <h1>THEMES</h1>
           </div>
+          {/* </div> */}
         </div>
         <div className={styles.themes}>
           <CurtainDrapes />
           <Image src="/curtainsTop.svg" alt="curtain top container" width={1472} height={36} className={styles.curtainsTop} />
-          <ThemeSliderClientWrapper initialRender={false} serverId={serverId as string} />
+          <ThemeSliderClientWrapper initialThemes={themes} serverId={serverId as string} />
         </div>
       </main>
       <ThemeOverviewPanel initialThemes={themes} serverId={serverId as string} />

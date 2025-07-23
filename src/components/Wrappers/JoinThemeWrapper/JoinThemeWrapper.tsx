@@ -9,7 +9,13 @@ import CharacterSearch from '@/components/character/CharacterSearch/CharacterSea
 import { Participant } from '@/types/Participant';
 import User from '@/components/user/User';
 
-export default function JoinThemeWrapper({ themeTitle, participants, username }: { themeTitle?: string; participants?: Participant[]; username?: string }) {
+interface Props {
+  themeTitle?: string;
+  participants?: Participant[] | undefined;
+  username?: string;
+}
+
+export default function JoinThemeWrapper({ themeTitle, participants, username }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [characterName, setCharacterName] = useState('No Character');
 

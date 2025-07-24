@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Avatar from '../../user/Avatar/Avatar';
-import getCookie from '@/lib/utils/getClientCookie';
 import { Poll as PollType } from '@/types/Polls';
 // import User from '../User/User';
 
@@ -16,10 +15,7 @@ export default function Poll({ poll, type, onUploadSuccess }: { poll?: PollType;
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
-  const serverId = getCookie('server_id');
-
   const handleVoteClick = () => setIsThemeModalOpen(true);
-
   const handleUploadClick = () => setIsUploadModalOpen(true);
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -33,7 +29,7 @@ export default function Poll({ poll, type, onUploadSuccess }: { poll?: PollType;
     const formData = new FormData(form);
 
     formData.append('poll_id', poll?.id as string);
-    formData.append('server_id', serverId as string);
+    formData.append('server_id', poll?.server_id as string);
 
     const res = await fetch('/api/polls', {
       method: 'POST',

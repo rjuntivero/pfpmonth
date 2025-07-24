@@ -8,12 +8,14 @@ export async function POST(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  console.log('User data:', user);
   if (!user) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
 
   const form = await req.formData();
 
+  console.log('Form data:', form);
   const file = form.get('theme-image');
   if (!(file instanceof File)) {
     return NextResponse.json({ error: 'Image file is required' }, { status: 400 });
@@ -24,6 +26,7 @@ export async function POST(req: NextRequest) {
   const option_text = form.get('theme-description')?.toString();
   const serverId = form.get('server_id')?.toString();
 
+  console.log('Form fields:', { poll_id, name, option_text, serverId });
   if (!poll_id || !name || !option_text || !serverId) {
     return NextResponse.json({ error: 'Missing required form fields' }, { status: 400 });
   }
@@ -32,8 +35,9 @@ export async function POST(req: NextRequest) {
 
   const image_url = await uploadThemeImage({ fileName: file.name, fileBuffer, serverId });
 
-  const { error } = await supabase.from('poll_options').insert([{ poll_id, created_by: user.id, name, option_text, image_url }]);
+  const { error } = await supabase.from('poll_options').insert([{ poll_id, created_by: user.id, name, option_text, image_url, server_id: serverId }]);
 
+  console.log('Insert result:', { error });
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

@@ -43,6 +43,8 @@ export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
     .eq('theme_month', themeMonth)
     .single();
 
+  console.log('Fetched theme data:', themeData);
+
   if (!themeData) return { error };
 
   const likes = themeData.theme_likes?.filter((l: any) => l.liked).length ?? 0;

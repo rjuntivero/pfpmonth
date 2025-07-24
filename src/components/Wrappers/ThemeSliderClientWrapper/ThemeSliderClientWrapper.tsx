@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
 import styles from './ThemeSliderClientWrapper.module.css';
 import { useDispatch } from 'react-redux';
@@ -7,27 +7,20 @@ import { setThemeYear, setThemes } from '@/features/themeSlice';
 import { useAppSelector } from '@/state/hooks';
 
 interface Props {
-  initialRender: boolean;
   serverId: string;
 }
 
-export default function ThemeSliderClientWrapper({ initialRender, serverId }: Props) {
+export default function ThemeSliderClientWrapper({ serverId }: Props) {
   const dispatch = useDispatch();
   const year = useAppSelector((state) => state.theme.year);
   const themes = useAppSelector((state) => state.theme.themes);
   const [loading, setLoading] = useState(false);
-  const hasFetchedOnce = useRef(initialRender);
 
   const handleYearUpdate = (updatedYear: number) => {
     dispatch(setThemeYear(updatedYear));
   };
 
   useEffect(() => {
-    if (hasFetchedOnce.current === false) {
-      hasFetchedOnce.current = true;
-      return;
-    }
-
     setLoading(true);
     fetch(`/api/themes?serverId=${serverId}&year=${year}`)
       .then((res) => res.json())

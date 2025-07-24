@@ -18,6 +18,39 @@ export async function updateTheme(themeId: string, updatedData: { name: string; 
   return data;
 }
 
+export async function promoteTheme(themeData: { name: string; description?: string; image_url?: string; server_id: string; created_by: string; theme_month: string }) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('themes').insert({
+    ...themeData,
+    created_at: new Date().toISOString(),
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function deletePollOption(pollOptionId: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('poll_options').delete().eq('id', pollOptionId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function deleteTheme(themeId: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('themes').delete().eq('id', themeId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
 export async function uploadThemeImage(serverId: string, file: File, month: string, year: string): Promise<string> {
   const supabase = createClient();
 

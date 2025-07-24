@@ -6,8 +6,7 @@ import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground'
 import ConfirmModal from '@/components/shared/Modal/ConfirmModal/ConfirmModal';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 
-export default async function SuggestionPage({ suggestion, slug }: { suggestion: any; slug: { themeMonth: string } }) {
-  // const themeData = await fetchThemeData({ themeMonth: slug.themeMonth });
+export default async function SuggestionPage({ suggestion }: { suggestion: any }) {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -26,8 +25,8 @@ export default async function SuggestionPage({ suggestion, slug }: { suggestion:
             {'"'} {'"'}
           </p>
           <div>
-            <ButtonModalWrapper modalContent={<ConfirmModal />} modalClassName="confirmModal">
-              Confirm Theme?
+            <ButtonModalWrapper modalClassName="confirmModal" buttonText="Confirm Theme?">
+              <ConfirmModal poll={suggestion} />
             </ButtonModalWrapper>
           </div>
         </div>

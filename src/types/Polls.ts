@@ -26,3 +26,33 @@ export interface Poll {
     avatar_url: string;
   }[];
 }
+
+export interface PollCreator {
+  username: string | null;
+  avatar_url: string | null;
+}
+
+export interface Participant {
+  username: string | null;
+  avatar_url: string | null;
+  character_name: string | null;
+  character_image: string | null;
+}
+
+export interface PollDetails {
+  id: string;
+  name: string;
+  description: string | null;
+  image_url: string | null;
+  theme_month: string;
+  status: string | null;
+  created_by: PollCreator | null;
+  likes: number;
+  dislikes: number;
+  participants: Participant[];
+}
+
+export interface FetchPollDataResponse {
+  poll?: PollDetails;
+  error?: unknown;
+}

@@ -1,16 +1,15 @@
 import Image from 'next/image';
 import styles from './ThemePage.module.css';
 import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
-// import Figure from '@/components/ui/Figure/Figure';
-// import Avatar from '@/components/user/Avatar/Avatar';
 import User from '@/components/user/User';
 import Feedback from '@/components/shared/LikeButton/LikeButton';
 import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 import { Theme } from '@/types/Theme';
-import fetchUser from '@/lib/api/user/fetchUser';
 import JoinThemeModal from '@/components/shared/Modal/JoinThemeModal/JoinThemeModal';
-
+// import Figure from '@/components/ui/Figure/Figure';
+// import Avatar from '@/components/user/Avatar/Avatar';
+// import fetchUser from '@/lib/api/user/fetchUser';
 interface Props {
   theme: Theme;
   inPast?: boolean;
@@ -19,7 +18,7 @@ interface Props {
 export default async function ThemePage({ theme, inPast }: Props) {
   const themeData = await fetchThemeData({ themeMonth: theme.theme_month });
 
-  const user = await fetchUser();
+  // const user = await fetchUser();
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -34,11 +33,8 @@ export default async function ThemePage({ theme, inPast }: Props) {
           <h2>Theme</h2>
           <h1>{themeData.theme?.name || 'null'}</h1>
           {!inPast && (
-            <ButtonModalWrapper
-              modalContent={<JoinThemeModal themeTitle={themeData?.theme?.name} participants={themeData?.theme?.participants} username={themeData.theme?.created_by.username} characterName="No Character" />}
-              modalClassName="joinModal"
-            >
-              Join Theme
+            <ButtonModalWrapper buttonText="Join Theme" modalClassName="joinModal">
+              <JoinThemeModal themeTitle={themeData?.theme?.name} participants={themeData?.theme?.participants} username={themeData.theme?.created_by.username} characterName="No Character" />
             </ButtonModalWrapper>
           )}
           <div className={styles.reviews}>

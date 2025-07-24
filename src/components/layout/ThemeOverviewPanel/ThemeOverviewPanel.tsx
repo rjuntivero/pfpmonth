@@ -7,7 +7,7 @@ import { Slide } from '@/types/Slide';
 import { useAppSelector } from '@/state/hooks';
 import { useDispatch } from 'react-redux';
 import { setThemes } from '@/features/themeSlice';
-import { updateTheme } from '@/lib/api/theme/themeActions';
+// import { updateTheme } from '@/lib/api/theme/themeActions';
 
 interface Props {
   initialThemes: Slide[];

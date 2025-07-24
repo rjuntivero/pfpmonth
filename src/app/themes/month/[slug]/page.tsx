@@ -37,8 +37,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   // Check poll suggestions if future
   if (isFuture) {
-    console.log('Future date detected:', themeMonth);
-
     const { data: centralPoll, error: pollError } = await supabase
       .from('polls')
       .select('id, poll_options(*)')
@@ -49,16 +47,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
       console.error('Error fetching central poll:', pollError);
     }
 
-    console.log('Central poll data:', centralPoll);
-
     const suggestions = centralPoll?.poll_options?.sort((a, b) => a.index - b.index) ?? [];
-
-    console.log('Sorted suggestions:', suggestions);
 
     const usedSuggestions = new Set();
 
     const suggestion = suggestions.find((s) => !usedSuggestions.has(s.id));
-    console.log('Selected suggestion for future month:', suggestion);
 
     if (suggestion) {
       usedSuggestions.add(suggestion.id);
@@ -70,8 +63,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
         theme_month: themeMonth,
       };
 
-      console.log('Returning suggestion page with data:', suggestionData);
-      return <SuggestionPage suggestion={suggestionData} slug={{ themeMonth: slug }} />;
+      return <SuggestionPage suggestion={suggestionData} />;
     }
   }
 

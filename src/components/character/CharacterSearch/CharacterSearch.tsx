@@ -34,7 +34,7 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
   }, [themeTitle]);
 
   //search through cached character list
-  const handleSearch = async (e) => {
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const filtered = results.filter((character) => {
       return character.toLowerCase().includes(query.toLowerCase());

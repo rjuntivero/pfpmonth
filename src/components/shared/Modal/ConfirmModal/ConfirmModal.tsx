@@ -16,21 +16,6 @@ export default function ConfirmModal({ poll }: Props) {
   const dispatch = useAppDispatch();
   const pollDataRef = useRef<FetchPollDataResponse | null>(null);
   const router = useRouter();
-
-  // fetch poll data when component mounts
-  //   useEffect(() => {
-  //     (async () => {
-  //       try {
-  //         const res = await fetch(`/api/poll/${pollId}`);
-  //         const data: FetchPollDataResponse = await res.json();
-  //         if (!res.ok) throw new Error('Failed to fetch poll data');
-  //         pollDataRef.current = data;
-  //       } catch (err) {
-  //         console.error('Error fetching poll data:', err);
-  //       }
-  //     })();
-  //   }, [pollId]);
-
   const promoteToTheme = async (): Promise<void> => {
     try {
       const promoteRes = await fetch(`/api/poll/${poll.id}/promote?month=${poll.theme_month}`, {

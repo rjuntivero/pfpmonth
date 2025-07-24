@@ -89,7 +89,7 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
               <div className={styles.loader}></div>
             </div>
           ) : editableThemes.length >= 1 ? (
-            editableThemes.map((theme, index) => <ThemeOverviewCard onUpdate={refetchThemes} index={index} key={index} theme={theme} onReset={() => resetTheme(theme.id as string)} onClaim={() => {}} />)
+            editableThemes.map((theme, index) => <ThemeOverviewCard type={theme.type} onUpdate={refetchThemes} index={index} key={index} theme={theme} onReset={() => resetTheme(theme.id as string)} onClaim={() => {}} />)
           ) : (
             <div>No editable themes...</div>
           )}

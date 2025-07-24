@@ -20,6 +20,7 @@ export default function Poll({ poll, type, onUploadSuccess }: { poll?: PollType;
 
   const formRef = useRef<HTMLFormElement>(null);
 
+  // handle poll upload
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -31,6 +32,7 @@ export default function Poll({ poll, type, onUploadSuccess }: { poll?: PollType;
     formData.append('poll_id', poll?.id as string);
     formData.append('server_id', poll?.server_id as string);
 
+    // upload poll
     const res = await fetch('/api/polls', {
       method: 'POST',
       body: formData,

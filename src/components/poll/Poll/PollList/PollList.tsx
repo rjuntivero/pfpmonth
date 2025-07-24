@@ -9,6 +9,7 @@ export default function PollList({ poll }: { poll: PollType }) {
 
   const [refreshKey, setRefreshKey] = useState(0);
 
+  // fetch server polls on mount and on poll update
   useEffect(() => {
     async function fetchPolls() {
       const res = await fetch(`/api/polls/options?pollId=${poll.id}`);
@@ -34,6 +35,7 @@ export default function PollList({ poll }: { poll: PollType }) {
     //eslint-disable-next-line
   }, [poll.id, refreshKey]);
 
+  // refresh page when poll is updated
   function forceRefresh() {
     setRefreshKey((prev) => prev + 1);
   }

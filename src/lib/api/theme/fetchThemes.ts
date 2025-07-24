@@ -138,5 +138,8 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
     };
   });
 
+  // log final slides
+  console.log('📊 Final slides generated for theme slider:', slides);
+
   return { serverName, serverId: resolvedServerId, themes: slides };
 }

@@ -7,10 +7,11 @@ export async function POST(req: Request, { params }: { params: { pollId: string 
   const { searchParams } = new URL(req.url);
   const monthParam = searchParams.get('month');
   const supabase = await createClient();
+  console.log('Poll Id:', pollId);
 
   // fetch poll data
   const { data: pollData, error: fetchError } = await supabase.from('poll_options').select('*, polls (server_id)').eq('id', pollId).single();
-
+  console.log('Poll Data:', pollData);
   if (fetchError || !pollData) {
     return NextResponse.json({ error: 'Poll not found' }, { status: 404 });
   }
@@ -42,7 +43,7 @@ export async function POST(req: Request, { params }: { params: { pollId: string 
 
   // promote poll to theme
   const { error } = await supabase.from('themes').insert({
-    id: pollData.poll_id,
+    id: pollData.id,
     name: pollData.name,
     description: pollData.description,
     image_url: imageUrl || '/no-image-placeholder.jpg',

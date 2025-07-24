@@ -5,13 +5,13 @@ import User from '@/components/user/User';
 import Feedback from '@/components/shared/LikeButton/LikeButton';
 import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
-import { Theme } from '@/types/Theme';
 import JoinThemeModal from '@/components/shared/Modal/JoinThemeModal/JoinThemeModal';
+import { Slide } from '@/types/Slide';
 // import Figure from '@/components/ui/Figure/Figure';
 // import Avatar from '@/components/user/Avatar/Avatar';
 // import fetchUser from '@/lib/api/user/fetchUser';
 interface Props {
-  theme: Theme;
+  theme: Slide;
   inPast?: boolean;
 }
 

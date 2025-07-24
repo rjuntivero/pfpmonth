@@ -31,8 +31,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing required form fields' }, { status: 400 });
   }
 
+  // upload poll image to supabase storage
   const fileBuffer = Buffer.from(await file.arrayBuffer());
-
   const image_url = await uploadThemeImage({ fileName: file.name, fileBuffer, serverId });
 
   const { error } = await supabase.from('poll_options').insert([{ poll_id, created_by: user.id, name, option_text, image_url, server_id: serverId }]);

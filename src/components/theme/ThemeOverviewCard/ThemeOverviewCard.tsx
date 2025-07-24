@@ -9,6 +9,7 @@ import { createTheme, updateTheme, uploadThemeImage } from '@/lib/api/theme/them
 import getCookie from '@/lib/utils/getClientCookie';
 
 interface Props {
+  type: string;
   theme: Slide;
   onReset?: (theme: Slide) => void;
   onClaim?: (theme: Slide) => void;
@@ -16,7 +17,7 @@ interface Props {
   onUpdate: () => void;
 }
 
-export default function ThemeOverviewCard({ theme, onReset, onClaim, index = 0, onUpdate }: Props) {
+export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index = 0, onUpdate }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -42,6 +43,7 @@ export default function ThemeOverviewCard({ theme, onReset, onClaim, index = 0, 
     }));
   }
 
+  // save edited changes to the theme data
   async function saveChanges() {
     try {
       let newThemeId = theme.id;
@@ -96,7 +98,7 @@ export default function ThemeOverviewCard({ theme, onReset, onClaim, index = 0, 
         )}
       </div>
       <div className={styles.themeDetails}>
-        <div className={`${styles.header} ${!theme.description && styles.noTheme}`}>
+        <div className={`${styles.header} ${type !== 'final' && styles.noTheme}`}>
           <h2>{theme.month}</h2>
           {editing ? (
             <div className={styles.nameInput}>
@@ -145,15 +147,26 @@ export default function ThemeOverviewCard({ theme, onReset, onClaim, index = 0, 
                     </>
                   ) : (
                     <>
-                      <Button variant="theme-card" onClick={() => setEditing(true)}>
-                        edit
-                      </Button>
-                      <Button variant="theme-card" onClick={() => onReset?.(theme)}>
-                        reset
-                      </Button>
-                      <Button variant="theme-card" onClick={() => onClaim?.(theme)}>
-                        claim
-                      </Button>
+                      {type !== 'suggestion' ? (
+                        <>
+                          <Button variant="theme-card" onClick={() => setEditing(true)}>
+                            edit
+                          </Button>
+                          <Button variant="theme-card" onClick={() => onReset?.(theme)}>
+                            reset
+                          </Button>
+                          <Button variant="theme-card" onClick={() => onClaim?.(theme)}>
+                            claim
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button variant="theme-card">promote</Button>
+                          <Button variant="theme-card" onClick={() => setEditing(true)}>
+                            edit
+                          </Button>
+                        </>
+                      )}
                     </>
                   )}
                 </>

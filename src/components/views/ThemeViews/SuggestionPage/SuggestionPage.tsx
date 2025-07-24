@@ -7,6 +7,8 @@ import ConfirmModal from '@/components/shared/Modal/ConfirmModal/ConfirmModal';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 
 export default async function SuggestionPage({ suggestion }: { suggestion: any }) {
+  console.log('SuggestionPage suggestion:', suggestion);
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -18,7 +20,7 @@ export default async function SuggestionPage({ suggestion }: { suggestion: any }
         </div>
 
         <div className={styles.title}>
-          <h2>Theme</h2>
+          <h2>Suggestion</h2>
           <h1>{suggestion.name || 'null'}</h1>
           <div className={styles.reviews}></div>
           <p className={styles.comment}>

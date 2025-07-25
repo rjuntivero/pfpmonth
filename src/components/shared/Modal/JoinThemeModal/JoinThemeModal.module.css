@@ -61,3 +61,21 @@ h1.participantTitle {
   height: 100%;
   gap: 1rem;
 }
+
+article.manualSearch {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+input.searchBar {
+  padding: 0.35em 1em;
+  border-radius: 50px;
+  font-family: var(--font-baloo);
+  font-size: 1rem;
+  border: none;
+  background-color: var(--foreground);
+  color: var(--text);
+}

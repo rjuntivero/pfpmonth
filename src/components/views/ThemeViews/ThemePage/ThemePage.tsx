@@ -7,6 +7,7 @@ import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 import JoinThemeModal from '@/components/shared/Modal/JoinThemeModal/JoinThemeModal';
 import { Slide } from '@/types/Slide';
+import Avatar from '@/components/user/Avatar/Avatar';
 // import Figure from '@/components/ui/Figure/Figure';
 // import Avatar from '@/components/user/Avatar/Avatar';
 // import fetchUser from '@/lib/api/user/fetchUser';
@@ -52,7 +53,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
         <section className={styles.userDetails}>
           <section className={styles.author}>
             <div className={styles.authorAvatar}>
-              <Image src={themeData.theme?.created_by.avatar_url || '/no-image-placeholder.jpg'} alt="Theme Frame" fill className={styles.avatar} />
+              <Avatar imageURL={themeData.theme?.created_by.avatar_url || '/no-image-placeholder.jpg'} className={styles.avatar} zoom={!themeData.theme?.created_by.avatar_url} />
             </div>
             <p className={styles.authorName}>created by {themeData.theme?.created_by.username}</p>
           </section>

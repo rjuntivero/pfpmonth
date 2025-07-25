@@ -9,6 +9,7 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [filteredResults, setFilteredResults] = useState<string[]>([]);
+  const [focused, setFocused] = useState(false);
 
   //generate list of characters
   useEffect(() => {
@@ -34,26 +35,33 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
   }, [themeTitle]);
 
   //search through cached character list
-  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const filtered = results.filter((character) => {
-      return character.toLowerCase().includes(query.toLowerCase());
-    });
+  // const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const filtered = results.filter((character) => {
+  //     return character.toLowerCase().includes(query.toLowerCase());
+  //   });
+  //   setFilteredResults(filtered);
+  // };
+
+  // Live update results as query changes
+  useEffect(() => {
+    const filtered = results.filter((character) => character.toLowerCase().includes(query.toLowerCase()));
     setFilteredResults(filtered);
-  };
+  }, [query, results]);
 
   return (
     <div className={styles.container}>
-      <form onSubmit={handleSearch}>
-        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search for a Character..." />
-        <button disabled={loading}>{loading ? 'Searching…' : 'Search'}</button>
+      <form onSubmit={(e) => e.preventDefault()}>
+        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 150)} placeholder="Search for a Character..." />
       </form>
 
-      <div>
-        <ul className={styles.results}>
+      <div className={`${styles.resultsWrapper} ${focused ? styles.show : ''}`}>
+        <ul className={`${styles.results}`}>
           {filteredResults.map((item, i) => (
             <li key={i}>
-              <Button variant="character-result">{item}</Button>
+              <Button variant="character-result" className={styles.searchItem}>
+                {item}
+              </Button>
             </li>
           ))}
         </ul>

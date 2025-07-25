@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextResponse } from 'next/server';
-import { uploadThemeImage } from '@/lib/api/theme/uploadImage';
+import { uploadPollImage } from '@/lib/api/theme/uploadImage';
 
 export async function POST(req: Request, { params }: { params: { pollId: string } }) {
   const { pollId } = params;
@@ -30,7 +30,7 @@ export async function POST(req: Request, { params }: { params: { pollId: string 
       const fileName = `${Date.now()}-${file.name}`;
 
       try {
-        imageUrl = await uploadThemeImage({
+        imageUrl = await uploadPollImage({
           fileName,
           fileBuffer: buffer,
           serverId: pollData.polls?.server_id,

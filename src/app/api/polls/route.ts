@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextRequest, NextResponse } from 'next/server';
-import { uploadThemeImage } from '@/lib/api/theme/uploadImage';
+import { uploadPollImage } from '@/lib/api/theme/uploadImage';
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
   // upload poll image to supabase storage
   const fileBuffer = Buffer.from(await file.arrayBuffer());
-  const image_url = await uploadThemeImage({ fileName: file.name, fileBuffer, serverId });
+  const image_url = await uploadPollImage({ fileName: file.name, fileBuffer, serverId });
 
   const { error } = await supabase.from('poll_options').insert([{ poll_id, created_by: user.id, name, option_text, image_url, server_id: serverId }]);
 

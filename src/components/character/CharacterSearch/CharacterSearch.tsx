@@ -49,13 +49,15 @@ export default function CharacterSearch({ themeTitle }: { themeTitle?: string })
         <button disabled={loading}>{loading ? 'Searching…' : 'Search'}</button>
       </form>
 
-      <ul className={styles.results}>
-        {filteredResults.map((item, i) => (
-          <li key={i}>
-            <Button variant="character-result">{item}</Button>
-          </li>
-        ))}
-      </ul>
+      <div>
+        <ul className={styles.results}>
+          {filteredResults.map((item, i) => (
+            <li key={i}>
+              <Button variant="character-result">{item}</Button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

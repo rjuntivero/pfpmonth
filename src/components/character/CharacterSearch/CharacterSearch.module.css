@@ -3,6 +3,10 @@
   height: 100px;
 }
 
+.container {
+  padding: 1em;
+}
+
 .container ul {
   padding: 0.5em 1rem;
   display: flex;
@@ -54,6 +58,7 @@ ul.results {
 
 ul.results li {
   transition: 200ms ease-in-out;
+  max-width: fit-content;
 }
 
 ul.results li:hover {

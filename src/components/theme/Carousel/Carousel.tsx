@@ -2,7 +2,6 @@
 
 import { useLayoutEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import styles from './Carousel.module.css';
 import { Slide } from '@/types/Slide';

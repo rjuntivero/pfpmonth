@@ -21,12 +21,10 @@ export async function uploadThemeImage({ fileName, fileBuffer, serverId, date }:
   return publicUrlData.publicUrl;
 }
 
-export async function uploadPollImage({ fileName, fileBuffer, serverId, date }: { fileName: string; fileBuffer: Buffer; serverId: string; date: string }) {
+export async function uploadPollImage({ fileName, fileBuffer, serverId }: { fileName: string; fileBuffer: Buffer; serverId: string }) {
   const supabase = await createClient();
-  const parsedDate = new Date(date);
-  const formattedDate = `${parsedDate.getFullYear()}-${parsedDate.toLocaleString('default', { month: 'long' })}`;
 
-  const filePath = `poll-themes/${serverId}/${formattedDate}/${fileName}`;
+  const filePath = `poll-themes/${serverId}/${fileName}`;
 
   const { error } = await supabase.storage.from('theme-images').upload(filePath, fileBuffer, {
     upsert: true,

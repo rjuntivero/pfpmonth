@@ -26,8 +26,8 @@ export async function GET(req: NextRequest) {
     Only respond with the names of the character.
     If you can't recognize ANY characters from the given theme, return a message saying "No characters found for this theme.".
     Do not generate original or creative names.
-    Do not explain anything.
-    Don't include additional information or context for vague descriptions such as 'The farmworld characters (Finn, Jake, etc.)' or 'Simon Petrikov (Pre-Ice King)'
+    Do not explain anything, for example, do not explain acronyms with a parentheses.
+    Don't include additional information or context for vague descriptions in parentheses such as 'The farmworld characters (Finn, Jake, etc.)' or 'Simon Petrikov (Pre-Ice King)'
     Start with the most popular or well-known characters first, and then list the rest in no particular order.
     I want a VERY LARGE list of characters, only limit the amount to around 100 or if the franchise/theme no longer has any characters to list.
     Just return the list of character names. Heres the given franchise or theme "${theme}"`;

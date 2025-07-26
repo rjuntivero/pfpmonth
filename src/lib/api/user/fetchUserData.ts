@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
-export default async function fetchUser() {
+export default async function fetchUserData() {
   const supabase = await createClient();
 
   const {
@@ -18,5 +18,5 @@ export default async function fetchUser() {
     month: 'long',
   });
 
-  return { username: userData?.username, joined_at: formattedDate, avatar_url: avatar_url };
+  return { username: userData?.username, joined_at: formattedDate, avatar_url: avatar_url, user_id: user.id };
 }

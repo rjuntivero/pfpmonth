@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchPollThemes } from '@/lib/api/poll/fetchPollThemes';
+import { fetchPollOptions } from '@/lib/api/poll/fetchPollOptions';
 
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Missing pollId' }, { status: 400 });
   }
 
-  const { pollThemes } = await fetchPollThemes({ pollId });
+  const { pollOptions } = await fetchPollOptions({ pollId });
 
-  return NextResponse.json({ pollThemes });
+  return NextResponse.json({ pollOptions });
 }

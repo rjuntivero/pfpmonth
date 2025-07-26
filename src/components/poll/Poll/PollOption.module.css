@@ -71,11 +71,13 @@
 .voteBtn {
   color: var(--foreground);
   transition: all 0.2s ease-in-out;
+  z-index: 100;
 }
 .voteBtn:hover {
   color: var(--main);
   filter: brightness(1.4);
   transition: all 0.2s ease-in-out;
+  z-index: 100;
 }
 
 /* Upload Modal */

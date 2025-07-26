@@ -1,5 +1,5 @@
 {
-  "name": "themetar",
+  "name": "pfpmonth",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,11 +15,11 @@
     "@next/font": "^14.2.15",
     "@reduxjs/toolkit": "^2.8.2",
     "@supabase/ssr": "^0.6.1",
-    "@supabase/supabase-js": "^2.49.4",
+    "@supabase/supabase-js": "^2.52.1",
     "@upstash/redis": "^1.35.1",
     "google-auth-library": "^9.15.1",
     "motion": "^12.10.4",
-    "next": "15.3.2",
+    "next": "^15.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0"

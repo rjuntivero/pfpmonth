@@ -3,7 +3,7 @@ import styles from './ThemePage.module.css';
 import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
 import User from '@/components/user/User';
 import Feedback from '@/components/shared/LikeButton/LikeButton';
-import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
+import { fetchThemeData } from '@/lib/api/theme/fetchThemeData';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 import JoinThemeModal from '@/components/shared/Modal/JoinThemeModal/JoinThemeModal';
 import { Slide } from '@/types/Slide';

@@ -1,7 +1,7 @@
 import styles from './page.module.css';
 import { cookies } from 'next/headers';
 import Avatar from '@/components/user/Avatar/Avatar';
-import fetchUser from '@/lib/api/user/fetchUser';
+import fetchUserData from '@/lib/api/user/fetchUserData';
 import ProfilePanel from '@/components/layout/ProfilePanel/ProfilePanel';
 import ServerCard from '@/components/server/ServerCard/ServerCard';
 import CharacterCard from '@/components/character/CharacterCard/CharacterCard';
@@ -10,7 +10,7 @@ import Image from 'next/image';
 export default async function Profile() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
-  const { username, joined_at, avatar_url } = await fetchUser();
+  const { username, joined_at, avatar_url } = await fetchUserData();
   // const { serverName, themes } = await fetchThemes(currentYear, serverId);
   return (
     <>

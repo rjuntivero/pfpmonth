@@ -79,3 +79,9 @@ input.searchBar {
   background-color: var(--foreground);
   color: var(--text);
 }
+
+.manualSearch p {
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--foreground);
+}

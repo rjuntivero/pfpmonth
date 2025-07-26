@@ -1,12 +1,12 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
-import { createPolls } from '../poll/createPolls';
+import { createServerPoll } from '../poll/pollActions';
 import { Slide } from '@/types/Slide';
 import { Theme, ThemeSliderResult } from '@/types/Theme';
-import { toSlug } from '@/lib/utils/utils';
+import { toSlug } from '@/lib/utils/stringUtils';
 import { fetchServerPoll } from '../poll/fetchServerPoll';
-import { fetchPollThemes } from '../poll/fetchPollThemes';
+import { fetchPollOptions } from '../poll/fetchPollOptions';
 import { fetchServer } from '../server/fetchServer';
-import { MONTHS } from '@/lib/utils/utils';
+import { MONTHS } from '@/lib/utils/stringUtils';
 
 export async function fetchThemes(selectedYear: number, serverIdFromCookie?: string): Promise<ThemeSliderResult> {
   const supabase = await createClient();
@@ -19,15 +19,15 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
 
   // create server poll if it does not yet exist
   if (serverIdFromCookie) {
-    await createPolls(serverIdFromCookie as string);
+    await createServerPoll(serverIdFromCookie as string);
   }
 
   // fetch existing poll themes
   const pollExists = await fetchServerPoll(serverIdFromCookie as string);
   if (pollExists) {
-    const pollOptionsExist = await fetchPollThemes({ pollId: pollExists.poll_id as string });
+    const pollOptionsExist = await fetchPollOptions({ pollId: pollExists.poll_id as string });
     if (pollOptionsExist) {
-      pollOptionsExist.pollThemes?.map((poll) => poll);
+      pollOptionsExist.pollOptions?.map((poll) => poll);
     }
   }
 

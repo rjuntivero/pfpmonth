@@ -1,4 +1,4 @@
-import { parseSlug } from '@/lib/utils/utils';
+import { parseSlug } from '@/lib/utils/stringUtils';
 import ThemePage from '@/components/views/ThemeViews/ThemePage/ThemePage';
 import SuggestionPage from '@/components/views/ThemeViews/SuggestionPage/SuggestionPage';
 import EmptyPage from '@/components/views/ThemeViews/EmptyPage/EmptyPage';

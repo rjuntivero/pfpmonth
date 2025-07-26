@@ -17,7 +17,7 @@ export default function JoinThemeModal({ themeTitle, participants, username, cha
   return (
     <>
       <div className={styles.modalWrapper}>
-        <h1 className={styles.themeTitle}>{themeTitle}</h1>
+        {/* <h1 className={styles.themeTitle}>{themeTitle}</h1> */}
         <div className={styles.content}>
           <div className={styles.actions}>
             <Avatar imageURL={'/no-image-placeholder.jpg'} className={styles.avatar} zoom={true} />
@@ -25,7 +25,7 @@ export default function JoinThemeModal({ themeTitle, participants, username, cha
             <h2 className={styles.characterName}>{characterName}</h2>
             <CharacterSearch themeTitle={themeTitle} />
             <article className={styles.manualSearch}>
-              <p>Unlisted Character? Enter them manually</p>
+              <p>or... Enter manually</p>
               <form action="" onSubmit={(e) => e.preventDefault()}>
                 <input type="text" className={styles.searchBar} />
                 <button>Submit</button>

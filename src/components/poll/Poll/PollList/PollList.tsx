@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { Poll as PollType } from '@/types/Polls';
-import Poll from '../Poll';
+import PollOption from '../PollOption';
 
 export default function PollList({ poll }: { poll: PollType }) {
-  const [polls, setPolls] = useState<PollType[]>([]);
+  const [pollOptions, setPollOptions] = useState<PollType[]>([]);
 
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -15,7 +15,7 @@ export default function PollList({ poll }: { poll: PollType }) {
       const res = await fetch(`/api/polls/options?pollId=${poll.id}`);
       const data = await res.json();
 
-      const sorted = (data.pollThemes || []).sort((a: PollType, b: PollType) => {
+      const sorted = (data.pollOptions || []).sort((a: PollType, b: PollType) => {
         const aVotes = a.vote_count ?? 0;
         const bVotes = b.vote_count ?? 0;
 
@@ -27,8 +27,8 @@ export default function PollList({ poll }: { poll: PollType }) {
         return bTime - aTime;
       });
 
-      setPolls(sorted);
-      setPolls(sorted);
+      setPollOptions(sorted);
+      setPollOptions(sorted);
     }
 
     fetchPolls();
@@ -42,10 +42,10 @@ export default function PollList({ poll }: { poll: PollType }) {
 
   return (
     <>
-      {polls.map((poll) => (
-        <Poll key={poll?.id} poll={poll} type="theme" />
+      {pollOptions.map((option) => (
+        <PollOption key={option?.id} poll={option} type="theme" />
       ))}
-      <Poll type="upload" poll={poll} onUploadSuccess={forceRefresh} />
+      <PollOption type="upload" poll={poll} onUploadSuccess={forceRefresh} />
     </>
   );
 }

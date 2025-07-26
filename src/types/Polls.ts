@@ -1,9 +1,6 @@
-import { Theme } from './Theme';
-
 export interface PollOption {
   vote_count: number;
   theme_id: string;
-  themes: Theme | null;
 }
 
 export interface Poll {

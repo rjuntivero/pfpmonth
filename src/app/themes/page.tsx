@@ -27,7 +27,7 @@ export default async function Page() {
         <div className={styles.themes}>
           <CurtainDrapes />
           <Image src="/curtainsTop.svg" alt="curtain top container" width={1472} height={36} className={styles.curtainsTop} />
-          <ThemeSliderClientWrapper initialThemes={themes} serverId={serverId as string} />
+          <ThemeSliderClientWrapper serverId={serverId as string} />
         </div>
       </main>
       <ThemeOverviewPanel initialThemes={themes} serverId={serverId as string} />

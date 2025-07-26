@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
-export async function fetchPollThemes({ pollId }: { pollId: string }) {
+export async function fetchPollOptions({ pollId }: { pollId: string }) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -40,7 +40,7 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
     return { error };
   }
 
-  const pollThemes = pollOptionsData.map((option) => {
+  const pollOptions = pollOptionsData.map((option) => {
     return {
       id: option.id,
       name: option.name,
@@ -62,5 +62,5 @@ export async function fetchPollThemes({ pollId }: { pollId: string }) {
     };
   });
 
-  return { pollThemes };
+  return { pollOptions };
 }

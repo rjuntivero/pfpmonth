@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextRequest, NextResponse } from 'next/server';
-import { uploadPollImage } from '@/lib/api/theme/uploadImage';
+import { uploadPollImage } from '@/lib/api/poll/pollActions';
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();

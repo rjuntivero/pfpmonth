@@ -56,9 +56,19 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   const themes = themesData as Theme[];
 
   // fetch centralized poll
-  const { data: centralPoll } = await supabase.from('polls').select(`id, poll_options ( id, vote_count, image_url, name, poll_id, created_at )`).eq('server_id', resolvedServerId).maybeSingle();
+  const { data: centralPoll, error: pollError } = await supabase.from('polls').select('id').eq('server_id', resolvedServerId).maybeSingle();
+  if (pollError || !centralPoll) {
+    // return { suggestions: [] };
+  }
 
-  const suggestions = (centralPoll?.poll_options ?? []).sort((a, b) => {
+  // fetch poll options
+  const { data: pollOptions, error: optionsError } = await supabase.from('poll_options_with_vote_count').select('id, vote_count, image_url, name, poll_id, created_at').eq('poll_id', centralPoll?.id);
+
+  if (optionsError || !pollOptions) {
+    // return { suggestions: [] };
+  }
+
+  const suggestions = (pollOptions ?? []).sort((a, b) => {
     const voteDiff = (b.vote_count ?? 0) - (a.vote_count ?? 0);
     return voteDiff !== 0 ? voteDiff : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });

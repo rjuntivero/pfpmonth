@@ -79,6 +79,10 @@
   transition: all 0.2s ease-in-out;
   z-index: 100;
 }
+.voteBtn.liked {
+  color: var(--main);
+  filter: brightness(1.4);
+}
 
 /* Upload Modal */
 .uploadModalContent {
@@ -203,6 +207,12 @@
 .themeModalContainer .themeImage {
   object-fit: cover;
   object-position: center;
+}
+
+.uploadText {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 900px) {

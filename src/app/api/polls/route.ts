@@ -45,69 +45,70 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ success: true });
 }
 
-export async function GET(req: NextRequest) {
-  const supabase = await createClient();
-  const pollId = req.nextUrl.searchParams.get('pollId');
+// export async function GET(req: NextRequest) {
+//   const supabase = await createClient();
+//   const pollId = req.nextUrl.searchParams.get('pollId');
 
-  if (!pollId) {
-    return NextResponse.json({ error: 'Missing pollId' }, { status: 400 });
-  }
+//   if (!pollId) {
+//     return NextResponse.json({ error: 'Missing pollId' }, { status: 400 });
+//   }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+//   const {
+//     data: { user },
+//   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
-  }
+//   if (!user) {
+//     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+//   }
 
-  const { data: pollOptions, error } = await supabase
-    .from('poll_options')
-    .select(
-      `
-      id,
-      poll_id,
-      option_text,
-      vote_count,
-      image_url,
-      created_by,
-      name,
-      created_at,
-      users:created_by ( username, avatar_url ),
-      poll_votes (
-        user_id,
-        users (
-          username,
-          avatar_url
-        )
-      )
-    `
-    )
-    .eq('poll_id', pollId)
-    .order('created_at', { ascending: false });
+//   const { data: pollOptions, error } = await supabase
+//     .from('poll_options')
+//     .select(
+//       `
+//       id,
+//       poll_id,
+//       option_text,
+//       vote_count,
+//       image_url,
+//       created_by,
+//       name,
+//       created_at,
+//       users:created_by ( username, avatar_url ),
+//       poll_votes (
+//         user_id,
+//         users (
+//           username,
+//           avatar_url
+//         )
+//       )
+//     `
+//     )
+//     .eq('poll_id', pollId)
+//     .order('created_at', { ascending: false });
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+//   if (error) {
+//     return NextResponse.json({ error: error.message }, { status: 500 });
+//   }
 
-  const pollThemes = pollOptions.map((option) => ({
-    id: option.id,
-    name: option.name,
-    image_url: option.image_url,
-    vote_count: option.vote_count,
-    created_by: {
-      username: option.users?.username || '',
-      avatar_url: option.users?.avatar_url || '',
-    },
-    description: option.option_text,
-    month: '',
-    year: '',
-    supporters: (option.poll_votes || []).map((vote) => ({
-      user_id: vote.user_id,
-      username: vote.users?.username || '',
-      avatar_url: vote.users?.avatar_url || '',
-    })),
-  }));
+//   const pollOption = pollOptions.map((option) => ({
+//     id: option.id,
+//     name: option.name,
+//     image_url: option.image_url,
+//     vote_count: option.vote_count,
+//     created_by: {
+//       username: option.users?.username || '',
+//       avatar_url: option.users?.avatar_url || '',
+//     },
+//     description: option.option_text,
+//     month: '',
+//     year: '',
+//     supporters: (option.poll_votes || []).map((vote) => ({
+//       user_id: vote.user_id,
+//       username: vote.users?.username || '',
+//       avatar_url: vote.users?.avatar_url || '',
+//     })),
+//     hasVoted: (option.poll_votes || []).some((vote) => vote.user_id === user.id),
+//   }));
 
-  return NextResponse.json({ pollThemes });
-}
+//   return NextResponse.json({ pollOption });
+// }

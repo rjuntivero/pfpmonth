@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Missing pollId' }, { status: 400 });
   }
 
-  const { pollOptions } = await fetchPollOptions({ pollId });
+  const { pollOptions } = await fetchPollOptions(pollId);
 
   return NextResponse.json({ pollOptions });
 }

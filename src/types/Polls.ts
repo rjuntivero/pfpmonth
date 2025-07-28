@@ -22,6 +22,7 @@ export interface Poll {
     username: string;
     avatar_url: string;
   }[];
+  hasVoted?: boolean;
 }
 
 export interface PollCreator {

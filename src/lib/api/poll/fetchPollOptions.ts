@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
-export async function fetchPollOptions({ pollId }: { pollId: string }) {
+export async function fetchPollOptions(pollId: string) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -11,7 +11,7 @@ export async function fetchPollOptions({ pollId }: { pollId: string }) {
   }
 
   const { data: pollOptionsData, error } = await supabase
-    .from('poll_options')
+    .from('poll_options_with_vote_count')
     .select(
       `
       id,

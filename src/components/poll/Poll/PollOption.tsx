@@ -11,25 +11,38 @@ import { Poll as PollType } from '@/types/Polls';
 const UploadThemeModal = dynamic(() => import('../../shared/Modal/BaseModal'), { ssr: false });
 const ThemeDetailsModal = dynamic(() => import('../../shared/Modal/BaseModal'), { ssr: false });
 
-export default function PollOption({ poll: pollOptions, type, onUploadSuccess }: { poll?: PollType; type: string; onUploadSuccess?: () => void }) {
+export default function PollOption({ poll: pollOptions, type, refetchThemes }: { poll?: PollType; type: string; refetchThemes?: () => void }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [voteCount, setVoteCount] = useState((pollOptions?.vote_count as number) || 0);
-  const [hasVoted, setHasVoted] = useState(false);
+  const [voteCount, setVoteCount] = useState<number | null>(pollOptions?.vote_count || 0);
+  const [hasVoted, setHasVoted] = useState(pollOptions?.hasVoted || false);
 
   const handlePollClick = () => setIsThemeModalOpen(true);
   const handleUploadClick = () => setIsUploadModalOpen(true);
 
   const formRef = useRef<HTMLFormElement>(null);
 
+  // fetch vote count on mount
+  useEffect(() => {
+    async function fetchVoteCount() {
+      const voteRes = await fetch(`/api/poll/${pollOptions?.id as string}`);
+      const voteData = await voteRes.json();
+      if (voteData.voteCount !== undefined) {
+        setVoteCount(voteData.voteCount);
+      } else {
+        console.error('Failed to fetch vote count:', voteData);
+      }
+    }
+
+    fetchVoteCount();
+  }, [pollOptions?.id]);
+
   // handle vote
   async function handleVote() {
     try {
-      console.log('poll option vote count:', voteCount);
       const userRes = await fetch('/api/user');
       const userData = await userRes.json();
       const userId = userData.user?.user_id;
-      console.log('User ID:', userId);
 
       if (!userId || !pollOptions?.id) return;
 
@@ -42,10 +55,8 @@ export default function PollOption({ poll: pollOptions, type, onUploadSuccess }:
       const data = await res.json();
 
       if (data.voted) {
-        setVoteCount((prev) => prev + 1);
         setHasVoted(true);
       } else if (data.notVoted) {
-        setVoteCount((prev) => Math.max(0, prev - 1));
         setHasVoted(false);
       }
     } catch (error) {
@@ -66,7 +77,7 @@ export default function PollOption({ poll: pollOptions, type, onUploadSuccess }:
     formData.append('server_id', pollOptions?.server_id as string);
 
     // upload poll
-    const res = await fetch('/api/poll', {
+    const res = await fetch('/api/polls', {
       method: 'POST',
       body: formData,
     });
@@ -76,7 +87,7 @@ export default function PollOption({ poll: pollOptions, type, onUploadSuccess }:
       alert('Upload failed: ' + result.error);
     } else {
       setIsUploadModalOpen(false);
-      onUploadSuccess?.();
+      refetchThemes?.();
     }
   }
   return (
@@ -110,7 +121,7 @@ export default function PollOption({ poll: pollOptions, type, onUploadSuccess }:
             <h1 className={styles.themeVotes}>
               {voteCount} {voteCount === 1 ? 'vote' : 'votes'}
             </h1>
-            <LikeButton className={styles.voteBtn} />
+            <LikeButton className={`${styles.voteBtn} ${hasVoted ? styles.liked : ''}`} />
             <h2>Supporting Users:</h2>
             <div className={styles.themeSupporters}>
               {/* {poll?.supporters.map((user) => {
@@ -145,19 +156,19 @@ export default function PollOption({ poll: pollOptions, type, onUploadSuccess }:
                     handleVote();
                   }}
                 >
-                  <LikeButton className={styles.voteBtn} />
+                  <LikeButton className={`${styles.voteBtn} ${hasVoted ? styles.liked : ''}`} />
                 </button>
               </div>
             </>
           )}
           {type === 'upload' && (
-            <>
+            <div className={styles.uploadText}>
               <Image src={'/AddBtn.svg'} width={30} height={30} alt="upload button" />
 
               <button onClick={(e) => e.stopPropagation()}>
                 <h1>Add Theme</h1>
               </button>
-            </>
+            </div>
           )}
         </div>
       </article>

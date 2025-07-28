@@ -14,6 +14,7 @@ export default function PollList({ poll }: { poll: PollType }) {
     async function fetchPolls() {
       const res = await fetch(`/api/polls/options?pollId=${poll.id}`);
       const data = await res.json();
+      console.log('Fetched poll options:', data.pollOptions);
 
       const sorted = (data.pollOptions || []).sort((a: PollType, b: PollType) => {
         const aVotes = a.vote_count ?? 0;
@@ -45,7 +46,7 @@ export default function PollList({ poll }: { poll: PollType }) {
       {pollOptions.map((option) => (
         <PollOption key={option?.id} poll={option} type="theme" />
       ))}
-      <PollOption type="upload" poll={poll} onUploadSuccess={forceRefresh} />
+      <PollOption type="upload" poll={poll} refetchThemes={forceRefresh} />
     </>
   );
 }

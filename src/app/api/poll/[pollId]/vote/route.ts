@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { updatePollOptionVote } from '@/lib/api/poll/pollActions';
 
 export async function POST(req: Request, { params }: { params: { pollId: string } }) {
-  const { pollId } = params;
+  const { pollId } = await params;
   const { userId } = await req.json();
 
   // fetch poll data

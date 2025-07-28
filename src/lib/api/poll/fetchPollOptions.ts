@@ -59,6 +59,7 @@ export async function fetchPollOptions(pollId: string) {
           username: vote.users?.username ?? '',
           avatar_url: vote.users?.avatar_url ?? '',
         })) ?? [],
+      hasVoted: option.poll_votes?.some((vote) => vote.user_id === user.id) ?? false,
     };
   });
 

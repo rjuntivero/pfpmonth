@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react';
 import { Poll as PollType } from '@/types/Polls';
 import PollOption from '../PollOption';
 
-export default function PollList({ poll }: { poll: PollType }) {
+interface Props {
+  poll: PollType;
+}
+
+export default function PollList({ poll }: Props) {
   const [pollOptions, setPollOptions] = useState<PollType[]>([]);
 
   const [refreshKey, setRefreshKey] = useState(0);

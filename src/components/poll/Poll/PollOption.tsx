@@ -1,7 +1,7 @@
 'use client';
 import styles from './PollOption.module.css';
 import LikeButton from '../../shared/Button/Like/LikeButton';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Avatar from '../../user/Avatar/Avatar';
@@ -22,21 +22,6 @@ export default function PollOption({ poll: pollOptions, type, refetchThemes }: {
 
   const formRef = useRef<HTMLFormElement>(null);
 
-  // fetch vote count on mount
-  useEffect(() => {
-    async function fetchVoteCount() {
-      const voteRes = await fetch(`/api/poll/${pollOptions?.id as string}`);
-      const voteData = await voteRes.json();
-      if (voteData.voteCount !== undefined) {
-        setVoteCount(voteData.voteCount);
-      } else {
-        console.error('Failed to fetch vote count:', voteData);
-      }
-    }
-
-    fetchVoteCount();
-  }, [pollOptions?.id]);
-
   // handle vote
   async function handleVote() {
     try {
@@ -56,8 +41,10 @@ export default function PollOption({ poll: pollOptions, type, refetchThemes }: {
 
       if (data.voted) {
         setHasVoted(true);
+        setVoteCount((prev) => (prev !== null ? prev + 1 : 1));
       } else if (data.notVoted) {
         setHasVoted(false);
+        setVoteCount((prev) => (prev !== null ? prev - 1 : 1));
       }
     } catch (error) {
       console.error('Error updating vote:', error);

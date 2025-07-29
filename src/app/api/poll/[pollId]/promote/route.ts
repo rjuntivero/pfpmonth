@@ -10,7 +10,7 @@ export async function POST(req: Request, { params }: { params: { pollId: string 
   console.log('Poll Id:', pollId);
 
   // fetch poll data
-  const { data: pollData, error: fetchError } = await supabase.from('poll_options').select('*, polls (server_id)').eq('id', pollId).single();
+  const { data: pollData, error: fetchError } = await supabase.from('poll_options').select('*, polls (server_id), created_by:users (id, username, avatar_url)').eq('id', pollId).single();
   console.log('Poll Data:', pollData);
   if (fetchError || !pollData) {
     return NextResponse.json({ error: 'Poll not found' }, { status: 404 });
@@ -48,7 +48,7 @@ export async function POST(req: Request, { params }: { params: { pollId: string 
     description: pollData.description,
     image_url: imageUrl || '/no-image-placeholder.jpg',
     server_id: pollData.polls?.server_id,
-    created_by: pollData.created_by_user?.id,
+    created_by: pollData.created_by.id,
     theme_month: monthParam,
   });
 
@@ -62,7 +62,7 @@ export async function POST(req: Request, { params }: { params: { pollId: string 
       console.error('Error deleting poll votes:', voteDeleteError);
       return NextResponse.json({ error: 'Failed to remove poll from poll options' }, { status: 500 });
     }
-    // delete poll option after deleting votes
+    // delete poll option after deleting
     const { error: pollDeleteError } = await supabase.from('poll_options').delete().eq('id', pollId);
     if (pollDeleteError) {
       console.error('Error deleting poll:', pollDeleteError);

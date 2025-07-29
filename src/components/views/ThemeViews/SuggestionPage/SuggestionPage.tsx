@@ -13,7 +13,7 @@ export default async function SuggestionPage({ suggestion }: { suggestion: Poll 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <ThemeBackground themeImage={suggestion.image_url || '/no-image-placeholder.jpg'} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+        <ThemeBackground themeImage={suggestion.image || '/no-image-placeholder.jpg'} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
         <div className={styles.fadeOverlay} />
 
         <div className={styles.frameWrapper}>

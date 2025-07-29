@@ -128,7 +128,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
         return {
           month: monthName,
           year: currentYear,
-          image_url: suggestion.image_url ?? '/no-image-placeholder.jpg',
+          image: suggestion.image_url ?? '/no-image-placeholder.jpg',
           name: suggestion.name || 'No Theme',
           id: suggestion.id,
           tag: 'suggested',

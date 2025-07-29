@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabase';
 
-export async function createTheme(data: { name: string; description: string; image_url: string; server_id: string; theme_month: string }): Promise<{ id: string }> {
+export async function createTheme(data: { name: string; description: string; image_url: string; created_by: string; server_id: string; theme_month: string }): Promise<{ id: string }> {
   const supabase = createClient();
 
   const { data: insertData, error } = await supabase.from('themes').insert([data]).select().single();

@@ -5,8 +5,9 @@ import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground'
 // import { fetchThemeData } from '@/lib/api/theme/fetchTheme';
 import ConfirmModal from '@/components/shared/Modal/ConfirmModal/ConfirmModal';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
+import { Poll } from '@/types/Polls';
 
-export default async function SuggestionPage({ suggestion }: { suggestion: any }) {
+export default async function SuggestionPage({ suggestion }: { suggestion: Poll }) {
   console.log('SuggestionPage suggestion:', suggestion);
 
   return (
@@ -24,7 +25,9 @@ export default async function SuggestionPage({ suggestion }: { suggestion: any }
           <h1>{suggestion.name || 'null'}</h1>
           <div className={styles.reviews}></div>
           <p className={styles.comment}>
-            {'"'} {'"'}
+            {'"'}
+            {suggestion.description}
+            {'"'}
           </p>
           <div>
             <ButtonModalWrapper modalClassName="confirmModal" buttonText="Confirm Theme?">
@@ -35,9 +38,9 @@ export default async function SuggestionPage({ suggestion }: { suggestion: any }
         <section className={styles.userDetails}>
           <section className={styles.author}>
             <div className={styles.authorAvatar}>
-              <Image src={'/no-image-placeholder.jpg'} alt="Theme Frame" fill className={styles.avatar} />
+              <Image src={suggestion.created_by_user?.avatar_url || '/no-image-placeholder.jpg'} alt="Theme Frame" fill className={styles.avatar} />
             </div>
-            <p className={styles.authorName}>Suggested by </p>
+            <p className={styles.authorName}>Suggested by {suggestion.created_by_user?.username}</p>
           </section>
           <section className={styles.participants}>
             <div className={styles.users}></div>

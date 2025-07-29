@@ -29,6 +29,7 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
     }
   }, [initialThemes, dispatch]);
 
+  // fetch themes when the year changes
   useEffect(() => {
     setLoading(true);
     fetch(`/api/themes?serverId=${serverId}&year=${year}`)

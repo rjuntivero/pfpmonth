@@ -7,6 +7,10 @@ export interface Theme {
   start_date: string;
   theme_month: string;
   description?: string;
+  created_by: {
+    username: string;
+    avatar_url: string;
+  };
 }
 
 export interface ThemeSliderResult {

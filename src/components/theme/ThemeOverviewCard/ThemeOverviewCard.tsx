@@ -47,13 +47,16 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
   async function saveChanges() {
     try {
       let newThemeId = theme.id;
-
+      const userRes = await fetch('/api/user');
+      const userData = await userRes.json();
+      const userId = userData.user?.user_id;
       if (!newThemeId) {
         const { id } = await createTheme({
           name: tempData.name,
           description: tempData.description || 'No description',
           image_url: '',
           server_id: serverId as string,
+          created_by: userId,
           theme_month: theme.theme_month,
         });
         newThemeId = id;

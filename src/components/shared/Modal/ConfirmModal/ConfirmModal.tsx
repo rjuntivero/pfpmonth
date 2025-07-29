@@ -4,8 +4,6 @@ import { useAppDispatch } from '@/state/hooks';
 import Button from '../../Button/Button';
 import styles from './ConfirmModal.module.css';
 import { closeModal } from '@/features/modalSlice';
-import { useRef } from 'react';
-import { FetchPollDataResponse } from '@/types/Polls';
 import { useRouter } from 'next/navigation';
 
 interface Props {
@@ -14,7 +12,6 @@ interface Props {
 
 export default function ConfirmModal({ poll }: Props) {
   const dispatch = useAppDispatch();
-  const pollDataRef = useRef<FetchPollDataResponse | null>(null);
   const router = useRouter();
   const promoteToTheme = async (): Promise<void> => {
     try {

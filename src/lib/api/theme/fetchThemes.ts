@@ -62,7 +62,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   }
 
   // fetch poll options
-  const { data: pollOptions, error: optionsError } = await supabase.from('poll_options_with_vote_count').select('id, vote_count, image_url, name, poll_id, created_at').eq('poll_id', centralPoll?.id);
+  const { data: pollOptions, error: optionsError } = await supabase.from('poll_options_with_vote_count').select('*').eq('poll_id', centralPoll?.id);
 
   if (optionsError || !pollOptions) {
     // return { suggestions: [] };
@@ -97,6 +97,9 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
         route: `/themes/month/${slug}`,
         type: 'final',
         theme_month: themeMonth,
+        server_id: resolvedServerId,
+        username: theme.created_by?.username,
+        avatar_url: theme.created_by?.avatar_url || '/no-image-placeholder.jpg',
       };
     }
 
@@ -111,6 +114,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
         route: `/themes/month/${slug}`,
         type: 'tbd',
         theme_month: themeMonth,
+        server_id: resolvedServerId,
       };
     }
 
@@ -124,13 +128,19 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
         return {
           month: monthName,
           year: currentYear,
-          image: suggestion.image_url ?? '/no-image-placeholder.jpg',
+          image_url: suggestion.image_url ?? '/no-image-placeholder.jpg',
           name: suggestion.name || 'No Theme',
           id: suggestion.id,
           tag: 'suggested',
           route: `/themes/month/${slug}`,
           type: 'suggestion',
           theme_month: themeMonth,
+          server_id: resolvedServerId,
+          description: suggestion.option_text,
+          created_by_user: {
+            username: suggestion.created_by_user?.username,
+            avatar_url: suggestion.created_by_user?.avatar_url || '/no-image-placeholder.jpg',
+          },
         };
       }
     }
@@ -145,11 +155,12 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
       route: `/themes/month/${slug}`,
       type: 'tbd',
       theme_month: themeMonth,
+      server_id: resolvedServerId,
     };
   });
 
   // log final slides
-  console.log('📊 Final slides generated for theme slider:', slides);
+  // console.log('📊 Final slides generated for theme slider:', slides);
 
   return { serverName, serverId: resolvedServerId, themes: slides };
 }

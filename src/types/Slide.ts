@@ -9,4 +9,5 @@ export interface Slide {
   type: 'final' | 'suggestion' | 'tbd';
   description?: string;
   theme_month: string;
+  server_id: string;
 }

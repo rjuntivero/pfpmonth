@@ -138,6 +138,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
           server_id: resolvedServerId,
           description: suggestion.option_text,
           created_by_user: {
+            id: suggestion.created_by_user?.id,
             username: suggestion.created_by_user?.username,
             avatar_url: suggestion.created_by_user?.avatar_url || '/no-image-placeholder.jpg',
           },

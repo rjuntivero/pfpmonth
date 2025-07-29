@@ -11,6 +11,7 @@ export interface Poll {
   image_url?: string;
   vote_count?: number;
   created_by_user?: {
+    id: string;
     username: string;
     avatar_url: string;
   };

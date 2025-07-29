@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { uploadPollImage } from '@/lib/api/poll/pollActions';
 
 export async function POST(req: Request, { params }: { params: { pollId: string } }) {
-  const { pollId } = params;
+  const { pollId } = await params;
   const { searchParams } = new URL(req.url);
   const monthParam = searchParams.get('month');
   const supabase = await createClient();
@@ -48,7 +48,7 @@ export async function POST(req: Request, { params }: { params: { pollId: string 
     description: pollData.description,
     image_url: imageUrl || '/no-image-placeholder.jpg',
     server_id: pollData.polls?.server_id,
-    created_by: pollData.created_by.id,
+    created_by: pollData.created_by_user?.id,
     theme_month: monthParam,
   });
 
@@ -56,10 +56,16 @@ export async function POST(req: Request, { params }: { params: { pollId: string 
     console.error('Error promoting poll to theme:', error);
     return NextResponse.json({ error: 'Failed to promote poll to theme' }, { status: 500 });
   } else {
-    // delete poll option after promotion
-    const { error: deleteError } = await supabase.from('poll_options').delete().eq('id', pollId);
-    if (deleteError) {
-      console.error('Error deleting poll:', error);
+    // delete poll option votes first after promotion
+    const { error: voteDeleteError } = await supabase.from('poll_votes').delete().eq('poll_option_id', pollId);
+    if (voteDeleteError) {
+      console.error('Error deleting poll votes:', voteDeleteError);
+      return NextResponse.json({ error: 'Failed to remove poll from poll options' }, { status: 500 });
+    }
+    // delete poll option after deleting votes
+    const { error: pollDeleteError } = await supabase.from('poll_options').delete().eq('id', pollId);
+    if (pollDeleteError) {
+      console.error('Error deleting poll:', pollDeleteError);
       return NextResponse.json({ error: 'Failed to remove poll from poll options' }, { status: 500 });
     }
   }

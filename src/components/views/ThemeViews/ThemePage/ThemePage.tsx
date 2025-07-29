@@ -37,7 +37,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
           <h1>{themeData.theme?.name || 'null'}</h1>
           {!inPast && (
             <ButtonModalWrapper buttonText="Join Theme" modalClassName="joinModal">
-              <JoinThemeModal key={themeData!.theme!.id} themeTitle={themeData?.theme?.name} themeId={themeData!.theme!.id} participants={themeData?.theme?.participants} username={themeData.theme?.created_by.username} chosenCharacter={character} />
+              <JoinThemeModal themeTitle={themeData?.theme?.name} themeId={themeData!.theme!.id} participants={themeData?.theme?.participants} username={themeData.theme?.created_by.username} chosenCharacter={character} />
             </ButtonModalWrapper>
           )}
           <div className={styles.reviews}>
@@ -48,9 +48,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
               <Feedback color={'#d9d9d9'} />
             </button>
           </div>
-          <p className={styles.comment}>
-            {'"'} {themeData.theme?.description} {'"'}
-          </p>
+          <p className={styles.comment}>{`"${themeData.theme?.description}"` || 'No Description'}</p>
         </div>
         <section className={styles.userDetails}>
           <section className={styles.author}>
@@ -63,7 +61,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
             <h1>{themeData.theme?.participants.length} participants:</h1>
             <div className={styles.users}>
               {themeData.theme?.participants.map((participant, i) => (
-                <User key={`${participant.username}-${i}`} character={participant.character_name} />
+                <User key={`${participant.username}-${i}`} participant={participant} />
               ))}
             </div>
           </section>

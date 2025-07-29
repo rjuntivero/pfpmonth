@@ -26,10 +26,12 @@ export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
         avatar_url
       ), 
       user_characters ( 
-        user_id, 
+        id,
         name,
+        theme_id,
         image_url,
-        user:users (
+        user_id, 
+        users (
           username,
           avatar_url
         )
@@ -49,8 +51,12 @@ export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
   const dislikes = themeData.theme_likes?.filter((l: any) => !l.liked).length ?? 0;
   const participants =
     themeData.user_characters?.map((c: any) => ({
-      username: c.user.username,
-      avatar_url: c.user.avatar_url,
+      id: c.id,
+      user_id: c.user_id,
+      theme_id: c.theme_id,
+      image_url: c.image_url,
+      avatar_url: c.users.avatar_url,
+      username: c.users.username,
       character_name: c.name,
       character_image: c.image_url,
     })) ?? [];

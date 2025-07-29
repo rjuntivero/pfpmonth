@@ -5,7 +5,7 @@ import Avatar from '@/components/user/Avatar/Avatar';
 import CharacterSearch from '@/components/character/CharacterSearch/CharacterSearch';
 import { Participant } from '@/types/Participant';
 import User from '@/components/user/User';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Character } from '@/types/Character';
 
 interface Props {
@@ -39,7 +39,7 @@ export default function JoinThemeModal({ themeTitle, themeId, participants, user
           </div>
           <div className={styles.participants}>
             <h1 className={styles.participantTitle}>Claimed Characters</h1>
-            {participants && participants?.length > 0 ? participants?.map((participant) => <User character={participant.name} key={participant.name} />) : 'No current participants'}
+            {participants && participants?.length > 0 ? participants?.map((participant) => <User participant={participant} key={participant.character_name} />) : 'No current participants'}
           </div>
         </div>
       </div>

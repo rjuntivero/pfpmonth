@@ -19,6 +19,7 @@
   border-radius: 50%;
   overflow: auto;
   aspect-ratio: 1/1;
+  padding: 1em;
 }
 
 .avatar {

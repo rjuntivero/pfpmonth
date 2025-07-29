@@ -24,11 +24,7 @@ export default async function SuggestionPage({ suggestion }: { suggestion: Poll 
           <h2>Suggestion</h2>
           <h1>{suggestion.name || 'null'}</h1>
           <div className={styles.reviews}></div>
-          <p className={styles.comment}>
-            {'"'}
-            {suggestion.description}
-            {'"'}
-          </p>
+          <p className={styles.comment}>{`"${suggestion.description}"` || 'No description'}</p>
           <div>
             <ButtonModalWrapper modalClassName="confirmModal" buttonText="Confirm Theme?">
               <ConfirmModal poll={suggestion} />

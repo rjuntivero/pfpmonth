@@ -39,7 +39,7 @@
 }
 
 .content {
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: auto 1fr;
   transition: grid-template-rows 0.3s ease, opacity 0.3s ease;
 }
 
@@ -135,6 +135,11 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.inputControls {
+  display: flex;
+  flex-direction: column;
 }
 
 .nameInput {

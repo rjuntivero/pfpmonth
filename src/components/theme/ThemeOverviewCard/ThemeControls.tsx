@@ -34,9 +34,6 @@ export default function ThemeControls({ editing, type, onSave, onCancel, onEdit,
         <Button variant="theme-card" onClick={onReset}>
           reset
         </Button>
-        <Button variant="theme-card" onClick={onClaim}>
-          claim
-        </Button>
       </div>
     );
   }

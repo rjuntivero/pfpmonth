@@ -37,6 +37,14 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
     setTempData((prev) => ({ ...prev, image_url: previewUrl }));
   };
 
+  function handleEditorChange(data: { name: string; description: string }) {
+    setTempData((prev) => ({
+      ...prev,
+      name: data.name as string,
+      description: data.description as string,
+    }));
+  }
+
   const saveChanges = async () => {
     try {
       let themeId = theme.id;
@@ -45,7 +53,7 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
       const userId = user?.user_id;
 
       if (!themeId) {
-        const { id } = await createTheme({ ...tempData, server_id: serverId, created_by: userId, theme_month: theme.theme_month });
+        const { id } = await createTheme({ ...tempData, server_id: serverId as string, created_by: userId, theme_month: theme.theme_month });
         themeId = id;
       }
 
@@ -79,7 +87,7 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
       <div className={styles.themeDetails}>
         <div className={`${styles.header} ${type !== 'final' && type !== 'suggestion' && styles.noTheme} ${type === 'suggestion' && styles.suggestion}`}>
           <h2>{theme.month}</h2>
-          {editing ? <ThemeEditorForm name={tempData.name} description={tempData.description || 'No Description'} onChange={setTempData} /> : <h3>{theme.name}</h3>}
+          {editing ? <ThemeEditorForm name={tempData.name} description={tempData.description || 'No Description'} onChange={handleEditorChange} /> : <h3>{theme.name}</h3>}
           <button onClick={() => setIsOpen(!isOpen)} disabled={editing}>
             +
           </button>

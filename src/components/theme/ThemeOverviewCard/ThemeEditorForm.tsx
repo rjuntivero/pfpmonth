@@ -8,7 +8,7 @@ interface Props {
 
 export default function ThemeEditorForm({ name, description, onChange }: Props) {
   return (
-    <>
+    <div className={styles.inputControls}>
       <div className={styles.nameInput}>
         <label htmlFor="name">Theme name:</label>
         <input id="name" className={styles.input} value={name} onChange={(e) => onChange({ name: e.target.value, description })} />
@@ -17,6 +17,6 @@ export default function ThemeEditorForm({ name, description, onChange }: Props) 
         <label htmlFor="description">Description:</label>
         <textarea id="description" className={styles.input} value={description} onChange={(e) => onChange({ name, description: e.target.value })} />
       </div>
-    </>
+    </div>
   );
 }

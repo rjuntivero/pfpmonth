@@ -44,6 +44,14 @@ export async function deletePollOption(pollOptionId: string) {
 export async function deleteTheme(themeId: string) {
   const supabase = await createClient();
 
+  // delete any dependent user_characters
+  const { error: characterDeleteError } = await supabase.from('user_characters').delete().eq('theme_id', themeId);
+
+  if (characterDeleteError) {
+    throw new Error(characterDeleteError.message);
+  }
+
+  // delete theme
   const { error } = await supabase.from('themes').delete().eq('id', themeId);
 
   if (error) {

@@ -9,6 +9,7 @@
   grid-auto-rows: none;
   display: grid;
   gap: 1.5em;
+  width: 100%;
   transition: grid-template-columns 500ms;
 }
 
@@ -28,18 +29,36 @@
 }
 
 .content {
-  margin-top: 1em;
   display: grid;
-  grid-template-columns: 1fr 2.5fr;
-  grid-template-rows: repeat(2, auto);
+  grid-template-rows: 0fr 1fr;
   gap: 1rem;
+  margin-top: 1em;
   color: var(--foreground);
   overflow: hidden;
+  transition: grid-template-rows 0.3s ease, opacity 0.3s ease;
 }
 
+.content {
+  grid-template-rows: 1fr 1fr;
+  transition: grid-template-rows 0.3s ease, opacity 0.3s ease;
+}
+
+/* styling for no themes */
 .header.noTheme h3 {
-  color: var(--main);
+  color: gray;
   font-weight: 500;
+}
+
+.header.noTheme h2 {
+  color: var(--main);
+}
+
+/* styling for suggested themes */
+.header.suggestion h3 {
+}
+
+.header.suggestion h2 {
+  color: var(--accent);
 }
 
 .header {

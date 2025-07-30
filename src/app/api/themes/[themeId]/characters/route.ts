@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { redis } from '@/lib/redis';
+import { createClient } from '@/lib/supabase/supabaseSSR';
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, { params }: { params: { themeId: string } }) {
+  const supabase = await createClient();
+  const { themeId } = await params;
+
+  const { data: claimedCharacters } = await supabase.from('user_characters').select('name').eq('theme_id', themeId);
+  const claimedNames = claimedCharacters?.map((c) => c.name) ?? [];
+
   const theme = req.nextUrl.searchParams.get('theme')?.toLowerCase();
 
   if (!theme) return NextResponse.json({ error: 'Theme is required' }, { status: 400 });
@@ -15,7 +22,13 @@ export async function GET(req: NextRequest) {
     const characters = Array.isArray(cached) ? cached : [];
 
     const uniqueCharacters = Array.from(new Set(characters));
-    return NextResponse.json({ source: 'cache', characters: uniqueCharacters });
+
+    const charactersWithStatus = uniqueCharacters.map((name) => ({
+      character_name: name,
+      claimed: claimedNames.includes(name),
+    }));
+
+    return NextResponse.json({ source: 'cache', characters: charactersWithStatus });
   }
 
   const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY!);
@@ -41,7 +54,8 @@ export async function GET(req: NextRequest) {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  await redis.set(cacheKey, JSON.stringify(characters), { ex: 60 * 60 * 24 });
+  // expiry 6 months
+  await redis.set(cacheKey, JSON.stringify(characters), { ex: 60 * 60 * 24 * 180 });
 
   return NextResponse.json({ source: 'ai', characters });
 }

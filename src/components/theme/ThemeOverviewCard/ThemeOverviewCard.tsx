@@ -1,5 +1,4 @@
 'use client';
-import Button from '../../shared/Button/Button';
 import styles from './ThemeOverviewCard.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -7,6 +6,9 @@ import { Slide } from '@/types/Slide';
 import { useState } from 'react';
 import { createTheme, updateTheme, uploadThemeImage } from '@/lib/api/theme/themeActions';
 import getCookie from '@/lib/utils/getClientCookie';
+import ThemeControls from './ThemeControls';
+import ThemeEditorForm from './ThemeEditorForm';
+import ThemeImageUploader from './ThemeImageUploader';
 
 interface Props {
   type: string;
@@ -29,55 +31,36 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
     image_url: theme.image,
   });
 
-  // handle theme image upload
-  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  const handleImageChange = (file: File) => {
     setSelectedFile(file);
-
     const previewUrl = URL.createObjectURL(file);
-    setTempData((prev) => ({
-      ...prev,
-      image_url: previewUrl,
-    }));
-  }
+    setTempData((prev) => ({ ...prev, image_url: previewUrl }));
+  };
 
-  // save edited changes to the theme data
-  async function saveChanges() {
+  const saveChanges = async () => {
     try {
-      let newThemeId = theme.id;
-      const userRes = await fetch('/api/user');
-      const userData = await userRes.json();
-      const userId = userData.user?.user_id;
-      if (!newThemeId) {
-        const { id } = await createTheme({
-          name: tempData.name,
-          description: tempData.description || 'No description',
-          image_url: '',
-          server_id: serverId as string,
-          created_by: userId,
-          theme_month: theme.theme_month,
-        });
-        newThemeId = id;
+      let themeId = theme.id;
+      const res = await fetch('/api/user');
+      const { user } = await res.json();
+      const userId = user?.user_id;
+
+      if (!themeId) {
+        const { id } = await createTheme({ ...tempData, server_id: serverId, created_by: userId, theme_month: theme.theme_month });
+        themeId = id;
       }
 
       let imageUrl = tempData.image_url;
       if (selectedFile) {
-        imageUrl = await uploadThemeImage(serverId as string, selectedFile, theme.month, theme.year.toString());
+        imageUrl = await uploadThemeImage(serverId, selectedFile, theme.month, theme.year.toString());
       }
 
-      await updateTheme(newThemeId, {
-        name: tempData.name,
-        description: tempData.description || 'No description',
-        image_url: imageUrl,
-      });
+      await updateTheme(themeId, { ...tempData, image_url: imageUrl });
       await onUpdate();
       setEditing(false);
     } catch (err) {
-      console.error('Failed to save:', err);
+      console.error('Failed to save theme:', err);
     }
-  }
+  };
 
   return (
     <motion.div
@@ -91,92 +74,37 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
       className={`${styles.container} ${isOpen ? styles.open : ''}`}
     >
       <div className={styles.imageWrapper}>
-        {editing ? (
-          <label className={styles.uploadLabel}>
-            <input type="file" accept="image/*" hidden onChange={handleImageChange} />
-            <Image alt="Theme image" src={tempData.image_url || '/no-image-placeholder.jpg'} width={300} height={300} className={styles.themeImageUpload} />
-          </label>
-        ) : (
-          <Image alt="Theme image" src={theme.image || '/no-image-placeholder.jpg'} width={300} height={300} className={styles.themeImage} />
-        )}
+        {editing ? <ThemeImageUploader imageUrl={tempData.image_url} onChange={handleImageChange} /> : <Image src={theme.image || '/no-image-placeholder.jpg'} alt="Theme image" width={300} height={300} className={styles.themeImage} />}
       </div>
       <div className={styles.themeDetails}>
-        <div className={`${styles.header} ${type !== 'final' && styles.noTheme}`}>
+        <div className={`${styles.header} ${type !== 'final' && type !== 'suggestion' && styles.noTheme} ${type === 'suggestion' && styles.suggestion}`}>
           <h2>{theme.month}</h2>
-          {editing ? (
-            <div className={styles.nameInput}>
-              <label htmlFor="name">Theme name:</label>
-              <input placeholder="type here..." id="name" className={styles.input} value={tempData.name} onChange={(e) => setTempData({ ...tempData, name: e.target.value })} />
-            </div>
-          ) : (
-            <h3>{theme.name}</h3>
-          )}
-
-          <button onClick={() => setIsOpen(!isOpen)} className={`${isOpen ? styles.open : ''}`} disabled={editing}>
+          {editing ? <ThemeEditorForm name={tempData.name} description={tempData.description || 'No Description'} onChange={setTempData} /> : <h3>{theme.name}</h3>}
+          <button onClick={() => setIsOpen(!isOpen)} disabled={editing}>
             +
           </button>
         </div>
-        <div className={`${styles.wrapper} ${isOpen ? styles.open : ''}`}>
-          <div className={styles.content}>
-            {editing ? (
-              <div className={styles.descriptionInput}>
-                <label htmlFor="description">Description:</label>
-                <textarea placeholder="type here..." id="description" className={styles.input} value={tempData.description} onChange={(e) => setTempData({ ...tempData, description: e.target.value })} />
-              </div>
-            ) : (
-              <p>{theme.description || 'No Description'}</p>
-            )}
-            <div className={styles.controls}>
-              {theme.tag !== 'inactive' && (
-                <>
-                  {editing ? (
-                    <>
-                      <Button variant="theme-card" onClick={saveChanges}>
-                        save
-                      </Button>
-                      <Button
-                        variant="theme-card"
-                        onClick={() => {
-                          setTempData({
-                            name: theme.name,
-                            description: theme.description,
-                            image_url: theme.image,
-                          });
-                          setEditing(false);
-                        }}
-                      >
-                        cancel
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      {type !== 'suggestion' ? (
-                        <>
-                          <Button variant="theme-card" onClick={() => setEditing(true)}>
-                            edit
-                          </Button>
-                          <Button variant="theme-card" onClick={() => onReset?.(theme)}>
-                            reset
-                          </Button>
-                          <Button variant="theme-card" onClick={() => onClaim?.(theme)}>
-                            claim
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button variant="theme-card">promote</Button>
-                          <Button variant="theme-card" onClick={() => setEditing(true)}>
-                            edit
-                          </Button>
-                        </>
-                      )}
-                    </>
-                  )}
-                </>
-              )}
-            </div>
+        {isOpen && (
+          <div className={`${styles.content} ${isOpen ? styles.open : ''}`}>
+            <p>{editing ? null : theme.description || 'No Description'}</p>
+            <ThemeControls
+              editing={editing}
+              type={type}
+              onSave={saveChanges}
+              onCancel={() => {
+                setTempData({
+                  name: theme.name,
+                  description: theme.description,
+                  image_url: theme.image,
+                });
+                setEditing(false);
+              }}
+              onEdit={() => setEditing(true)}
+              onReset={() => onReset?.(theme)}
+              onClaim={() => onClaim?.(theme)}
+            />
           </div>
-        </div>
+        )}
       </div>
     </motion.div>
   );

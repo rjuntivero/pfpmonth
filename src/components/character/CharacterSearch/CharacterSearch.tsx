@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import styles from './CharacterSearch.module.css';
 import Button from '@/components/shared/Button/Button';
-
+import { ClaimedCharacter } from '@/types/Character';
 interface Props {
   themeTitle?: string;
   themeId: string;
@@ -12,9 +12,9 @@ interface Props {
 
 export default function CharacterSearch({ themeTitle, themeId, setChosenCharacter }: Props) {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<string[]>([]);
+  const [results, setResults] = useState<ClaimedCharacter[]>([]);
+  const [filteredResults, setFilteredResults] = useState<ClaimedCharacter[]>([]);
   const [loading, setLoading] = useState(false);
-  const [filteredResults, setFilteredResults] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
 
   //generate list of characters
@@ -24,7 +24,7 @@ export default function CharacterSearch({ themeTitle, themeId, setChosenCharacte
 
       setLoading(true);
 
-      const res = await fetch(`/api/characters?theme=${encodeURIComponent(themeTitle)}`);
+      const res = await fetch(`/api/themes/${themeId}/characters?theme=${encodeURIComponent(themeTitle)}`);
       const data = await res.json();
 
       if (res.ok) {
@@ -42,7 +42,7 @@ export default function CharacterSearch({ themeTitle, themeId, setChosenCharacte
 
   // Live update results as query changes
   useEffect(() => {
-    const filtered = results.filter((character) => character.toLowerCase().includes(query.toLowerCase()));
+    const filtered = results.filter((character) => character?.character_name?.toLowerCase()?.includes(query?.toLowerCase()));
     setFilteredResults(filtered);
   }, [query, results]);
 
@@ -74,10 +74,10 @@ export default function CharacterSearch({ themeTitle, themeId, setChosenCharacte
 
       <div className={`${styles.resultsWrapper} ${focused ? styles.show : ''}`}>
         <ul className={`${styles.results}`}>
-          {filteredResults.map((item, i) => (
-            <li key={i} onClick={() => handleCharacterSelection(item)}>
-              <Button variant="character-result" className={styles.searchItem}>
-                {item}
+          {filteredResults.map((char, i) => (
+            <li key={i}>
+              <Button variant="character-result" className={`${styles.searchItem} ${char.claimed ? styles.claimed : ''}`} disabled={char.claimed} onClick={() => handleCharacterSelection(char.character_name)}>
+                {char.character_name}
               </Button>
             </li>
           ))}

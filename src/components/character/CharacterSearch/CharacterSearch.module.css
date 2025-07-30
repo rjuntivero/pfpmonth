@@ -10,7 +10,6 @@
   padding: 0.5em 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5em;
 }
 .container ul li {
   list-style-type: none;
@@ -65,6 +64,7 @@ ul.results {
 
 ul.results li .searchItem {
   text-align: start;
+  width: 100%;
 }
 
 ul.results li {
@@ -78,6 +78,35 @@ ul.results li:hover {
   color: var(--background);
   transition: 200ms ease-in-out;
   cursor: pointer;
+}
+
+ul.results li button.claimed {
+  background-color: var(--main);
+  position: relative;
+  cursor: not-allowed;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+}
+
+ul.results li button.claimed::after {
+  content: 'This character is claimed';
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+}
+
+ul.results li button.claimed:hover::after {
+  opacity: 1;
 }
 
 .resultsWrapper {

@@ -7,11 +7,12 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   className?: string;
   variant?: string;
+  disabled?: boolean;
 }
 
-export default function Button({ children, onClick, type = 'button', variant = 'primary', className }: ButtonProps) {
+export default function Button({ children, onClick, type = 'button', variant = 'primary', className, disabled }: ButtonProps) {
   return (
-    <button onClick={onClick} type={type} className={`${styles[variant]} ${className || ''}`}>
+    <button onClick={onClick} type={type} className={`${styles[variant]} ${className || ''}`} disabled={disabled}>
       {children}
     </button>
   );

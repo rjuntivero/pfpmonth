@@ -18,6 +18,13 @@ interface Props {
 
 export default function JoinThemeModal({ themeTitle, themeId, participants, username, chosenCharacter }: Props) {
   const [characterName, setCharacterName] = useState<string | 'No Character'>('No Character');
+  const [characterImage, setCharacterImage] = useState<string | '/no-image-placeholder.jpg'>(chosenCharacter?.image_url || '/no-image-placeholder.jpg');
+
+  // change character image
+  function handleImageChange(file: File) {
+    const url = URL.createObjectURL(file);
+    setCharacterImage(url);
+  }
 
   return (
     <>
@@ -25,7 +32,7 @@ export default function JoinThemeModal({ themeTitle, themeId, participants, user
         {/* <h1 className={styles.themeTitle}>{themeTitle}</h1> */}
         <div className={styles.content}>
           <div className={styles.actions}>
-            <Avatar imageURL={'/no-image-placeholder.jpg'} className={styles.avatar} zoom={true} />
+            <Avatar editable={true} onImageChange={handleImageChange} imageURL={characterImage} className={styles.avatar} zoom={true} />
             <h2 className={styles.username}>{username}</h2>
             <h2 className={styles.characterName}>{chosenCharacter?.characterName}</h2>
             <CharacterSearch themeTitle={themeTitle} themeId={themeId} setChosenCharacter={setCharacterName} />

@@ -5,11 +5,18 @@ interface Props {
   imageURL: string;
   className?: string;
   zoom?: boolean;
+  editable?: boolean;
+  onImageChange?: (file: File) => void;
 }
-export default function Avatar({ imageURL, className, zoom }: Props) {
+export default function Avatar({ imageURL, className, zoom, editable, onImageChange }: Props) {
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files || e.target.files.length === 0) return;
+    onImageChange?.(e.target.files[0]);
+  }
   return (
-    <div className={`${styles.avatarContainer} ${className}`}>
-      <Image src={imageURL} alt="avatar image" fill className={`${styles.avatarImage} ${zoom ? styles.zoomed : ''}`} />
-    </div>
+    <label className={`${styles.avatarContainer} ${className}`} title={editable ? 'Click to upload new image' : undefined} style={{ cursor: editable ? 'pointer' : 'default' }}>
+      <Image src={imageURL} alt="avatar image" fill className={`${styles.avatarImage} ${zoom ? styles.zoomed : ''} ${editable ? styles.editable : ''}`} />
+      {editable && <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />}
+    </label>
   );
 }

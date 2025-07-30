@@ -8,8 +8,15 @@
 .avatarContainer .avatarImage {
   object-fit: cover;
   object-position: center;
+  transition: all 0.3s ease;
 }
 
 .avatarImage.zoomed {
   transform: scale(1.4);
+}
+
+.avatarContainer .editable:hover {
+  filter: brightness(80%) saturate(60%);
+  outline: 2px solid var(--accent-color);
+  transition: filter 0.3s ease;
 }

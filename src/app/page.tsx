@@ -12,9 +12,12 @@ export default async function Page() {
 
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
+      {/* <a href="#themes" className="sr-only focus:not-sr-only">
+        Skip to themes
+      </a> */}
+      <main className={styles.main} id="main">
         <div className={styles.hero}>
-          <header className={styles.header}>
+          <header className={styles.header} role="banner">
             <h1>
               <span className={styles.highlight}>
                 P<span>F</span>P
@@ -25,13 +28,17 @@ export default async function Page() {
           </header>
           <div className={styles.getStarted}>
             <h2>Pitch It. Pick It. PFP It.</h2>
-            <button className={styles.actionBtn}>Get Started</button>
+            <button className={styles.actionBtn} aria-label="Start creating profile themes for your Discord server">
+              Get Started
+            </button>
           </div>
         </div>
-        <section>
+        <section aria-hidden="true">
           <TrendingThemes />
         </section>
-        <ThemeSlider serverName={serverName as string} slides={themes ?? []} />
+        <section role="region" aria-label="Current Server Themes">
+          <ThemeSlider id="themes" serverName={serverName as string} slides={themes ?? []} />
+        </section>
         <section className={styles.CallToAction}>
           <CallToAction />
         </section>

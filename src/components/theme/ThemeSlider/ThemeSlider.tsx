@@ -6,7 +6,15 @@ import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/theme/Carousel/Carousel';
 import { Slide } from '@/types/Slide';
 
-export default function ThemeSlider({ serverName, slides, display = 'both', monthClassName }: { serverName?: string; slides: Slide[]; display?: 'none' | 'date' | 'button' | 'both'; monthClassName?: string }) {
+interface Props {
+  serverName?: string;
+  slides: Slide[];
+  display?: 'none' | 'date' | 'button' | 'both';
+  monthClassName?: string;
+  id?: string;
+}
+
+export default function ThemeSlider({ serverName, slides, display = 'both', monthClassName, id }: Props) {
   const router = useRouter();
   const currentMonthIndex = new Date().getMonth();
   const [activeSlide, setActiveSlide] = useState(slides[currentMonthIndex]);
@@ -15,7 +23,7 @@ export default function ThemeSlider({ serverName, slides, display = 'both', mont
   const showButton = display === 'button' || display === 'both';
 
   return (
-    <div className={styles.wrapper} role="region" aria-label="Monthly themes slider">
+    <div id={id} className={styles.wrapper} role="region" aria-label="Monthly themes slider">
       <div className={styles.header}>
         {serverName && <h3>{serverName}</h3>}
         {showDetails && <h2>Themes</h2>}

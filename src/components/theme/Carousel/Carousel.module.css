@@ -115,7 +115,7 @@
 .controls {
   display: flex;
   justify-content: center;
-  align-items: top;
+  align-items: center;
 
   gap: 1.5rem;
   & button {
@@ -123,7 +123,7 @@
   }
 }
 
-.controls button {
+.controls h1 {
   padding: 0;
   display: flex;
   align-items: top;

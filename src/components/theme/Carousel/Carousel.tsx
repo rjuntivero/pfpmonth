@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import styles from './Carousel.module.css';
@@ -50,6 +50,16 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
     scrollTo(newIndex + CLONE_COUNT);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') handleScroll(1);
+      if (e.key === 'ArrowLeft') handleScroll(-1);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeIndex]);
+
   const realignIfClone = (index: number) => {
     if (index < CLONE_COUNT) {
       setTimeout(() => scrollTo(index + originalLength), 0);
@@ -75,7 +85,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
   }, [slides]);
 
   return (
-    <div className={styles.carouselWrapper}>
+    <div className={styles.carouselWrapper} role="region" aria-label="Theme carousel">
       <motion.div
         ref={trackRef}
         className={styles.track}
@@ -88,47 +98,96 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
         {extendedSlides.map((slide, i) => {
           const logicalIndex = (i - CLONE_COUNT + originalLength) % originalLength;
           const isActive = logicalIndex === activeIndex;
+          const slideRoute = slides[logicalIndex]?.route;
 
-          return (
-            <div
-              key={`${slide.id ?? 'placeholder'}-${i}`}
-              className={`${styles.slide} ${isActive ? styles.active : styles.inactive} ${logicalIndex === currentMonthIndex ? styles.currentTheme : ''}`}
-              style={{ backgroundImage: `url(${slide.image})` }}
-              onClick={() => {
-                setActiveIndex(logicalIndex);
-                setActiveSlide(slides[logicalIndex]);
-                scrollTo(i);
-                realignIfClone(i);
+          // if route exists, render as a link
+          if (slideRoute) {
+            return (
+              <a
+                key={`${slide.id ?? 'placeholder'}-${i}`}
+                href={slideRoute}
+                className={`${styles.slide} ${isActive ? styles.active : styles.inactive} ${logicalIndex === currentMonthIndex ? styles.currentTheme : ''}`}
+                style={{ backgroundImage: `url(${slide.image})` }}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${slide.name}${logicalIndex === currentMonthIndex ? ', Current Month' : ''}`}
+                tabIndex={0}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveIndex(logicalIndex);
+                  setActiveSlide(slides[logicalIndex]);
+                  scrollTo(i);
+                  realignIfClone(i);
 
-                const clickedSlide = slides[logicalIndex];
-                const isClickingActive = logicalIndex === activeIndex;
-
-                if (!isClickingActive || !clickedSlide?.route) return;
-
-                router.push(clickedSlide.route as string);
-              }}
-            >
-              <div className={styles.tagStack}>
-                {slide.tag?.includes('tbd') && (
+                  router.push(slideRoute);
+                }}
+              >
+                <div className={styles.tagStack}>
+                  {/* {slide.tag?.includes('tbd') && (
                   <div className={styles.tbdTag}>
                     <span>TBD</span>
                   </div>
-                )}
-                {slide.tag?.includes('suggested') && (
-                  <div className={styles.suggestedTag}>
-                    <span>Suggested</span>
+                )} */}
+                  {slide.tag?.includes('suggested') && (
+                    <div className={styles.suggestedTag} role="note" aria-label="Suggested theme">
+                      <span>Suggested</span>
+                    </div>
+                  )}
+                </div>
+              </a>
+            );
+          } else {
+            // Slide without route (non-navigable)
+            return (
+              <div
+                key={`${slide.id ?? 'placeholder'}-${i}`}
+                className={`${styles.slide} ${isActive ? styles.active : styles.inactive} ${logicalIndex === currentMonthIndex ? styles.currentTheme : ''}`}
+                style={{ backgroundImage: `url(${slide.image})` }}
+                role="group"
+                aria-roledescription="slide"
+                aria-label={`${slide.name}${logicalIndex === currentMonthIndex ? ', Current Month' : ''}`}
+                onClick={() => {
+                  setActiveIndex(logicalIndex);
+                  setActiveSlide(slides[logicalIndex]);
+                  scrollTo(i);
+                  realignIfClone(i);
+
+                  const clickedSlide = slides[logicalIndex];
+                  const isClickingActive = logicalIndex === activeIndex;
+
+                  if (!isClickingActive || !clickedSlide?.route) return;
+
+                  router.push(clickedSlide.route as string);
+                }}
+              >
+                <div className={styles.tagStack}>
+                  {/* {slide.tag?.includes('tbd') && (
+                  <div className={styles.tbdTag}>
+                    <span>TBD</span>
                   </div>
-                )}
+                )} */}
+                  {slide.tag?.includes('suggested') && (
+                    <div className={styles.suggestedTag} role="note" aria-label="Suggested theme">
+                      <span>Suggested</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          );
+            );
+          }
         })}
       </motion.div>
 
       <div className={styles.controls}>
-        <button onClick={() => handleScroll(-1)}>{'<'}</button>
-        <button className={styles.activeSlideName}>{slides[activeIndex]?.name}</button>
-        <button onClick={() => handleScroll(1)}>{'>'}</button>
+        <button onClick={() => handleScroll(-1)} aria-label="Previous theme">
+          {'<'}
+        </button>
+        <h1 aria-live="polite" tabIndex={-1} className={styles.activeSlideName}>
+          {slides[activeIndex]?.name}
+        </h1>
+        <button onClick={() => handleScroll(1)} aria-label="Next theme">
+          {'>'}
+        </button>
       </div>
     </div>
   );

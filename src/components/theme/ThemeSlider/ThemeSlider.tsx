@@ -15,13 +15,13 @@ export default function ThemeSlider({ serverName, slides, display = 'both', mont
   const showButton = display === 'button' || display === 'both';
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} role="region" aria-label="Monthly themes slider">
       <div className={styles.header}>
         {serverName && <h3>{serverName}</h3>}
         {showDetails && <h2>Themes</h2>}
       </div>
 
-      <section className={styles.sliderSection}>
+      <section className={styles.sliderSection} aria-live="polite" aria-atomic="true">
         <h3 className={`${styles.date} ${monthClassName || ''}`}>
           {activeSlide?.month} {showDetails && activeSlide?.year}
         </h3>
@@ -30,7 +30,7 @@ export default function ThemeSlider({ serverName, slides, display = 'both', mont
       </section>
 
       {showButton && (
-        <button className={styles.allThemes} onClick={() => router.push('/themes')}>
+        <button className={styles.allThemes} onClick={() => router.push('/themes')} aria-label="View all themes">
           All themes
         </button>
       )}

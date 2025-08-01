@@ -38,26 +38,29 @@ export default function Navbar() {
       }
     }
 
-    updateUnderline(); // initial on load or pathname change
-    window.addEventListener('resize', updateUnderline); // watch for resizes
+    // initial on load or pathname change
+    updateUnderline();
+    // watch for resizes
+    window.addEventListener('resize', updateUnderline);
 
+    // clean up
     return () => {
-      window.removeEventListener('resize', updateUnderline); // clean up
+      window.removeEventListener('resize', updateUnderline);
     };
   }, [pathname]);
 
   return (
-    <div className={styles.navbar}>
-      <div className={styles.menu}>
+    <nav className={styles.navbar}>
+      <button type="button" aria-label="Open menu" className={styles.menu}>
         <Image src="/Menu.svg" alt="Menu Icon" width={40} height={40} className={styles.menuIcon} />
-      </div>
+      </button>
       <ul ref={containerRef} className={styles.navItems}>
         {navItems.map((item) => {
           const isActive = pathname === item.path || pathname.startsWith(item.path + '/');
 
           return (
             <li key={item.name}>
-              <Link href={item.path} data-path={item.path} className={isActive ? styles.selected : ''}>
+              <Link aria-current={isActive ? 'page' : undefined} href={item.path} data-path={item.path} className={isActive ? styles.selected : ''}>
                 {item.name}
               </Link>
             </li>
@@ -77,6 +80,6 @@ export default function Navbar() {
           }}
         />
       </ul>
-    </div>
+    </nav>
   );
 }

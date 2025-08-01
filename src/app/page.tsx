@@ -24,7 +24,7 @@ export default async function Page() {
             <p>Create Monthly Profile Themes for your Discord server</p>
           </header>
           <div className={styles.getStarted}>
-            <h2>Vote. Upload. Slay</h2>
+            <h2>Pitch It. Pick It. PFP It.</h2>
             <button className={styles.actionBtn}>Get Started</button>
           </div>
         </div>

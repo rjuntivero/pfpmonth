@@ -16,7 +16,7 @@ export default async function Page() {
       <main className={styles.main}>
         <div className={styles.heading}>
           <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
-          <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} />
+          <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} priority={true} />
           {/* <div className={styles.titleContainer}> */}
           <div className={styles.title}>
             <h2>barbz</h2>

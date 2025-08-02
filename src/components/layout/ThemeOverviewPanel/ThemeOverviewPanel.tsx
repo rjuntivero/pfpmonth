@@ -31,13 +31,15 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
 
   // fetch themes when the year changes
   useEffect(() => {
-    setLoading(true);
-    fetch(`/api/themes?serverId=${serverId}&year=${year}`)
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch(setThemes(data.slides));
-        setLoading(false);
-      });
+    if (didMountRef.current) {
+      setLoading(true);
+      fetch(`/api/themes?serverId=${serverId}&year=${year}`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setThemes(data.slides));
+          setLoading(false);
+        });
+    }
   }, [year, serverId, dispatch]);
 
   const refetchThemes = async () => {

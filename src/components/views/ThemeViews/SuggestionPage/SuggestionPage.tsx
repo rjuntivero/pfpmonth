@@ -17,7 +17,7 @@ export default async function SuggestionPage({ suggestion }: { suggestion: Poll 
         <div className={styles.fadeOverlay} />
 
         <div className={styles.frameWrapper}>
-          <Image src="/ThemeFrame.svg" alt="Theme Frame" fill priority className={styles.frame} />
+          <Image src="/ThemeFrame.svg" alt="Theme Frame" fill priority={true} className={styles.frame} />
         </div>
 
         <div className={styles.title}>

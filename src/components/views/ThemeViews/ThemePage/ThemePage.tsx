@@ -41,12 +41,12 @@ export default async function ThemePage({ theme, inPast }: Props) {
             </ButtonModalWrapper>
           )}
           <div className={styles.reviews}>
-            <button className={`${styles.dislikesBtn} ${styles.btn}`}>
+            {/* <button className={`${styles.dislikesBtn} ${styles.btn}`}>
               <Feedback color={'#d9d9d9'} />
             </button>
             <button className={`${styles.likesBtn} ${styles.btn}`}>
               <Feedback color={'#d9d9d9'} />
-            </button>
+            </button> */}
           </div>
           <p className={styles.comment}>{`"${themeData.theme?.description}"` || 'No Description'}</p>
         </div>

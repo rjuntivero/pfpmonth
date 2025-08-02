@@ -3,10 +3,29 @@
 import Avatar from '@/components/user/Avatar/Avatar';
 import styles from './LeaderboardClientWrapper.module.css';
 import UserRanking from '@/components/user/UserRanking/UserRanking';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { GuildMember } from '@/types/User';
 
 export default function LeaderboardClientWrapper({ serverName }: { serverName?: string }) {
   const [year, setYear] = useState('2025');
+  const [guildMembers, setGuildMembers] = useState<GuildMember[]>([]);
+
+  useEffect(() => {
+    async function fetchGuild() {
+      try {
+        const guildRes = await fetch('/api/server/members', {
+          method: 'GET',
+        });
+        const guildData = await guildRes.json();
+        setGuildMembers(guildData);
+        console.log(guildData);
+      } catch (err) {
+        console.error('Failed to fetch guild data:', err);
+      }
+    }
+    fetchGuild();
+  }, []);
+
   return (
     <>
       <section className={styles.pedestals}>
@@ -37,13 +56,9 @@ export default function LeaderboardClientWrapper({ serverName }: { serverName?: 
         <div className={styles.pageNav}>
           <button>{'<  '} </button>1 of 1 <button>{'  >'}</button>
         </div>
-        <UserRanking />
-        <UserRanking />
-        <UserRanking />
-        <UserRanking />
-        <UserRanking />
-        <UserRanking />
-        <UserRanking />
+        {guildMembers?.map((member) => (
+          <UserRanking key={member.discord_users.username} />
+        ))}
       </section>
     </>
   );

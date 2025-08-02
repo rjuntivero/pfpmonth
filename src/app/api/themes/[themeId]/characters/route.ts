@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/supabaseSSR';
 export async function GET(req: NextRequest, { params }: { params: { themeId: string } }) {
   const supabase = await createClient();
   const { themeId } = await params;
+  console.log(`Fetching characters for themeId: ${themeId}`);
 
   const { data: claimedCharacters } = await supabase.from('user_characters').select('name').eq('theme_id', themeId);
   const claimedNames = claimedCharacters?.map((c) => c.name) ?? [];
@@ -39,6 +40,7 @@ export async function GET(req: NextRequest, { params }: { params: { themeId: str
     Only respond with the names of the character.
     If you can't recognize ANY characters from the given theme, return a message saying "No characters found for this theme.".
     Do not generate original or creative names.
+    When you receieve a theme, first check if the theme is any recent pop culture franchise, movie, tv show, etc. (use databases like imdb, fandom, etc. to check for characters).
     Do not explain anything, for example, do not explain acronyms with a parentheses.
     Don't include additional information or context for vague descriptions in parentheses such as 'The farmworld characters (Finn, Jake, etc.)' or 'Simon Petrikov (Pre-Ice King)'
     Start with the most popular or well-known characters first, and then list the rest in no particular order.

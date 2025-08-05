@@ -4,18 +4,20 @@ import { useEffect, useState } from 'react';
 import styles from './CharacterSearch.module.css';
 import Button from '@/components/shared/Button/Button';
 import { ClaimedCharacter } from '@/types/Character';
+import { useAppDispatch } from '@/state/hooks';
+import { updateCharacterName } from '@/features/characterSlice';
 interface Props {
   themeTitle?: string;
   themeId: string;
-  setChosenCharacter: (character: string) => void;
 }
 
-export default function CharacterSearch({ themeTitle, themeId, setChosenCharacter }: Props) {
+export default function CharacterSearch({ themeTitle, themeId }: Props) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<ClaimedCharacter[]>([]);
   const [filteredResults, setFilteredResults] = useState<ClaimedCharacter[]>([]);
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState(false);
+  const dispatch = useAppDispatch();
 
   //generate list of characters
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function CharacterSearch({ themeTitle, themeId, setChosenCharacte
 
   // handle character selection
   async function handleCharacterSelection(character: string) {
-    setChosenCharacter(character);
+    dispatch(updateCharacterName(character));
     try {
       const res = await fetch('/api/user/character', {
         method: 'POST',

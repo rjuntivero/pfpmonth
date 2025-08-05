@@ -5,4 +5,5 @@ export interface DiscordUser {
 
 export interface GuildMember {
   discord_users: DiscordUser;
+  user_id: string;
 }

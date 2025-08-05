@@ -6,5 +6,12 @@ export async function GET() {
   const server = await fetchServer();
   const guildMembers = await fetchGuild(server.data?.server_id);
 
-  return NextResponse.json(guildMembers);
+  // members with a user_id come first
+  const sortedMembers = guildMembers.sort((a, b) => {
+    const aHasUser = a.user_id ? 1 : 0;
+    const bHasUser = b.user_id ? 1 : 0;
+    return bHasUser - aHasUser;
+  });
+
+  return NextResponse.json(sortedMembers);
 }

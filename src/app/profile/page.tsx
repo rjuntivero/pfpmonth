@@ -6,12 +6,14 @@ import ProfilePanel from '@/components/layout/ProfilePanel/ProfilePanel';
 import ServerCard from '@/components/server/ServerCard/ServerCard';
 import CharacterCard from '@/components/character/CharacterCard/CharacterCard';
 import Image from 'next/image';
+import { fetchCharacters } from '@/lib/api/user/characterActions';
 
 export default async function Profile() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
   const { username, joined_at, avatar_url } = await fetchUserData();
-  // const { serverName, themes } = await fetchThemes(currentYear, serverId);
+  const characters = await fetchCharacters();
+
   return (
     <>
       <div className={styles.page}>
@@ -51,9 +53,9 @@ export default async function Profile() {
             </div>
             <div className={`${styles.characterWrapper} ${styles.wrapper}`}>
               <ProfilePanel heading="Characters" className={styles.characters} contentClassName={styles.characterLayout}>
-                <CharacterCard imageURL={'/naruto.jpg'} characterName={'finn the human'} selected={true} />
-                <CharacterCard imageURL={'/naruto.jpg'} characterName={'finn the human'} />
-                <CharacterCard imageURL={'/naruto.jpg'} characterName={'finn the human'} />
+                {characters?.map((character) => (
+                  <CharacterCard key={character.name} imageURL={character.image_url || '/no-image-placeholder.jpg'} characterName={character.name} selected={false} />
+                ))}
               </ProfilePanel>
             </div>
             <div className={`${styles.themeWrapper} ${styles.wrapper}`}>
@@ -61,7 +63,7 @@ export default async function Profile() {
                 <h1>
                   May <span>{currentYear}</span>
                 </h1>
-                <Image src={'/naruto.jpg' || '/no-image-placeholder.jpg'} alt="theme image" width={330} height={480} className={styles.themeImage} />
+                <Image src={'/no-image-placeholder.jpg'} alt="theme image" width={330} height={480} className={styles.themeImage} />
                 <h2>Naruto</h2>
               </ProfilePanel>
             </div>

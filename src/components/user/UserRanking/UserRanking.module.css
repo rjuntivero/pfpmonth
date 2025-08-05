@@ -3,7 +3,18 @@
   background-color: var(--ui-background);
   border: 1px solid black;
   display: flex;
+  justify-content: start;
   align-items: center;
+  gap: 2em;
   padding: 1rem;
   height: 105px;
+}
+
+.container.newUser {
+  filter: opacity(65%);
+}
+
+.avatar {
+  display: flex;
+  padding: 2.5em;
 }

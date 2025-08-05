@@ -1,9 +1,12 @@
+'use client';
 import Image from 'next/image';
 import styles from './User.module.css';
 import { Participant } from '@/types/Participant';
+import { useState } from 'react';
 
 export default function User({ participant }: { participant?: Participant }) {
-  console.log('Participant', participant);
+  const [characterName, setCharacterName] = useState<string | 'No Character'>(participant?.character_name || 'No Character');
+
   return (
     <div className={styles.container}>
       <div className={styles.avatarContainer}>
@@ -11,7 +14,7 @@ export default function User({ participant }: { participant?: Participant }) {
       </div>
       <div className={styles.user}>
         <h3 className={styles.username}>{participant?.username}</h3>
-        <h3 className={styles.character}>{participant?.character_name}</h3>
+        <h3 className={styles.character}>{characterName}</h3>
       </div>
     </div>
   );

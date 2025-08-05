@@ -5,6 +5,7 @@ import styles from './LeaderboardClientWrapper.module.css';
 import UserRanking from '@/components/user/UserRanking/UserRanking';
 import { useEffect, useState } from 'react';
 import { GuildMember } from '@/types/User';
+import { motion } from 'framer-motion';
 
 export default function LeaderboardClientWrapper({ serverName }: { serverName?: string }) {
   const [year, setYear] = useState('2025');
@@ -36,8 +37,8 @@ export default function LeaderboardClientWrapper({ serverName }: { serverName?: 
           </div>
           <h1 className={styles.themeTitle}>Adventure Time</h1>
           <div className={styles.filters}>
+            <button>May</button>
             <button>2025</button>
-            <button>Adventure..</button>
           </div>
         </div>
         <div className={styles.topUsers}>
@@ -57,7 +58,9 @@ export default function LeaderboardClientWrapper({ serverName }: { serverName?: 
           <button>{'<  '} </button>1 of 1 <button>{'  >'}</button>
         </div>
         {guildMembers?.map((member) => (
-          <UserRanking key={member.discord_users.username} />
+          <motion.div key={member.discord_users.username}>
+            <UserRanking member={member} />
+          </motion.div>
         ))}
       </section>
     </>

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './CharacterSearch.module.css';
 import Button from '@/components/shared/Button/Button';
 import { ClaimedCharacter } from '@/types/Character';
-import { useAppDispatch } from '@/state/hooks';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { updateCharacterName } from '@/features/characterSlice';
 interface Props {
   themeTitle?: string;
@@ -17,9 +17,11 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
   const [filteredResults, setFilteredResults] = useState<ClaimedCharacter[]>([]);
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState(false);
+  const claimedCharacter = useAppSelector((state) => state.character.chosenCharacter[themeId]);
+
   const dispatch = useAppDispatch();
 
-  //generate list of characters
+  // generate list of characters
   useEffect(() => {
     const fetchCharacters = async () => {
       if (!themeTitle) return;
@@ -42,7 +44,7 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
     fetchCharacters();
   }, [themeTitle]);
 
-  // Live update results as query changes
+  // live update results as query changes
   useEffect(() => {
     const filtered = results.filter((character) => character?.character_name?.toLowerCase()?.includes(query?.toLowerCase()));
     setFilteredResults(filtered);
@@ -75,14 +77,27 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
       </form>
 
       <div className={`${styles.resultsWrapper} ${focused ? styles.show : ''}`}>
-        <ul className={`${styles.results}`}>
-          {filteredResults.map((char, i) => (
-            <li key={i}>
-              <Button variant="character-result" className={`${styles.searchItem} ${char.claimed ? styles.claimed : ''}`} disabled={char.claimed} onClick={() => handleCharacterSelection(char.character_name)}>
-                {char.character_name}
-              </Button>
+        <ul className={styles.results}>
+          {loading ? (
+            <li className={styles.loaderWrapper}>
+              <div className={styles.loader}></div>
             </li>
-          ))}
+          ) : filteredResults.length > 0 ? (
+            filteredResults.map((char, i) => (
+              <li key={i}>
+                <Button
+                  variant="character-result"
+                  className={`${styles.searchItem} ${char.character_name === claimedCharacter?.name ? styles.claimed : ''}`}
+                  disabled={char.character_name === claimedCharacter?.name}
+                  onClick={() => handleCharacterSelection(char.character_name)}
+                >
+                  {char.character_name}
+                </Button>
+              </li>
+            ))
+          ) : (
+            <li>No characters found</li>
+          )}
         </ul>
       </div>
     </div>

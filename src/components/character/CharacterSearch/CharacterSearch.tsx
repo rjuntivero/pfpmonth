@@ -50,7 +50,7 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
 
   // handle character selection
   async function handleCharacterSelection(character: string) {
-    dispatch(updateCharacterName(character));
+    dispatch(updateCharacterName({ themeId, name: character }));
     try {
       const res = await fetch('/api/user/character', {
         method: 'POST',

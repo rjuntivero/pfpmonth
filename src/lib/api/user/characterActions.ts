@@ -48,3 +48,48 @@ export async function fetchCharacters(): Promise<Character[] | undefined> {
 
   return characterData;
 }
+
+export async function updateCharacterImage(themeId: string, userId: string, fileBuffer: Buffer, fileName: string, fileType?: string): Promise<Character | undefined> {
+  const supabase = await createClient();
+
+  // const filePath = `avatar-images/themes/${themeId}/users/${userId}/${fileName}`;
+  const filePath = `avatar-images/themes/${themeId}/users/${userId}/${fileName}`;
+
+  // upload file
+  const { error: uploadError } = await supabase.storage.from('avatar-images').upload(filePath, fileBuffer, {
+    upsert: true,
+    contentType: fileType || 'image/png',
+  });
+
+  if (uploadError) {
+    console.error('Error uploading file:', uploadError);
+    return;
+  }
+
+  const { data: urlData } = supabase.storage.from('avatar-images').getPublicUrl(filePath);
+  const publicUrl = urlData.publicUrl;
+
+  if (!publicUrl) {
+    console.error('Error getting public URL:');
+    return;
+  }
+
+  // upsert user_characters record with new image URL
+  const { data: characterData, error: upsertError } = await supabase.from('user_characters').upsert(
+    [
+      {
+        user_id: userId,
+        theme_id: themeId,
+        image_url: publicUrl,
+      },
+    ],
+    { onConflict: 'user_id,theme_id' }
+  );
+
+  if (upsertError) {
+    console.error('Error upserting character image:', upsertError);
+    return;
+  }
+
+  return characterData?.[0];
+}

@@ -4,12 +4,12 @@ import { Participant } from '@/types/Participant';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface CharacterState {
-  chosenCharacter: Character;
+  chosenCharacter: { [themeId: string]: Character };
   participants: Participant[];
 }
 
 const initialState: CharacterState = {
-  chosenCharacter: { name: 'No Character', image_url: '/no-image-placeholder.jpg', id: '', theme_id: '', user_id: '' },
+  chosenCharacter: {},
   participants: [],
 };
 
@@ -18,13 +18,20 @@ const characerSlice = createSlice({
   initialState,
   reducers: {
     setChosenCharacter(state, action: PayloadAction<Character>) {
-      state.chosenCharacter = action.payload as Character;
+      const char = action.payload;
+      state.chosenCharacter[char.theme_id] = char;
     },
-    updateCharacterName(state, action: PayloadAction<string>) {
-      state.chosenCharacter.name = action.payload;
+    updateCharacterName(state, action: PayloadAction<{ themeId: string; name: string }>) {
+      const { themeId, name } = action.payload;
+      if (state.chosenCharacter[themeId]) {
+        state.chosenCharacter[themeId].name = name;
+      }
     },
-    updateCharacterImage(state, action: PayloadAction<string>) {
-      state.chosenCharacter.image_url = action.payload;
+    updateCharacterImage(state, action: PayloadAction<{ themeId: string; image_url: string }>) {
+      const { themeId, image_url } = action.payload;
+      if (state.chosenCharacter[themeId]) {
+        state.chosenCharacter[themeId].image_url = image_url;
+      }
     },
     setParticipants(state, action: PayloadAction<Participant[]>) {
       state.participants = action.payload;

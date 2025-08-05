@@ -7,7 +7,6 @@ import { Participant } from '@/types/Participant';
 import User from '@/components/user/User';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { updateCharacterImage } from '@/features/characterSlice';
-import { useEffect } from 'react';
 
 interface Props {
   themeTitle?: string;
@@ -17,13 +16,40 @@ interface Props {
 }
 
 export default function JoinThemeModal({ themeTitle, themeId, participants, username }: Props) {
-  const character = useAppSelector((state) => state.character.chosenCharacter);
+  const character = useAppSelector((state) => state.character.chosenCharacter[themeId]) || {
+    name: 'No Character',
+    image_url: '/no-image-placeholder.jpg',
+  };
   const dispatch = useAppDispatch();
 
   // change character image
-  function handleImageChange(file: File) {
-    const url = URL.createObjectURL(file);
-    dispatch(updateCharacterImage(url));
+  async function handleImageChange(file: File) {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = async () => {
+      const base64Data = (reader.result as string).split(',')[1];
+
+      const res = await fetch('/api/user/character/image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          themeId,
+          fileBase64: base64Data,
+          fileName: file.name,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success && data.character) {
+        dispatch(updateCharacterImage({ themeId, image_url: data.character.image_url }));
+      } else {
+        console.error('Failed to upload character image', data.error);
+      }
+    };
+    reader.onerror = (error) => {
+      console.error('File reading error:', error);
+    };
   }
 
   return (

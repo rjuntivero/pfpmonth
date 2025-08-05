@@ -282,6 +282,14 @@ div.users {
   flex: 1;
 }
 
+h1.loadingText {
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-align: center;
+  margin-top: 2rem;
+}
+
 @media (max-width: 1200px) {
   .main {
     padding-top: 1rem;

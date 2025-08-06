@@ -1,10 +1,14 @@
 import LeaderboardClientWrapper from '@/components/wrappers/LeaderboardClientWrapper/LeaderboardClientWrapper';
 import styles from './page.module.css';
 import { fetchServer } from '@/lib/api/server/fetchServer';
+import { requireAuth } from '@/lib/auth/requireAuth';
 
 export default async function Leaderboard() {
   const server = await fetchServer();
   const serverName = server.data?.servers?.name || 'No Server';
+
+  // ensure user is authenticated
+  await requireAuth();
 
   return (
     <div className={styles.page}>

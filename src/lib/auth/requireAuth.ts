@@ -1,0 +1,15 @@
+import { createClient } from '@/lib/supabase/supabaseSSR';
+import { redirect } from 'next/navigation';
+
+export async function requireAuth() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  return user;
+}

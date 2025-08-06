@@ -6,11 +6,16 @@ import { CurtainDrapes } from '@/components/theme/CurtainDrapes/CurtainDrapes';
 import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
 import { cookies } from 'next/headers';
 import ThemeOverviewPanel from '@/components/layout/ThemeOverviewPanel/ThemeOverviewPanel';
+import { requireAuth } from '@/lib/auth/requireAuth';
 
 export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
   const { themes } = await fetchThemes(currentYear, serverId);
+
+  // ensure user is authenticated
+  await requireAuth();
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>

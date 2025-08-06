@@ -59,9 +59,9 @@ export default async function Page() {
           </header>
           <div className={styles.getStarted}>
             <h2>Pitch It. Pick It. PFP It.</h2>
-            <button className={styles.actionBtn} aria-label="Start creating profile themes for your Discord server">
+            {/* <button className={styles.actionBtn} aria-label="Start creating profile themes for your Discord server">
               Get Started
-            </button>
+            </button> */}
           </div>
         </div>
         <section aria-hidden="true">

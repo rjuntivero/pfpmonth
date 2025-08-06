@@ -10,7 +10,7 @@ export interface Poll {
   name?: string;
   image_url?: string;
   vote_count?: number;
-  created_by_user?: {
+  created_by?: {
     id: string;
     username: string;
     avatar_url: string;

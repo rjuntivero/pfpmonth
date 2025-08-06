@@ -82,7 +82,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
     requestAnimationFrame(() => {
       setReady(true);
     });
-  }, [slides]);
+  }, [slides, scrollTo, setActiveSlide]);
 
   return (
     <div className={styles.carouselWrapper} role="region" aria-label="Theme carousel">

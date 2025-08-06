@@ -1,4 +1,4 @@
-import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
+// import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';

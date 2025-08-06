@@ -63,5 +63,7 @@ export async function fetchPollOptions(pollId: string) {
     };
   });
 
+  console.log('Fetched Poll Options:', pollOptions);
+
   return { pollOptions };
 }

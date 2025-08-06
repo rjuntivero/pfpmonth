@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { updatePollOptionVote } from '@/lib/api/poll/pollActions';
 
-export async function POST(req: Request, { params }: { params: { pollId: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ pollId: string }> }) {
   const { pollId } = await params;
   const { userId } = await req.json();
 

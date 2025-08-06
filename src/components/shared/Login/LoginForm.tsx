@@ -2,11 +2,18 @@
 'use client';
 
 export default function LoginForm() {
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const email = form.login - email.value;
-    const password = form['login-password'].value;
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const form = e.currentTarget;
+  //   const email = form.login - email.value;
+  //   const password = form['login-password'].value;
+  // };
+
+  const handleSubmit = async () => {
+    // e.preventDefault();
+    // const form = e.currentTarget;
+    // const email = form.login - email.value;
+    // const password = form['login-password'].value;
   };
 
   return (

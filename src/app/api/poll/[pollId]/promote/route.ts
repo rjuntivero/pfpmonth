@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextResponse } from 'next/server';
 import { uploadPollImage } from '@/lib/api/poll/pollActions';
 
-export async function POST(req: Request, { params }: { params: { pollId: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ pollId: string }> }) {
   const { pollId } = await params;
   const { searchParams } = new URL(req.url);
   const monthParam = searchParams.get('month');

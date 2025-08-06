@@ -59,7 +59,7 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
 
       let imageUrl = tempData.image_url;
       if (selectedFile) {
-        imageUrl = await uploadThemeImage(serverId, selectedFile, theme.month, theme.year.toString());
+        imageUrl = await uploadThemeImage(serverId as string, selectedFile, theme.month, theme.year.toString());
       }
 
       await updateTheme(themeId, { ...tempData, image_url: imageUrl });

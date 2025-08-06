@@ -7,8 +7,8 @@ function getErrorMessage(error: unknown): string {
   return String(error);
 }
 
-export async function DELETE(req: Request, { params }: { params: { themeId: string } }) {
-  const { themeId } = params;
+export async function DELETE(req: Request, { params }: { params: Promise<{ themeId: string }> }) {
+  const { themeId } = await params;
 
   if (!themeId) {
     return NextResponse.json({ error: 'Missing themeId' }, { status: 400 });
@@ -23,8 +23,8 @@ export async function DELETE(req: Request, { params }: { params: { themeId: stri
   }
 }
 
-export async function POST(req: Request, { params }: { params: { themeId: string } }) {
-  const { themeId } = params;
+export async function POST(req: Request, { params }: { params: Promise<{ themeId: string }> }) {
+  const { themeId } = await params;
 
   const body = await req.json();
   const { name, description, image_url, server_id, created_by, theme_month } = body;

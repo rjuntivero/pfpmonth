@@ -5,9 +5,10 @@ import Button from '../../Button/Button';
 import styles from './ConfirmModal.module.css';
 import { closeModal } from '@/features/modalSlice';
 import { useRouter } from 'next/navigation';
+import { PollDetails } from '@/types/Polls';
 
 interface Props {
-  poll: any;
+  poll: PollDetails;
 }
 
 export default function ConfirmModal({ poll }: Props) {

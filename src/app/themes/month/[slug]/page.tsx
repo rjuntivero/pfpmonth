@@ -5,8 +5,9 @@ import EmptyPage from '@/components/views/ThemeViews/EmptyPage/EmptyPage';
 import LockedPage from '@/components/views/ThemeViews/LockedPage/LockedPage';
 
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
+import { PollDetails } from '@/types/Polls';
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const parsed = parseSlug(slug);
   const [dateString, dateObj] = parsed ?? ['', null];
@@ -30,7 +31,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   if (currentSlide.type === 'suggestion') {
-    return <SuggestionPage suggestion={currentSlide} />;
+    return <SuggestionPage suggestion={currentSlide as unknown as PollDetails} />;
   }
 
   if (currentSlide.type === 'tbd' && isPast) {

@@ -2,12 +2,14 @@
 'use client';
 
 export default function RegisterForm() {
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const email = form.login - email.value;
-    const password = form['login-password'].value;
-  };
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const form = e.currentTarget;
+  //   const email = form.login - email.value;
+  //   const password = form['login-password'].value;
+  // };
+
+  const handleSubmit = async () => {};
 
   return (
     <form onSubmit={handleSubmit}>

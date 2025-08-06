@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 import { createServerPoll } from '../poll/pollActions';
-import { Slide } from '@/types/Slide';
 import { Theme, ThemeSliderResult } from '@/types/Theme';
 import { toSlug } from '@/lib/utils/stringUtils';
 import { fetchServerPoll } from '../poll/fetchServerPoll';
@@ -76,7 +75,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   // avoid reusing suggestions
   const usedSuggestions = new Set<string>();
 
-  const slides: Slide[] = MONTHS.map((monthName, monthIndex) => {
+  const slides = MONTHS.map((monthName, monthIndex) => {
     const month = String(monthIndex + 1).padStart(2, '0');
     const slug = toSlug(monthIndex, currentYear);
     const isCurrentMonth = now.getFullYear() === currentYear && now.getMonth() === monthIndex;
@@ -137,10 +136,10 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
           theme_month: themeMonth,
           server_id: resolvedServerId,
           description: suggestion.option_text,
-          created_by_user: {
+          created_by: {
             id: suggestion.created_by_user?.id,
-            username: suggestion.created_by_user?.username,
-            avatar_url: suggestion.created_by_user?.avatar_url || '/no-image-placeholder.jpg',
+            username: suggestion.created_by?.username,
+            avatar_url: suggestion.created_by?.avatar_url || '/no-image-placeholder.jpg',
           },
         };
       }

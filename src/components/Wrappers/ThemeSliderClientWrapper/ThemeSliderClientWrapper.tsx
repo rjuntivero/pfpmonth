@@ -5,10 +5,11 @@ import styles from './ThemeSliderClientWrapper.module.css';
 import { useDispatch } from 'react-redux';
 import { setThemeYear, setThemes } from '@/features/themeSlice';
 import { useAppSelector } from '@/state/hooks';
+import { Slide } from '@/types/Slide';
 
 interface Props {
   serverId: string;
-  initialThemes: any[];
+  initialThemes: Slide[];
   initialYear: number;
 }
 

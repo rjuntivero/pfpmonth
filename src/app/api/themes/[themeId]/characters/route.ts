@@ -3,7 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { redis } from '@/lib/redis';
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
-export async function GET(req: NextRequest, { params }: { params: { themeId: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ themeId: string }> }) {
   const supabase = await createClient();
   const { themeId } = await params;
   console.log(`Fetching characters for themeId: ${themeId}`);

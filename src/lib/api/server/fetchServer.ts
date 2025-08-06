@@ -1,13 +1,29 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
-export async function fetchServer() {
+type Server = {
+  server_id: string;
+  servers: {
+    name: string;
+  };
+};
+
+type FetchServerResponse = {
+  data: Server | null;
+};
+
+export async function fetchServer(): Promise<FetchServerResponse> {
   const supabase = await createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const server = await supabase.from('user_servers').select('server_id, servers (name)').eq('user_id', user?.id).maybeSingle();
+  const { data, error } = await supabase.from('user_servers').select('server_id, servers( name )').eq('user_id', user?.id).maybeSingle<Server>();
 
-  return { data: server.data };
+  if (error) {
+    console.error('Error fetching server:', error.message);
+    return { data: null };
+  }
+
+  return { data };
 }

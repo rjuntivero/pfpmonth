@@ -42,7 +42,7 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
     };
 
     fetchCharacters();
-  }, [themeTitle]);
+  }, [themeTitle, themeId]);
 
   // live update results as query changes
   useEffect(() => {

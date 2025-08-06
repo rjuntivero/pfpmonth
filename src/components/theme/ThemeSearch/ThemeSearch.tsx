@@ -10,7 +10,7 @@ export default function ThemeSearch() {
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = async (e) => {
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });

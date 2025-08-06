@@ -1,6 +1,15 @@
 import { createClient } from '@/lib/supabase/supabase';
 
-export async function createTheme(data: { name: string; description: string; image_url: string; created_by: string; server_id: string; theme_month: string }): Promise<{ id: string }> {
+export type ThemeInput = {
+  name: string;
+  description?: string;
+  image_url?: string;
+  server_id: string;
+  created_by: string;
+  theme_month: string;
+};
+
+export async function createTheme(data: ThemeInput): Promise<{ id: string }> {
   const supabase = createClient();
 
   const { data: insertData, error } = await supabase.from('themes').insert([data]).select().single();
@@ -9,13 +18,14 @@ export async function createTheme(data: { name: string; description: string; ima
   return insertData;
 }
 
-export async function updateTheme(themeId: string, updatedData: { name: string; description: string; image_url: string }) {
+export async function updateTheme(themeId: string, updatedData: Partial<ThemeInput>): Promise<void> {
   const supabase = createClient();
 
-  const { data, error } = await supabase.from('themes').update(updatedData).eq('id', themeId);
+  const { error } = await supabase.from('themes').update(updatedData).eq('id', themeId);
 
   if (error) throw new Error(error.message);
-  return data;
+
+  return;
 }
 
 export async function promoteTheme(themeData: { name: string; description?: string; image_url?: string; server_id: string; created_by: string; theme_month: string }) {

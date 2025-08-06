@@ -11,7 +11,7 @@ interface Props {
   onClaim?: () => void;
 }
 
-export default function ThemeControls({ editing, type, onSave, onCancel, onEdit, onReset, onClaim }: Props) {
+export default function ThemeControls({ editing, type, onSave, onCancel, onEdit, onReset }: Props) {
   if (editing) {
     return (
       <div className={styles.controls}>

@@ -1,4 +1,4 @@
-// import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
+import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
@@ -20,8 +20,8 @@ export default async function Page() {
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.heading}>
-          {/* <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
-          <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} priority={true} /> */}
+          <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+          {/* <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} priority={true} /> */}
           {/* <div className={styles.titleContainer}> */}
           <div className={styles.title}>
             <h2>barbz</h2>

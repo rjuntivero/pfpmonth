@@ -13,8 +13,8 @@ import ThemeImageUploader from './ThemeImageUploader';
 interface Props {
   type: string;
   theme: Slide;
-  onReset?: (theme: Slide) => void;
-  onClaim?: (theme: Slide) => void;
+  onReset?: (_theme: Slide) => void;
+  onClaim?: (_theme: Slide) => void;
   index?: number;
   onUpdate: () => void;
 }

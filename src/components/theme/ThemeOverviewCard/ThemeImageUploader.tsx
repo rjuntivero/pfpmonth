@@ -3,7 +3,7 @@ import styles from './ThemeOverviewCard.module.css';
 
 interface Props {
   imageUrl: string;
-  onChange: (file: File) => void;
+  onChange: (_file: File) => void;
 }
 
 export default function ThemeImageUploader({ imageUrl, onChange }: Props) {

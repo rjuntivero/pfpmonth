@@ -1,6 +1,34 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 import { error } from 'console';
 
+interface ThemeData {
+  id: string;
+  name: string;
+  description: string;
+  image_url: string;
+  status: 'final' | 'suggestion' | 'tbd';
+
+  created_by: {
+    username: string;
+    avatar_url: string;
+  };
+
+  user_characters: {
+    id: string;
+    name: string;
+    user_id: string;
+    theme_id: string;
+    image_url: string | null;
+    users: {
+      id: string;
+      username: string;
+      avatar_url: string;
+    };
+  }[];
+
+  themes_likes: any[];
+}
+
 export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
   const supabase = await createClient();
 
@@ -21,7 +49,7 @@ export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
       description, 
       image_url,
       status, 
-      created_by ( 
+      created_by:users!themes_created_by_fkey ( 
         username, 
         avatar_url
       ), 
@@ -46,11 +74,12 @@ export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
     .single();
 
   if (!themeData) return { error };
+  console.log('themeData:', themeData);
 
-  const likes = themeData.theme_likes?.filter((l: any) => l.liked).length ?? 0;
-  const dislikes = themeData.theme_likes?.filter((l: any) => !l.liked).length ?? 0;
+  const likes = themeData.theme_likes?.filter((l) => l.liked).length ?? 0;
+  const dislikes = themeData.theme_likes?.filter((l) => !l.liked).length ?? 0;
   const participants =
-    themeData.user_characters?.map((c: any) => ({
+    themeData.user_characters?.map((c) => ({
       id: c.id,
       user_id: c.user_id,
       theme_id: c.theme_id,

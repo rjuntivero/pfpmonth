@@ -3,7 +3,7 @@ import styles from './ThemeOverviewCard.module.css';
 interface Props {
   name: string;
   description: string;
-  onChange: (data: { name: string; description: string }) => void;
+  onChange: (_data: { name: string; description: string }) => void;
 }
 
 export default function ThemeEditorForm({ name, description, onChange }: Props) {

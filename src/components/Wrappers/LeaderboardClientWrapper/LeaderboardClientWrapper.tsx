@@ -8,7 +8,7 @@ import { GuildMember } from '@/types/User';
 import { motion } from 'framer-motion';
 
 export default function LeaderboardClientWrapper({ serverName }: { serverName?: string }) {
-  const [year, setYear] = useState('2025');
+  const [year, _setYear] = useState('2025');
   const [guildMembers, setGuildMembers] = useState<GuildMember[]>([]);
 
   useEffect(() => {

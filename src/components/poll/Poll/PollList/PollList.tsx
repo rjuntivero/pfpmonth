@@ -37,7 +37,6 @@ export default function PollList({ poll }: Props) {
     }
 
     fetchPolls();
-    //eslint-disable-next-line
   }, [poll.id, refreshKey]);
 
   // refresh page when poll is updated

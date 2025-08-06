@@ -72,7 +72,7 @@ export default function CallToAction() {
         </span>
       </h1>
 
-      <Image src="/CallToActionChasm.svg" className={styles.chasm} alt="Chasm" width={1068} height={566} priority={true} />
+      <Image src="/CallToActionChasm.svg" className={styles.chasm} alt="Chasm" width={1068} height={566} />
 
       <button ref={buttonRef} className={styles.voteBtn} onClick={handleClick}>
         <span className={styles.voteLabel}>Vote here</span>

@@ -6,7 +6,7 @@ interface Props {
   className?: string;
   zoom?: boolean;
   editable?: boolean;
-  onImageChange?: (file: File) => void;
+  onImageChange?: (_file: File) => void;
 }
 export default function Avatar({ imageURL, className, zoom, editable, onImageChange }: Props) {
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {

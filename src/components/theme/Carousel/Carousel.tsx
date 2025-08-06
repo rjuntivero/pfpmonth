@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useRef, useState, useEffect } from 'react';
+import { useLayoutEffect, useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import styles from './Carousel.module.css';
@@ -8,7 +8,7 @@ import { Slide } from '@/types/Slide';
 import Link from 'next/link';
 interface Props {
   slides: Slide[];
-  setActiveSlide: (slide: Slide) => void;
+  setActiveSlide: (_slide: Slide) => void;
 }
 
 export default function Carousel({ slides, setActiveSlide }: Props) {
@@ -25,30 +25,36 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
   const x = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 200, damping: 30 });
 
-  const scrollTo = (index: number) => {
-    const container = trackRef.current;
-    if (!container) return;
+  const scrollTo = useCallback(
+    (index: number) => {
+      const container = trackRef.current;
+      if (!container) return;
 
-    const target = container.children[index] as HTMLElement;
-    if (!target) return;
+      const target = container.children[index] as HTMLElement;
+      if (!target) return;
 
-    const containerWidth = container.offsetWidth;
-    const targetLeft = target.offsetLeft;
-    const targetWidth = target.offsetWidth;
-    const offset = targetLeft - container.offsetLeft - (containerWidth / 2 - targetWidth / 2);
+      const containerWidth = container.offsetWidth;
+      const targetLeft = target.offsetLeft;
+      const targetWidth = target.offsetWidth;
+      const offset = targetLeft - container.offsetLeft - (containerWidth / 2 - targetWidth / 2);
 
-    x.set(-offset);
-  };
+      x.set(-offset);
+    },
+    [x]
+  );
 
-  const handleScroll = (dir: number) => {
-    let newIndex = activeIndex + dir;
-    if (newIndex < 0) newIndex = originalLength - 1;
-    if (newIndex >= originalLength) newIndex = 0;
+  const handleScroll = useCallback(
+    (dir: number) => {
+      let newIndex = activeIndex + dir;
+      if (newIndex < 0) newIndex = originalLength - 1;
+      if (newIndex >= originalLength) newIndex = 0;
 
-    setActiveIndex(newIndex);
-    setActiveSlide(slides[newIndex]);
-    scrollTo(newIndex + CLONE_COUNT);
-  };
+      setActiveIndex(newIndex);
+      setActiveSlide(slides[newIndex]);
+      scrollTo(newIndex + CLONE_COUNT);
+    },
+    [activeIndex, originalLength, slides, setActiveSlide, scrollTo]
+  );
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -58,7 +64,7 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeIndex]);
+  }, [activeIndex, handleScroll]);
 
   const realignIfClone = (index: number) => {
     if (index < CLONE_COUNT) {

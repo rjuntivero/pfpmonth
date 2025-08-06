@@ -5,7 +5,7 @@ import { Participant } from '@/types/Participant';
 import { useState } from 'react';
 
 export default function User({ participant }: { participant?: Participant }) {
-  const [characterName, setCharacterName] = useState<string | 'No Character'>(participant?.character_name || 'No Character');
+  const [characterName, _setCharacterName] = useState<string | 'No Character'>(participant?.character_name || 'No Character');
 
   return (
     <div className={styles.container}>

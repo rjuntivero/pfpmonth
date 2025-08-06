@@ -8,9 +8,11 @@ import { useAppSelector } from '@/state/hooks';
 
 interface Props {
   serverId: string;
+  initialThemes: any[];
+  initialYear: number;
 }
 
-export default function ThemeSliderClientWrapper({ serverId }: Props) {
+export default function ThemeSliderClientWrapper({ serverId, initialThemes, initialYear }: Props) {
   const dispatch = useDispatch();
   const year = useAppSelector((state) => state.theme.year);
   const themes = useAppSelector((state) => state.theme.themes);
@@ -20,15 +22,23 @@ export default function ThemeSliderClientWrapper({ serverId }: Props) {
     dispatch(setThemeYear(updatedYear));
   };
 
+  // initial hydration
   useEffect(() => {
-    setLoading(true);
-    fetch(`/api/themes?serverId=${serverId}&year=${year}`)
-      .then((res) => res.json())
-      .then((data) => {
-        dispatch(setThemes(data.slides));
-        setLoading(false);
-      });
-  }, [year, serverId, dispatch]);
+    dispatch(setThemeYear(initialYear));
+    dispatch(setThemes(initialThemes));
+  }, [dispatch, initialThemes, initialYear]);
+
+  useEffect(() => {
+    if (year !== initialYear) {
+      setLoading(true);
+      fetch(`/api/themes?serverId=${serverId}&year=${year}`)
+        .then((res) => res.json())
+        .then((data) => {
+          dispatch(setThemes(data.slides));
+          setLoading(false);
+        });
+    }
+  }, [year, serverId, dispatch, initialYear]);
 
   return (
     <>

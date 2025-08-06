@@ -20,8 +20,8 @@ export default async function Page() {
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.heading}>
-          <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
-          <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} priority={true} />
+          {/* <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+          <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} priority={true} /> */}
           {/* <div className={styles.titleContainer}> */}
           <div className={styles.title}>
             <h2>barbz</h2>
@@ -32,7 +32,7 @@ export default async function Page() {
         <div className={styles.themes}>
           <CurtainDrapes />
           <Image src="/curtainsTop.svg" alt="curtain top container" width={1472} height={36} className={styles.curtainsTop} />
-          <ThemeSliderClientWrapper serverId={serverId as string} />
+          <ThemeSliderClientWrapper serverId={serverId as string} initialYear={currentYear} initialThemes={themes} />
         </div>
       </main>
       <ThemeOverviewPanel initialThemes={themes} serverId={serverId as string} />

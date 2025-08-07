@@ -4,6 +4,7 @@ type Server = {
   server_id: string;
   servers: {
     name: string;
+    icon_url: string | null;
   };
 };
 
@@ -26,4 +27,21 @@ export async function fetchServer(): Promise<FetchServerResponse> {
   }
 
   return { data };
+}
+
+export async function fetchServers() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data, error } = await supabase.from('user_servers').select('server_id, servers(name, icon_url)').eq('user_id', user?.id);
+
+  if (error) {
+    console.error('Error fetching servers:', error.message);
+    return { serverNames: [] };
+  }
+
+  return { serverNames: data ?? [] };
 }

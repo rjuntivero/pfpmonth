@@ -123,6 +123,8 @@
   gap: 1rem;
   align-items: center;
   padding: 1.5rem 1rem;
+  max-width: 600px;
+  overflow: hidden;
 }
 
 .themesLayout h1 {

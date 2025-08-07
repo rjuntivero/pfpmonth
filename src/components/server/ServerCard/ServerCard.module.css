@@ -13,6 +13,11 @@
   cursor: pointer;
 }
 
+.container p {
+  max-width: 13ch;
+  text-align: center;
+}
+
 .selected {
   box-shadow: var(--selected);
   background: var(--main);

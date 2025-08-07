@@ -29,7 +29,7 @@ interface ThemeData {
   themes_likes: any[];
 }
 
-export async function fetchThemeData({ themeMonth }: { themeMonth: string }) {
+export async function fetchThemeData({ themeMonth }: { themeMonth: string }):Promise<ThemeData> {
   const supabase = await createClient();
 
   const {

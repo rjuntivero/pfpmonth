@@ -4,14 +4,21 @@ import fetchUserData from '@/lib/api/user/fetchUserData';
 import ProfilePanel from '@/components/layout/ProfilePanel/ProfilePanel';
 import ServerCard from '@/components/server/ServerCard/ServerCard';
 import CharacterCard from '@/components/character/CharacterCard/CharacterCard';
-import Image from 'next/image';
 import { fetchCharacters } from '@/lib/api/user/characterActions';
 import { requireAuth } from '@/lib/auth/requireAuth';
+import { fetchServers } from '@/lib/api/server/fetchServer';
+import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
+import { cookies } from 'next/headers';
+import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 
 export default async function Profile() {
   const currentYear = new Date().getFullYear();
+  const serverId = (await cookies()).get('server_id')?.value;
+  const { themes } = await fetchThemes(currentYear, serverId);
+
   const { username, joined_at, avatar_url } = await fetchUserData();
   const characters = await fetchCharacters();
+  const servers = await fetchServers();
 
   // ensure user is authenticated
   await requireAuth();
@@ -47,26 +54,21 @@ export default async function Profile() {
           <section className={styles.infoWrapper}>
             <div className={`${styles.serverWrapper} ${styles.wrapper}`}>
               <ProfilePanel heading="Servers" className={styles.servers} contentClassName={styles.serverLayout}>
-                <ServerCard imageURL={'/naruto.jpg'} serverName={'server'} selected={true} />
-                <ServerCard imageURL={'/naruto.jpg'} serverName={'server'} />
-                <ServerCard imageURL={'/naruto.jpg'} serverName={'server'} />
-                <ServerCard imageURL={'/naruto.jpg'} serverName={'server'} />
+                {servers.serverNames?.map((server) => (
+                  <ServerCard key={server.server_id} imageURL={server.servers.icon_url || '/no-image-placeholder.jpg'} serverName={server.servers.name} selected={true} />
+                ))}
               </ProfilePanel>
             </div>
             <div className={`${styles.characterWrapper} ${styles.wrapper}`}>
               <ProfilePanel heading="Characters" className={styles.characters} contentClassName={styles.characterLayout}>
-                {characters?.map((character) => (
-                  <CharacterCard key={character.name} imageURL={character.image_url || '/no-image-placeholder.jpg'} characterName={character.name} selected={false} />
+                {characters?.map((character, i) => (
+                  <CharacterCard key={character.name} imageURL={character.image_url || '/no-image-placeholder.jpg'} characterName={character.name} selected={i != 1} />
                 ))}
               </ProfilePanel>
             </div>
             <div className={`${styles.themeWrapper} ${styles.wrapper}`}>
               <ProfilePanel heading="Themes" className={styles.themes} contentClassName={styles.themesLayout}>
-                <h1>
-                  May <span>{currentYear}</span>
-                </h1>
-                <Image src={'/no-image-placeholder.jpg'} alt="theme image" width={330} height={480} className={styles.themeImage} />
-                <h2>Naruto</h2>
+                <ThemeSliderClientWrapper serverId={serverId as string} initialYear={currentYear} initialThemes={themes} />
               </ProfilePanel>
             </div>
           </section>

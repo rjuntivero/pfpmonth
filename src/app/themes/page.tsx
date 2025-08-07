@@ -7,10 +7,12 @@ import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWra
 import { cookies } from 'next/headers';
 import ThemeOverviewPanel from '@/components/layout/ThemeOverviewPanel/ThemeOverviewPanel';
 import { requireAuth } from '@/lib/auth/requireAuth';
+import { fetchServer } from '@/lib/api/server/fetchServer';
 
 export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
+  const server = await fetchServer();
   const { themes } = await fetchThemes(currentYear, serverId);
 
   // ensure user is authenticated
@@ -22,12 +24,12 @@ export default async function Page() {
         <div className={styles.heading}>
           <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
           {/* <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} priority={true} /> */}
-          {/* <div className={styles.titleContainer}> */}
-          <div className={styles.title}>
-            <h2>barbz</h2>
-            <h1>THEMES</h1>
+          <div className={styles.titleContainer}>
+            <div className={styles.title}>
+              <h2>{server.data?.servers.name}</h2>
+              <h1>THEMES</h1>
+            </div>
           </div>
-          {/* </div> */}
         </div>
         <div className={styles.themes}>
           <CurtainDrapes />

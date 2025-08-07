@@ -30,15 +30,13 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
   }, [dispatch, initialThemes, initialYear]);
 
   useEffect(() => {
-    if (year !== initialYear) {
-      setLoading(true);
-      fetch(`/api/themes?serverId=${serverId}&year=${year}`)
-        .then((res) => res.json())
-        .then((data) => {
-          dispatch(setThemes(data.slides));
-          setLoading(false);
-        });
-    }
+    setLoading(true);
+    fetch(`/api/themes?serverId=${serverId}&year=${year}`)
+      .then((res) => res.json())
+      .then((data) => {
+        dispatch(setThemes(data.slides));
+        setLoading(false);
+      });
   }, [year, serverId, dispatch, initialYear]);
 
   return (

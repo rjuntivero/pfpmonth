@@ -6,16 +6,18 @@ import { useRouter } from 'next/navigation';
 import styles from './Carousel.module.css';
 import { Slide } from '@/types/Slide';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { setActiveSlide } from '@/features/themeSlice';
 interface Props {
   slides: Slide[];
-  setActiveSlide: (_slide: Slide) => void;
 }
 
-export default function Carousel({ slides, setActiveSlide }: Props) {
+export default function Carousel({ slides }: Props) {
   const router = useRouter();
   const CLONE_COUNT = 3;
   const originalLength = slides.length;
   const extendedSlides = [...slides.slice(-CLONE_COUNT), ...slides, ...slides.slice(0, CLONE_COUNT)];
+  const dispatch = useDispatch();
 
   const trackRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -50,10 +52,10 @@ export default function Carousel({ slides, setActiveSlide }: Props) {
       if (newIndex >= originalLength) newIndex = 0;
 
       setActiveIndex(newIndex);
-      setActiveSlide(slides[newIndex]);
+      dispatch(setActiveSlide(slides[newIndex]));
       scrollTo(newIndex + CLONE_COUNT);
     },
-    [activeIndex, originalLength, slides, setActiveSlide, scrollTo]
+    [activeIndex, originalLength, slides, scrollTo, dispatch]
   );
 
   useEffect(() => {

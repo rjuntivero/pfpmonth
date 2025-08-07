@@ -5,11 +5,13 @@ interface Theme {
   year: number;
   themes: Slide[];
   isThemePanelOpen: boolean;
+  activeSlide?: Slide;
 }
 
 const initialState: Theme = {
   year: new Date().getFullYear(),
   themes: [],
+  activeSlide: undefined,
   isThemePanelOpen: false,
 };
 
@@ -26,9 +28,12 @@ const themeSlice = createSlice({
     toggleThemePanel: (state) => {
       state.isThemePanelOpen = !state.isThemePanelOpen;
     },
+    setActiveSlide(state, action: PayloadAction<Slide>) {
+      state.activeSlide = action.payload;
+    },
   },
 });
 
-export const { setThemeYear, toggleThemePanel, setThemes } = themeSlice.actions;
+export const { setThemeYear, toggleThemePanel, setThemes, setActiveSlide } = themeSlice.actions;
 
 export default themeSlice.reducer;

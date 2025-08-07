@@ -1,12 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/theme/Carousel/Carousel';
 import { Slide } from '@/types/Slide';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/state/store';
+import { useAppSelector } from '@/state/hooks';
 
 interface Props {
   serverName?: string;
@@ -18,9 +16,7 @@ interface Props {
 
 export default function ThemeSlider({ serverName, slides, display = 'both', monthClassName, id }: Props) {
   const router = useRouter();
-  const currentMonthIndex = new Date().getMonth();
-  // const [activeSlide, setActiveSlide] = useState(slides[currentMonthIndex]);
-  const activeSlide = useSelector((state: RootState) => state.theme.activeSlide);
+  const activeSlide = useAppSelector((state) => state.theme.activeSlide);
 
   const showDetails = display === 'date' || display === 'both';
   const showButton = display === 'button' || display === 'both';

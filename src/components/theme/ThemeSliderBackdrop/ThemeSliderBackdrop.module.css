@@ -1,0 +1,16 @@
+.fadeInZoom {
+  animation: fadeZoomIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeZoomIn {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+    filter: blur(12px);
+  }
+  100% {
+    transform: scale(1.05);
+    opacity: 1;
+    filter: blur(0);
+  }
+}

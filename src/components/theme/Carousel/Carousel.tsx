@@ -84,13 +84,13 @@ export default function Carousel({ slides }: Props) {
 
     scrollTo(startIndex + CLONE_COUNT);
     setActiveIndex(startIndex);
-    setActiveSlide(slides[startIndex]);
+    dispatch(setActiveSlide(slides[startIndex]));
     setCurrentMonthIndex(current);
 
     requestAnimationFrame(() => {
       setReady(true);
     });
-  }, [slides, scrollTo, setActiveSlide]);
+  }, [slides, scrollTo, dispatch]);
 
   return (
     <div className={styles.carouselWrapper} role="region" aria-label="Theme carousel">
@@ -117,7 +117,7 @@ export default function Carousel({ slides }: Props) {
               aria-label={`${slide.name}${logicalIndex === currentMonthIndex ? ', Current Month' : ''}`}
               onClick={() => {
                 setActiveIndex(logicalIndex);
-                setActiveSlide(slides[logicalIndex]);
+                dispatch(setActiveSlide(slides[logicalIndex]));
                 scrollTo(i);
                 realignIfClone(i);
 

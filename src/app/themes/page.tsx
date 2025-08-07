@@ -1,4 +1,3 @@
-import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
 import styles from './page.module.css';
 import Image from 'next/image';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
@@ -8,6 +7,7 @@ import { cookies } from 'next/headers';
 import ThemeOverviewPanel from '@/components/layout/ThemeOverviewPanel/ThemeOverviewPanel';
 import { requireAuth } from '@/lib/auth/requireAuth';
 import { fetchServer } from '@/lib/api/server/fetchServer';
+import ThemeSliderBackdrop from '@/components/theme/ThemeSliderBackdrop/ThemeSliderBackdrop';
 
 export default async function Page() {
   const currentYear = new Date().getFullYear();
@@ -22,7 +22,7 @@ export default async function Page() {
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.heading}>
-          <ThemeBackground wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+          <ThemeSliderBackdrop wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
           {/* <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} priority={true} /> */}
           <div className={styles.titleContainer}>
             <div className={styles.title}>

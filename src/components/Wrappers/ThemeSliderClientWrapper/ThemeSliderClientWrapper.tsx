@@ -1,9 +1,9 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
 import styles from './ThemeSliderClientWrapper.module.css';
 import { useDispatch } from 'react-redux';
-import { setThemeYear, setThemes } from '@/features/themeSlice';
+import { setLoaded, setThemeYear, setThemes } from '@/features/themeSlice';
 import { useAppSelector } from '@/state/hooks';
 import { Slide } from '@/types/Slide';
 
@@ -17,7 +17,7 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
   const dispatch = useDispatch();
   const year = useAppSelector((state) => state.theme.year);
   const themes = useAppSelector((state) => state.theme.themes);
-  const [loading, setLoading] = useState(false);
+  const loaded = useAppSelector((state) => state.theme.loaded);
 
   const handleYearUpdate = (updatedYear: number) => {
     dispatch(setThemeYear(updatedYear));
@@ -30,12 +30,12 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
   }, [dispatch, initialThemes, initialYear]);
 
   useEffect(() => {
-    setLoading(true);
+    dispatch(setLoaded(false));
     fetch(`/api/themes?serverId=${serverId}&year=${year}`)
       .then((res) => res.json())
       .then((data) => {
         dispatch(setThemes(data.slides));
-        setLoading(false);
+        dispatch(setLoaded(true));
       });
   }, [year, serverId, dispatch, initialYear]);
 
@@ -52,7 +52,7 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
           </button>
         </div>
       </div>
-      {loading ? (
+      {!loaded ? (
         <div className={styles.loaderWrapper}>
           <div className={styles.loader}></div>
         </div>

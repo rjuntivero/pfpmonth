@@ -34,8 +34,8 @@ export default function ConfirmModal({ poll }: Props) {
 
   return (
     <div className={styles.modal}>
-      <p>This will make this suggestion the final theme for the month</p>
-      <h1>Are you sure?</h1>
+      <p className={styles.confirmDescription}>This will make this suggestion the final theme for the month</p>
+      <h1 className={styles.confirmMessage}>Are you sure?</h1>
       <div className={styles.actions}>
         <Button onClick={promoteToTheme}>Yes</Button>
         <Button onClick={() => dispatch(closeModal())}>No</Button>

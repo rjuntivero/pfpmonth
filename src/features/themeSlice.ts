@@ -6,6 +6,7 @@ interface Theme {
   themes: Slide[];
   isThemePanelOpen: boolean;
   activeSlide?: Slide;
+  loaded?: boolean;
 }
 
 const initialState: Theme = {
@@ -13,6 +14,7 @@ const initialState: Theme = {
   themes: [],
   activeSlide: undefined,
   isThemePanelOpen: false,
+  loaded: false,
 };
 
 const themeSlice = createSlice({
@@ -31,9 +33,12 @@ const themeSlice = createSlice({
     setActiveSlide(state, action: PayloadAction<Slide>) {
       state.activeSlide = action.payload;
     },
+    setLoaded: (state, action: PayloadAction<boolean>) => {
+      state.loaded = action.payload;
+    },
   },
 });
 
-export const { setThemeYear, toggleThemePanel, setThemes, setActiveSlide } = themeSlice.actions;
+export const { setThemeYear, toggleThemePanel, setThemes, setActiveSlide, setLoaded } = themeSlice.actions;
 
 export default themeSlice.reducer;

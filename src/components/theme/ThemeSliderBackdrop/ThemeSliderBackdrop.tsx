@@ -24,7 +24,7 @@ export default function ThemeSliderBackdrop({ wrapperClassName = '', imageClassN
   console.log('ThemeBackground rendering with image:', activeSlide.image);
   return (
     <div key={activeSlide.id} className={`${wrapperClassName}  ${styles.fadeInZoom}`}>
-      <Image src={activeSlide?.image || '/no-image-placeholder.jpg'} alt="Background" fill priority className={imageClassName} />
+      <Image src={activeSlide?.image || '/no-image-placeholder.jpg'} alt="Background" fill priority quality={60} className={imageClassName} aria-placeholder="theme background image" />
     </div>
   );
 }

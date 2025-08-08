@@ -9,14 +9,15 @@ import { PollDetails } from '@/types/Polls';
 
 interface Props {
   poll: PollDetails;
+  themeMonth: string;
 }
 
-export default function ConfirmModal({ poll }: Props) {
+export default function ConfirmModal({ poll, themeMonth }: Props) {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const promoteToTheme = async (): Promise<void> => {
     try {
-      const promoteRes = await fetch(`/api/poll/${poll.id}/promote?month=${poll.theme_month}`, {
+      const promoteRes = await fetch(`/api/poll/${poll.id}/promote?month=${themeMonth}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });

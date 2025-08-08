@@ -45,7 +45,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ pollId:
   const { error } = await supabase.from('themes').insert({
     id: pollData.id,
     name: pollData.name,
-    description: pollData.description,
+    description: pollData.option_text,
     image_url: imageUrl || '/no-image-placeholder.jpg',
     server_id: pollData.polls?.server_id,
     created_by: pollData.created_by.id,

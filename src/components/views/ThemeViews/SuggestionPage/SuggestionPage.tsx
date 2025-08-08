@@ -7,7 +7,12 @@ import ConfirmModal from '@/components/shared/Modal/ConfirmModal/ConfirmModal';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 import { fetchPolLData } from '@/lib/api/poll/fetchPollData';
 
-export default async function SuggestionPage({ suggestionId }: { suggestionId: string }) {
+interface Props {
+  suggestionId: string;
+  themeMonth: string;
+}
+
+export default async function SuggestionPage({ suggestionId, themeMonth }: Props) {
   const suggestion = await fetchPolLData(suggestionId);
   console.log('SuggestionPage suggestion:', suggestion);
 
@@ -28,7 +33,7 @@ export default async function SuggestionPage({ suggestionId }: { suggestionId: s
           <p className={styles.comment}>{`"${suggestion.option_text}"` || 'No description'}</p>
           <div>
             <ButtonModalWrapper modalClassName="confirmModal" buttonText="Confirm Theme?">
-              <ConfirmModal poll={suggestion} />
+              <ConfirmModal poll={suggestion} themeMonth={themeMonth} />
             </ButtonModalWrapper>
           </div>
         </div>

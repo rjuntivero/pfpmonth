@@ -30,7 +30,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   if (currentSlide.type === 'suggestion') {
-    return <SuggestionPage suggestionId={currentSlide.id} />;
+    return <SuggestionPage suggestionId={currentSlide.id as string} themeMonth={themeMonth} />;
   }
 
   if (currentSlide.type === 'tbd' && isPast) {

@@ -6,23 +6,25 @@
   box-sizing: border-box;
   display: flex;
   justify-content: start;
-  gap: 1.5rem;
+  gap: 0.5rem;
   align-items: center;
   padding: 8px;
-
+  line-height: 1.1;
   cursor: pointer;
 }
 
 .selected {
   box-shadow: var(--selected);
   background: var(--main);
-  border: 1px solid #0d0d0d;
+  outline: 1px solid #0d0d0d;
 }
 
 .serverImage {
   object-fit: cover;
   object-position: top;
   border-radius: 50%;
+  display: flex;
+  aspect-ratio: 1/1;
 }
 
 .serverName {

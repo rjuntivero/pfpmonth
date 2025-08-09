@@ -100,12 +100,6 @@
   display: flex;
 }
 
-.serverLayout {
-  display: flex;
-  gap: 0.75rem;
-  overflow-x: auto;
-}
-
 .themeWrapper {
   grid-row: 2;
   grid-column: 2;

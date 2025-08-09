@@ -1,7 +1,7 @@
 import styles from './page.module.css';
 import Avatar from '@/components/user/Avatar/Avatar';
 import fetchUserData from '@/lib/api/user/fetchUserData';
-import ProfilePanel from '@/components/layout/ProfilePanel/ProfilePanel';
+import ProfilePanel from '@/components/profile/ProfilePanel/ProfilePanel';
 import ServerCard from '@/components/server/ServerCard/ServerCard';
 import CharacterCard from '@/components/character/CharacterCard/CharacterCard';
 import { fetchCharacters } from '@/lib/api/user/characterActions';
@@ -10,6 +10,9 @@ import { fetchServers } from '@/lib/api/server/fetchServer';
 import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
 import { cookies } from 'next/headers';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
+import ServerPanel from '@/components/profile/ServerPanel/ServerPanel';
+import CharacterPanel from '@/components/profile/CharacterPanel/CharacterPanel';
+import ThemePanel from '@/components/profile/ThemePanel/ThemePanel';
 
 export default async function Profile() {
   const currentYear = new Date().getFullYear();
@@ -53,23 +56,15 @@ export default async function Profile() {
           </section>
           <section className={styles.infoWrapper}>
             <div className={`${styles.serverWrapper} ${styles.wrapper}`}>
-              <ProfilePanel heading="Servers" className={styles.servers} contentClassName={styles.serverLayout}>
-                {servers.serverNames?.map((server) => (
-                  <ServerCard key={server.server_id} imageURL={server.servers.icon_url || '/no-image-placeholder.jpg'} serverName={server.servers.name} selected={true} />
-                ))}
-              </ProfilePanel>
+              <ServerPanel servers={servers.serverNames} />
             </div>
             <div className={`${styles.characterWrapper} ${styles.wrapper}`}>
-              <ProfilePanel heading="Characters" className={styles.characters} contentClassName={styles.characterLayout}>
-                {characters?.map((character, i) => (
-                  <CharacterCard key={character.name} imageURL={character.image_url || '/no-image-placeholder.jpg'} characterName={character.name} selected={i != 1} />
-                ))}
-              </ProfilePanel>
+              <CharacterPanel characters={characters} />
             </div>
             <div className={`${styles.themeWrapper} ${styles.wrapper}`}>
-              <ProfilePanel heading="Themes" className={styles.themes} contentClassName={styles.themesLayout}>
+              <ThemePanel heading="Themes" className={styles.themes} contentClassName={styles.themesLayout}>
                 <ThemeSliderClientWrapper serverId={serverId as string} initialYear={currentYear} initialThemes={themes} />
-              </ProfilePanel>
+              </ThemePanel>
             </div>
           </section>
         </main>

@@ -2,7 +2,7 @@
 
 import styles from './ProfilePanel.module.css';
 
-interface ProfilePanelProps {
+interface Props {
   heading?: string;
   children: React.ReactNode;
   className?: string;
@@ -10,7 +10,7 @@ interface ProfilePanelProps {
   contentClassName?: string;
 }
 
-export default function ProfilePanel({ heading, children, className = '', headingClassName = '', contentClassName = '' }: ProfilePanelProps) {
+export default function ProfilePanel({ heading, children, className = '', headingClassName = '', contentClassName = '' }: Props) {
   return (
     <div className={styles.container}>
       {heading && <h1 className={`${styles.heading} ${headingClassName}`}>{heading}</h1>}

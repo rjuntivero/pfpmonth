@@ -18,7 +18,7 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
   const year = useAppSelector((state) => state.theme.year);
   const themes = useAppSelector((state) => state.theme.themes);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+  const loading = useAppSelector((state) => !state.theme.loaded);
 
   const didMountRef = useRef(false);
 
@@ -28,19 +28,6 @@ export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
       didMountRef.current = true;
     }
   }, [initialThemes, dispatch]);
-
-  // fetch themes when the year changes
-  useEffect(() => {
-    if (didMountRef.current) {
-      setLoading(true);
-      fetch(`/api/themes?serverId=${serverId}&year=${year}`)
-        .then((res) => res.json())
-        .then((data) => {
-          dispatch(setThemes(data.slides));
-          setLoading(false);
-        });
-    }
-  }, [year, serverId, dispatch]);
 
   const refetchThemes = async () => {
     const res = await fetch(`/api/themes?serverId=${serverId}&year=${year}`);

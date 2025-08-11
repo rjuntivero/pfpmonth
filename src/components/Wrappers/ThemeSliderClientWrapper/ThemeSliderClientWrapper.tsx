@@ -25,9 +25,11 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
 
   // initial hydration
   useEffect(() => {
-    dispatch(setThemeYear(initialYear));
-    dispatch(setThemes(initialThemes));
-  }, [dispatch, initialThemes, initialYear]);
+    if (!themes?.length) {
+      dispatch(setThemeYear(initialYear));
+      dispatch(setThemes(initialThemes));
+    }
+  }, [dispatch, initialThemes, initialYear, themes?.length]);
 
   useEffect(() => {
     dispatch(setLoaded(false));

@@ -8,6 +8,7 @@ export interface Theme {
   theme_month: string;
   description?: string;
   created_by: {
+    id: string;
     username: string;
     avatar_url: string;
   };

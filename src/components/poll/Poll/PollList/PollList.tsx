@@ -37,7 +37,7 @@ export default function PollList({ poll }: Props) {
     }
 
     fetchPolls();
-  }, [poll.id, refreshKey]);
+  }, [poll?.id, refreshKey]);
 
   // refresh page when poll is updated
   function forceRefresh() {

@@ -51,7 +51,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   const currentYear = selectedYear;
 
   // fetch official themes
-  const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, theme_month, description').eq('server_id', resolvedServerId);
+  const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, theme_month, description, created_by(id,username,avatar_url)').eq('server_id', resolvedServerId);
   const themes = themesData as Theme[];
 
   // fetch centralized poll

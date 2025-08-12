@@ -15,6 +15,12 @@
   text-align: center;
 }
 
+.themeDetails h1 {
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 700;
+  color: var(--main);
+}
+
 .header {
   display: flex;
   justify-content: center;
@@ -64,11 +70,11 @@
 }
 
 .topUser:nth-child(odd) {
-  width: 200px;
+  width: clamp(7.5rem, 15vw, 12.5rem);
 }
 
 .topUser:nth-child(even) {
-  width: 360px;
+  width: clamp(11.25rem, 25vw, 22.5rem);
   aspect-ratio: 1/1;
 }
 
@@ -77,13 +83,13 @@
   display: flex;
   justify-content: center;
   padding-bottom: 1rem;
-  font-size: 2rem;
+  font-size: clamp(1rem, 2vw, 2rem);
   font-weight: 600;
   color: var(--accent);
 }
 
 .topUser:nth-child(odd)::before {
-  font-size: 1.5rem;
+  font-size: clamp(0.9rem, 1.5vw, 1.5rem);
   color: var(--foreground);
   font-weight: 500;
 }
@@ -95,14 +101,14 @@
   align-items: end;
   color: white;
   background-color: var(--ui-background);
-  width: 325px;
-  height: 200px;
+  width: clamp(7rem, 22vw, 20.3125rem);
+  height: clamp(13rem, 15vw, 12.5rem);
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  bottom: -100px;
+  bottom: clamp(-13rem, -5.8vw, -3.5rem);
   z-index: 1;
-  font-size: 4.25rem;
+  font-size: clamp(2rem, 4vw, 4.25rem);
   font-weight: 800;
   color: var(--accent);
   border-bottom-left-radius: 50px;
@@ -112,17 +118,18 @@
 .topUser:nth-child(odd)::after {
   content: '2nd';
   display: flex;
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
   font-weight: 700;
   justify-content: center;
   align-items: flex-end;
   background-color: var(--ui-background);
-  width: 185px;
-  height: 130px;
+  width: clamp(5rem, 14vw, 10rem);
+  height: clamp(5rem, 10vw, 8.125rem);
   position: absolute;
+  padding: clamp(0.2rem, 1vw, 0.6rem);
   left: 50%;
   transform: translateX(-50%);
-  bottom: -70px;
+  bottom: clamp(-8rem, -3.8vw, -2.8rem);
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 50px;
 }

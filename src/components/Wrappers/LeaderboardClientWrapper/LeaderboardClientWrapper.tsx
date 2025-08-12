@@ -57,10 +57,10 @@ export default function LeaderboardClientWrapper({ serverName }: { serverName?: 
         <div className={styles.pageNav}>
           <button>{'<  '} </button>1 of 1 <button>{'  >'}</button>
         </div>
-        {guildMembers?.map((member) => (
-          <motion.div key={member.discord_users.username}>
-            <UserRanking member={member} />
-          </motion.div>
+        {guildMembers?.map((member, i) => (
+          <div key={member.discord_users.username}>
+            <UserRanking member={member} index={i} />
+          </div>
         ))}
       </section>
     </>

@@ -30,10 +30,18 @@
   object-fit: cover;
   object-position: top;
   border-radius: 50%;
+  width: clamp(4.5rem, 6vw, 6.5rem);
+  height: clamp(4.5rem, 6vw, 6.5rem);
 }
 
 .serverName {
   font-weight: 500;
-  font-size: 1.2rem;
+  font-size: clamp(0.3rem, 2vw, 1.2rem);
   font-family: var(--font-baloo);
+}
+
+@media screen and (max-width: 800px) {
+  .container {
+    max-width: 100%;
+  }
 }

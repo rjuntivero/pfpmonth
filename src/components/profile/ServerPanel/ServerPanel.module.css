@@ -17,3 +17,13 @@
   flex-direction: row;
   gap: 1rem;
 }
+
+@media screen and (max-width: 800px) {
+  .serverPanel {
+    flex-direction: column !important;
+  }
+  .serverContent {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}

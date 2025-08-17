@@ -6,7 +6,7 @@ export interface Slide {
   id?: string;
   tag?: string;
   route: string | null;
-  type: 'final' | 'suggestion' | 'tbd';
+  type: string;
   description?: string;
   theme_month: string;
   server_id: string;

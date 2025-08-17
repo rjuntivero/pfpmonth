@@ -26,7 +26,7 @@ export default async function Page() {
           {/* <Image src="/chasm2.svg" alt="title container" width={1440} height={379} className={styles.titleWrapper} priority={true} /> */}
           <div className={styles.titleContainer}>
             <div className={styles.title}>
-              <h2>{server.data?.servers.name}</h2>
+              <h2>{server?.name}</h2>
               <h1>THEMES</h1>
             </div>
           </div>

@@ -4,7 +4,7 @@ import { fetchServer } from '@/lib/api/server/fetchServer';
 
 export async function GET() {
   const server = await fetchServer();
-  const guildMembers = await fetchGuild(server.data?.server_id as string);
+  const guildMembers = await fetchGuild(server?.server_id as string);
 
   // members with a user_id come first
   const sortedMembers = guildMembers.sort((a, b) => {

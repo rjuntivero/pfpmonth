@@ -1,5 +1,12 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
+type UserServerResponse = {
+  users: {
+    username: string;
+  };
+  joined_at: string;
+};
+
 export default async function fetchUserData() {
   const supabase = await createClient();
 
@@ -7,18 +14,19 @@ export default async function fetchUserData() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { serverName: null, serverId: null, themes: [] };
+  if (!user) return { username: null, joined_at: null, avatar_url: null, user_id: null };
 
   const avatar_url = user.user_metadata.avatar_url;
 
-  console.log('User ID:', user.id);
-  const { data: userData } = await supabase.from('user_servers').select('users(username), joined_at').eq('user_id', user.id).single();
-  const joinedAt = new Date(userData?.joined_at);
-  const formattedDate = joinedAt.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-  });
+  const { data: userData } = await supabase.from('user_servers').select('users(username), joined_at').eq('user_id', user.id).single<UserServerResponse>();
 
-  console.log('Fetched user data:', userData);
-  return { username: userData?.users.username, joined_at: formattedDate, avatar_url: avatar_url, user_id: user.id };
+  const joinedAt = userData?.joined_at ? new Date(userData.joined_at) : null;
+  const formattedDate = joinedAt ? joinedAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : null;
+
+  return {
+    username: userData?.users?.username ?? null,
+    joined_at: formattedDate,
+    avatar_url,
+    user_id: user.id,
+  };
 }

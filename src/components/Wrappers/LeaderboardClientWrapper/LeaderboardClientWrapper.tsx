@@ -5,7 +5,6 @@ import styles from './LeaderboardClientWrapper.module.css';
 import UserRanking from '@/components/user/UserRanking/UserRanking';
 import { useEffect, useState } from 'react';
 import { GuildMember } from '@/types/User';
-import { motion } from 'framer-motion';
 
 export default function LeaderboardClientWrapper({ serverName }: { serverName?: string }) {
   const [year, _setYear] = useState('2025');

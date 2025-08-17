@@ -12,7 +12,7 @@ interface ThemeData {
     avatar_url: string;
   };
 
-  user_characters: {
+  user_characters?: {
     id: string;
     name: string;
     user_id: string;
@@ -25,10 +25,25 @@ interface ThemeData {
     };
   }[];
 
-  themes_likes: any[];
+  theme_likes?: {
+    liked: boolean;
+  }[];
+
+  theme_month: string;
+  likes: number;
+  dislikes: number;
+  participants: {
+    id: string;
+    character_name: string;
+    theme_id: string;
+    image_url: string | null;
+    user_id: string;
+    username: string;
+    avatar_url: string;
+  }[];
 }
 
-export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?: string; characterId?: string }): Promise<ThemeData> {
+export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?: string; characterId?: string }): Promise<ThemeData | { error: string }> {
   const supabase = await createClient();
 
   const {
@@ -36,7 +51,7 @@ export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?:
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error };
+    return { error: 'Not authenticated' };
   }
 
   let themeData: ThemeData | null = null;
@@ -50,7 +65,38 @@ export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?:
     }
     console.log('themeId:', themeId.theme_id);
 
-    const { data, error } = await supabase.from('themes').select('id, name, image_url, theme_month').eq('id', themeId.theme_id).single();
+    const { data, error } = await supabase
+      .from('themes')
+      .select(
+        `
+      id, 
+      name, 
+      description, 
+      image_url,
+      status, 
+      created_by:users!themes_created_by_fkey ( 
+        username, 
+        avatar_url
+      ), 
+      user_characters ( 
+        id,
+        name,
+        theme_id,
+        image_url,
+        user_id, 
+        users (
+          username,
+          avatar_url
+        )
+      ), 
+      themes_likes( 
+        liked, 
+        user_id
+      )
+    `
+      )
+      .eq('id', themeId.theme_id)
+      .single<ThemeData>();
 
     if (error) {
       console.error('Error fetching theme:', error);
@@ -111,20 +157,18 @@ export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?:
       character_image: c.image_url,
     })) ?? [];
   return {
-    theme: {
-      id: themeData?.id,
-      name: themeData?.name,
-      description: themeData?.description,
-      image_url: themeData?.image_url,
-      theme_month: themeMonth || themeData?.theme_month,
-      status: themeData?.status,
-      created_by: {
-        username: themeData?.created_by?.username,
-        avatar_url: themeData?.created_by?.avatar_url,
-      },
-      likes,
-      dislikes,
-      participants,
+    id: themeData?.id,
+    name: themeData?.name,
+    description: themeData?.description,
+    image_url: themeData?.image_url,
+    theme_month: themeMonth || themeData?.theme_month,
+    status: themeData?.status,
+    created_by: {
+      username: themeData?.created_by?.username,
+      avatar_url: themeData?.created_by?.avatar_url,
     },
+    likes,
+    dislikes,
+    participants,
   };
 }

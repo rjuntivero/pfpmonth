@@ -1,18 +1,20 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
-type Server = {
+export type Server = {
+  server_id: string;
+  name: string;
+  icon_url: string | null;
+};
+
+type SupabaseServerRow = {
   server_id: string;
   servers: {
     name: string;
     icon_url: string | null;
-  };
+  }[];
 };
 
-type FetchServerResponse = {
-  data: Server | null;
-};
-
-export async function fetchServer(): Promise<FetchServerResponse> {
+export async function fetchServer(): Promise<Server> {
   const supabase = await createClient();
 
   const {
@@ -21,15 +23,18 @@ export async function fetchServer(): Promise<FetchServerResponse> {
 
   const { data, error } = await supabase.from('user_servers').select('server_id, servers( name )').eq('user_id', user?.id).maybeSingle<Server>();
 
-  if (error) {
-    console.error('Error fetching server:', error.message);
-    return { data: null };
-  }
+  if (error) throw new Error(error.message);
 
-  return { data };
+  return (
+    data || {
+      server_id: '',
+      name: 'Unknown Server',
+      icon_url: null,
+    }
+  );
 }
 
-export async function fetchServers() {
+export async function fetchServers(): Promise<Server[]> {
   const supabase = await createClient();
 
   const {
@@ -38,10 +43,16 @@ export async function fetchServers() {
 
   const { data, error } = await supabase.from('user_servers').select('server_id, servers(name, icon_url)').eq('user_id', user?.id);
 
-  if (error) {
-    console.error('Error fetching servers:', error.message);
-    return { serverNames: [] };
-  }
+  if (error) throw new Error(error.message);
 
-  return { serverNames: data ?? [] };
+  const flattened: Server[] = (data || []).map((d: SupabaseServerRow) => {
+    const server = Array.isArray(d.servers) ? d.servers[0] : d.servers;
+    return {
+      server_id: d.server_id,
+      name: server?.name ?? 'Unknown Server',
+      icon_url: server?.icon_url ?? null,
+    };
+  });
+
+  return flattened;
 }

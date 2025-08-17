@@ -31,14 +31,15 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   }
 
   let serverName: string | null = null;
-  let resolvedServerId = serverIdFromCookie ?? null;
+  const resolvedServerId = serverIdFromCookie ?? null;
 
   // fetch serverId from cookie or user server
   if (!resolvedServerId) {
-    const { data: userServer } = await fetchServer();
+    const userServer = await fetchServer();
 
-    resolvedServerId = userServer?.server_id ?? null;
-    serverName = userServer?.servers?.name ?? null;
+    if ('error' in userServer) {
+      console.error(userServer.error);
+    }
   } else {
     const { data: server } = await supabase.from('servers').select('name').eq('id', resolvedServerId).single();
 
@@ -52,7 +53,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
 
   // fetch official themes
   const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, theme_month, description, created_by(id,username,avatar_url)').eq('server_id', resolvedServerId);
-  const themes = themesData as Theme[];
+  const themes = themesData as unknown as Theme[];
 
   // fetch centralized poll
   const { data: centralPoll, error: pollError } = await supabase.from('polls').select('id').eq('server_id', resolvedServerId).maybeSingle();
@@ -83,16 +84,33 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
     const theme = themes.find((t) => t.theme_month?.startsWith(`${currentYear}-${month}`));
     const themeMonth = `${currentYear}-${month}-01`;
 
+    const defaultSlide = {
+      month: monthName,
+      year: currentYear,
+      image: '/no-image-placeholder.jpg',
+      name: 'No Theme',
+      id: '',
+      description: '',
+      tag: undefined,
+      route: `/themes/month/${slug}`,
+      type: 'tbd',
+      theme_month: themeMonth,
+      server_id: resolvedServerId,
+      username: '',
+      avatar_url: '/no-image-placeholder.jpg',
+      created_by: undefined as { id: string; username: string; avatar_url: string } | undefined,
+    };
     // slides that have a corresponding theme table entry
     if (theme) {
       return {
+        ...defaultSlide,
         month: monthName,
         year: currentYear,
         image: theme.image_url,
         name: theme.name,
         id: theme.id,
         description: theme.description,
-        tag: [],
+        tag: 'final',
         route: `/themes/month/${slug}`,
         type: 'final',
         theme_month: themeMonth,
@@ -105,6 +123,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
     // current active month slide without a theme
     if (isCurrentMonth) {
       return {
+        ...defaultSlide,
         month: monthName,
         year: currentYear,
         image: '/no-image-placeholder.jpg',
@@ -125,6 +144,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
       if (suggestion) {
         usedSuggestions.add(suggestion.id);
         return {
+          ...defaultSlide,
           month: monthName,
           year: currentYear,
           image: suggestion.image_url ?? '/no-image-placeholder.jpg',
@@ -147,11 +167,11 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
 
     // future slide WITHOUT a theme
     return {
+      ...defaultSlide,
       month: monthName,
       year: currentYear,
       image: '/no-image-placeholder.jpg',
       name: 'No Theme',
-      tag: 'inactive',
       route: `/themes/month/${slug}`,
       type: 'tbd',
       theme_month: themeMonth,

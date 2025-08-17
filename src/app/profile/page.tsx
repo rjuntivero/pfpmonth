@@ -4,7 +4,7 @@ import fetchUserData from '@/lib/api/user/fetchUserData';
 import ProfilePanel from '@/components/profile/ProfilePanel/ProfilePanel';
 import { fetchCharacters } from '@/lib/api/user/characterActions';
 import { requireAuth } from '@/lib/auth/requireAuth';
-import { fetchServers } from '@/lib/api/server/fetchServer';
+import { fetchServers, Server } from '@/lib/api/server/fetchServer';
 import { cookies } from 'next/headers';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import ServerPanel from '@/components/profile/ServerPanel/ServerPanel';
@@ -22,6 +22,12 @@ export default async function Profile() {
   const { username, joined_at, avatar_url } = await fetchUserData();
   const characters = await fetchCharacters();
   const servers = await fetchServers();
+  let serverList = [] as Server[];
+  if ('error' in servers) {
+    console.error(servers.error);
+  } else {
+    serverList = servers;
+  }
 
   // ensure user is authenticated
   await requireAuth();
@@ -47,20 +53,20 @@ export default async function Profile() {
                 )}
               </div>
               <div className={`${styles.timelineWrapper} ${styles.wrapper}`}>
-                <TimelinePanel themes={themes} />
+                <TimelinePanel themes={themes.themes} />
               </div>
             </div>
           </section>
           <section className={styles.infoWrapper}>
             <div className={`${styles.serverWrapper} ${styles.wrapper}`}>
-              <ServerPanel servers={servers.serverNames} />
+              <ServerPanel servers={serverList} />
             </div>
             <div className={`${styles.characterWrapper} ${styles.wrapper}`}>
               <CharacterPanel characters={characters} />
             </div>
             <div className={`${styles.themeWrapper} ${styles.wrapper}`}>
               <ThemePanel heading="Themes" className={styles.themes} contentClassName={styles.themesLayout}>
-                <ThemePreview serverId={serverId} />
+                <ThemePreview />
               </ThemePanel>
             </div>
           </section>

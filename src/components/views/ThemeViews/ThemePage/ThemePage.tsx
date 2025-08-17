@@ -19,14 +19,20 @@ interface Props {
 
 export default async function ThemePage({ theme, inPast }: Props) {
   const themeData = await fetchThemeData({ themeMonth: theme.theme_month });
-  const character = await fetchCharacter(themeData.theme?.id);
-  const participants = themeData.theme?.participants || [];
+
+  if ('error' in themeData) {
+    return <div>{themeData.error}</div>;
+  }
+
+  console.log('Theme Data:', themeData);
+  const character = await fetchCharacter(themeData?.id);
+  const participants = themeData?.participants || [];
 
   return (
     <div className={styles.page}>
       <CharacterInitWrapper character={character} participants={participants} />
       <main className={styles.main}>
-        <ThemeBackground themeImage={themeData.theme?.image_url} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
+        <ThemeBackground themeImage={themeData?.image_url} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
         <div className={styles.fadeOverlay} />
 
         <div className={styles.frameWrapper}>
@@ -35,10 +41,10 @@ export default async function ThemePage({ theme, inPast }: Props) {
 
         <div className={styles.title}>
           <h2>Theme</h2>
-          <h1>{themeData.theme?.name || 'null'}</h1>
+          <h1>{themeData?.name || 'null'}</h1>
           {!inPast && (
             <ButtonModalWrapper buttonText="Join Theme" modalClassName="joinModal">
-              <JoinThemeModal themeTitle={themeData?.theme?.name} themeId={themeData!.theme!.id} participants={themeData?.theme?.participants} username={themeData.theme?.created_by.username} />
+              <JoinThemeModal themeTitle={themeData?.name} themeId={themeData!.id} participants={themeData?.participants} username={themeData?.created_by.username} />
             </ButtonModalWrapper>
           )}
           <div className={styles.reviews}>
@@ -49,19 +55,19 @@ export default async function ThemePage({ theme, inPast }: Props) {
               <Feedback color={'#d9d9d9'} />
             </button> */}
           </div>
-          <p className={styles.comment}>{`"${themeData.theme?.description}"` || 'No Description'}</p>
+          <p className={styles.comment}>{`"${themeData?.description}"` || 'No Description'}</p>
         </div>
         <section className={styles.userDetails}>
           <section className={styles.author}>
             <div className={styles.authorAvatar}>
-              <Avatar imageURL={themeData.theme?.created_by.avatar_url || '/no-image-placeholder.jpg'} className={styles.avatar} zoom={!themeData.theme?.created_by.avatar_url} />
+              <Avatar imageURL={themeData?.created_by.avatar_url || '/no-image-placeholder.jpg'} className={styles.avatar} zoom={!themeData?.created_by.avatar_url} />
             </div>
-            <p className={styles.authorName}>created by {themeData.theme?.created_by.username}</p>
+            <p className={styles.authorName}>created by {themeData?.created_by.username}</p>
           </section>
           <section className={styles.participants}>
-            <h1>{themeData.theme?.participants.length} participants:</h1>
+            <h1>{themeData?.participants.length} participants:</h1>
             <div className={styles.users}>
-              {themeData.theme?.participants.map((participant, i) => (
+              {themeData?.participants.map((participant, i: number) => (
                 <User key={`${participant.username}-${i}`} participant={participant} />
               ))}
             </div>

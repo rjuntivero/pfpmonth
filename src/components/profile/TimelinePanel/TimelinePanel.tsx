@@ -11,9 +11,9 @@ interface Props {
 export default function ThemePanel({ themes }: Props) {
   return (
     <ProfilePanel heading="Timeline" className={styles.timeline} contentClassName={styles.timelineContent}>
-      {themes?.themes.map((theme) => {
+      {themes?.map((theme) => {
         return (
-          <div key={theme.id} className={`${styles.themeMonth} ${theme.id && styles.hasTheme}`}>
+          <div key={theme.theme_month} className={`${styles.themeMonth} ${theme.id && styles.hasTheme}`}>
             <h1>{theme?.theme_month ? new Date(Number(theme.theme_month.split('-')[0]), Number(theme.theme_month.split('-')[1]) - 1).toLocaleString('default', { month: 'long' }) : 'N/A'}</h1>
           </div>
         );

@@ -1,0 +1,27 @@
+.timeline {
+  padding: 0;
+  max-height: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.timelineContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.themeMonth {
+  flex: 1;
+  outline: 2px solid var(--main);
+  text-align: center;
+  padding: 2em;
+}
+
+.hasTheme {
+  background-color: var(--main);
+  outline: 2px solid var(--text);
+}
+
+.hasTheme h1 {
+  color: var(--text);
+}

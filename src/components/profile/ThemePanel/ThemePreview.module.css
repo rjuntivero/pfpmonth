@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+}
+
+.container .image {
+  display: flex;
+  object-fit: cover;
+  border-radius: 10px;
+  height: 100%;
+  width: 100%;
+}
+
+.container .themeDate {
+  line-height: 1.1;
+}
+
+.container .themeTitle {
+  font-size: 1.5rem;
+}
+
+.container .themeYear {
+  font-size: clamp(1rem, 9vw, 2.5em);
+  color: var(--accent);
+}
+
+.container .themeDate .themeMonth {
+  font-weight: 400;
+}
+
+.container .image .imageContainer {
+  display: flex;
+  object-fit: cover;
+}

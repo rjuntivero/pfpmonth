@@ -1,13 +1,14 @@
+import { Character } from '@/types/Character';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ProfileState {
   selectedServerId: string | null;
-  selectedCharacterName: string | null;
+  selectedCharacter: Character | null;
 }
 
 const initialState: ProfileState = {
   selectedServerId: null,
-  selectedCharacterName: null,
+  selectedCharacter: null,
 };
 
 const profileSlice = createSlice({
@@ -16,10 +17,10 @@ const profileSlice = createSlice({
   reducers: {
     setSelectedServerId(state, action: PayloadAction<string | null>) {
       state.selectedServerId = action.payload;
-      state.selectedCharacterName = null;
+      state.selectedCharacter = null;
     },
-    setSelectedCharacterName(state, action: PayloadAction<string | null>) {
-      state.selectedCharacterName = action.payload;
+    setSelectedCharacterName(state, action: PayloadAction<Character | null>) {
+      state.selectedCharacter = action.payload;
     },
   },
 });

@@ -1,6 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 1rem;
   height: 100%;
 }
@@ -15,6 +16,9 @@
   border-radius: 20px;
   box-sizing: border-box;
   box-shadow: inset 4px 7px 7px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: start;
+  justify-content: center;
 }
 
 .heading {

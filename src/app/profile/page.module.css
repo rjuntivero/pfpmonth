@@ -16,7 +16,7 @@
 .infoWrapper {
   padding-inline: 1rem;
   padding-block: 1rem;
-  width: 100%;
+  max-width: 50%;
   height: 100%;
   display: grid;
 
@@ -33,7 +33,7 @@
   padding-inline: 2rem;
   padding-block: 3rem;
   /* border: 1px solid pink; */
-  width: 100%;
+  max-width: 50%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -152,6 +152,7 @@
 
   .infoWrapper {
     grid-template-rows: auto 2fr;
+    max-width: 100%;
   }
 
   .characterWrapper {
@@ -170,6 +171,8 @@
 
   .profileWrapper {
     gap: 1rem;
+    max-width: 100%;
+    padding-block: 0;
   }
 
   .userWrapper {

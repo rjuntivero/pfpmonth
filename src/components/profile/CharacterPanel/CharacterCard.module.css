@@ -2,46 +2,36 @@
   --selected: 0px 4px 1.6px #716174;
   padding: 1em;
   border-radius: 20px;
-  height: 100%;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: start;
+  gap: 0.5rem;
   align-items: center;
   padding: 8px;
-  max-width: fit-content;
-  cursor: pointer;
-  gap: 0.5em;
-}
-
-.container p {
-  max-width: 13ch;
   line-height: 1.1;
-  text-align: center;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  margin-bottom: 0.75em;
 }
 
 .selected {
   box-shadow: var(--selected);
   background: var(--main);
   outline: 1px solid #0d0d0d;
+  transition: all 0.4s ease;
 }
 
 .serverImage {
   object-fit: cover;
   object-position: top;
   border-radius: 50%;
-  width: clamp(4.5rem, 6vw, 6.5rem);
-  height: clamp(4.5rem, 6vw, 6.5rem);
+  display: flex;
+  aspect-ratio: 1/1;
 }
 
 .serverName {
   font-weight: 500;
-  font-size: clamp(0.3rem, 2vw, 1.2rem);
+  font-size: 1.2rem;
   font-family: var(--font-baloo);
-}
-
-@media screen and (max-width: 800px) {
-  .container {
-    max-width: 100%;
-  }
 }

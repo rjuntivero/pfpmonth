@@ -2,11 +2,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 2px solid rgba(0, 0, 0, 0.5);
-  outline: 1px solid black;
   flex-basis: 150px;
   border-radius: 20px;
   cursor: pointer;
+  opacity: 0.4;
+  transition: 0.3s all ease;
+  background: linear-gradient(135deg, rgba(191, 191, 191, 0.15) 0%, rgba(255, 255, 255, 0.15) 70%);
+}
+
+.addServer:hover {
+  transition: 0.3s all ease;
+  opacity: 1;
+  scale: 1.03;
 }
 
 .serverPanel {

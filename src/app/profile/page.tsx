@@ -5,17 +5,19 @@ import ProfilePanel from '@/components/profile/ProfilePanel/ProfilePanel';
 import { fetchCharacters } from '@/lib/api/user/characterActions';
 import { requireAuth } from '@/lib/auth/requireAuth';
 import { fetchServers } from '@/lib/api/server/fetchServer';
-import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
 import { cookies } from 'next/headers';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import ServerPanel from '@/components/profile/ServerPanel/ServerPanel';
 import CharacterPanel from '@/components/profile/CharacterPanel/CharacterPanel';
 import ThemePanel from '@/components/profile/ThemePanel/ThemePanel';
+import ThemePreview from '@/components/profile/ThemePanel/ThemePreview';
+import TimelinePanel from '@/components/profile/TimelinePanel/TimelinePanel';
 
 export default async function Profile() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
-  const { themes } = await fetchThemes(currentYear, serverId);
+  const themes = await fetchThemes(currentYear, serverId);
+  const badges = [];
 
   const { username, joined_at, avatar_url } = await fetchUserData();
   const characters = await fetchCharacters();
@@ -38,17 +40,14 @@ export default async function Profile() {
             </div>
             <div className={styles.milestoneWrapper}>
               <div className={`${styles.badgeWrapper} ${styles.wrapper}`}>
-                <ProfilePanel className={styles.badges}>
-                  <i>BADGE</i>
-                  <i>BADGE</i>
-                  <i>BADGE</i>
-                  <i>BADGE</i>
-                </ProfilePanel>
+                {badges.length > 0 && (
+                  <ProfilePanel className={styles.badges}>
+                    <i>badges</i>
+                  </ProfilePanel>
+                )}
               </div>
               <div className={`${styles.timelineWrapper} ${styles.wrapper}`}>
-                <ProfilePanel heading="Timeline" className={styles.timeline}>
-                  <i>server</i>
-                </ProfilePanel>
+                <TimelinePanel themes={themes} />
               </div>
             </div>
           </section>
@@ -61,7 +60,7 @@ export default async function Profile() {
             </div>
             <div className={`${styles.themeWrapper} ${styles.wrapper}`}>
               <ThemePanel heading="Themes" className={styles.themes} contentClassName={styles.themesLayout}>
-                {/* <ThemeSliderClientWrapper serverId={serverId as string} initialYear={currentYear} initialThemes={themes} /> */}
+                <ThemePreview serverId={serverId} />
               </ThemePanel>
             </div>
           </section>

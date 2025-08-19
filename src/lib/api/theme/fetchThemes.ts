@@ -14,7 +14,9 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return { serverName: null, serverId: null, themes: [] };
+  if (!user) {
+    return { serverName: null, serverId: null, themes: [] };
+  }
 
   // create server poll if it does not yet exist
   if (serverIdFromCookie) {

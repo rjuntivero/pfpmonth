@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
 import styles from './ThemeSliderClientWrapper.module.css';
 import { useDispatch } from 'react-redux';
@@ -16,8 +16,8 @@ interface Props {
 export default function ThemeSliderClientWrapper({ serverId, initialThemes, initialYear }: Props) {
   const dispatch = useDispatch();
   const year = useAppSelector((state) => state.theme.year);
-  const themes = useAppSelector((state) => state.theme.themes);
   const loaded = useAppSelector((state) => state.theme.loaded);
+  const [hydrated, setHydrated] = useState(false);
 
   const handleYearUpdate = (updatedYear: number) => {
     dispatch(setThemeYear(updatedYear));
@@ -25,21 +25,31 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
 
   // initial hydration
   useEffect(() => {
-    if (!themes?.length) {
-      dispatch(setThemeYear(initialYear));
-      dispatch(setThemes(initialThemes));
-    }
-  }, [dispatch, initialThemes, initialYear, themes?.length]);
+    dispatch(setThemeYear(initialYear));
+    dispatch(setThemes(initialThemes));
+    dispatch(setLoaded(true));
+    setHydrated(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
+    if (!hydrated) return;
     dispatch(setLoaded(false));
-    fetch(`/api/themes?serverId=${serverId}&year=${year}`)
-      .then((res) => res.json())
-      .then((data) => {
+
+    try {
+      async function fetchThemes() {
+        const res = await fetch(`/api/themes?year=${year}&serverId=${serverId}`);
+        const data = await res.json();
+
         dispatch(setThemes(data.slides));
         dispatch(setLoaded(true));
-      });
-  }, [year, serverId, dispatch, initialYear]);
+      }
+      fetchThemes();
+    } catch (error) {
+      console.error(error);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [year, serverId, dispatch]);
 
   return (
     <>
@@ -59,7 +69,7 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
           <div className={styles.loader}></div>
         </div>
       ) : (
-        <ThemeSlider slides={themes} display="none" monthClassName={styles.themesPage} />
+        <ThemeSlider display="none" monthClassName={styles.themesPage} />
       )}
     </>
   );

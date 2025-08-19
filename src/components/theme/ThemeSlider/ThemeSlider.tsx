@@ -5,18 +5,23 @@ import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/theme/Carousel/Carousel';
 import { Slide } from '@/types/Slide';
 import { useAppSelector } from '@/state/hooks';
+import { useEffect } from 'react';
 
 interface Props {
   serverName?: string;
-  slides: Slide[];
   display?: 'none' | 'date' | 'button' | 'both';
   monthClassName?: string;
   id?: string;
 }
 
-export default function ThemeSlider({ serverName, slides, display = 'both', monthClassName, id }: Props) {
+export default function ThemeSlider({ serverName, display = 'both', monthClassName, id }: Props) {
   const router = useRouter();
   const activeSlide = useAppSelector((state) => state.theme.activeSlide);
+  const slides = useAppSelector((state) => state.theme.themes);
+  console.log('ThemeSlider slides:', slides);
+  useEffect(() => {
+    console.log('ThemeSlider slides:', slides);
+  }, [slides]);
 
   const showDetails = display === 'date' || display === 'both';
   const showButton = display === 'button' || display === 'both';

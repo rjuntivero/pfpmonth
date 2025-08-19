@@ -13,17 +13,9 @@ interface Props {
 export default function ThemeSliderBackdrop({ wrapperClassName = '', imageClassName = '' }: Props) {
   const activeSlide = useAppSelector((state) => state.theme.activeSlide);
 
-  useEffect(() => {
-    console.log('ThemeBackground activeSlide changed:', activeSlide);
-  }, [activeSlide]);
-  if (!activeSlide) {
-    console.log('ThemeBackground no activeSlide, rendering null');
-    return null;
-  }
-
-  console.log('ThemeBackground rendering with image:', activeSlide.image);
+  console.log('ThemeBackground rendering with image:', activeSlide?.image);
   return (
-    <div key={activeSlide.id} className={`${wrapperClassName}  ${styles.fadeInZoom}`}>
+    <div key={activeSlide?.id} className={`${wrapperClassName}  ${styles.fadeInZoom}`}>
       <Image src={activeSlide?.image || '/no-image-placeholder.jpg'} alt="Background" fill priority quality={60} className={imageClassName} aria-placeholder="theme background image" />
     </div>
   );

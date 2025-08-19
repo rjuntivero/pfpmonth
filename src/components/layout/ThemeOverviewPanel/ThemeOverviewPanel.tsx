@@ -2,32 +2,28 @@
 import Button from '@/components/shared/Button/Button';
 import styles from './ThemeOverviewPanel.module.css';
 import ThemeOverviewCard from '@/components/theme/ThemeOverviewCard/ThemeOverviewCard';
-import { useEffect, useRef, useState } from 'react';
-import { Slide } from '@/types/Slide';
+import { useRef, useState } from 'react';
 import { useAppSelector } from '@/state/hooks';
 import { useDispatch } from 'react-redux';
 import { setThemes } from '@/features/themeSlice';
 // import { updateTheme } from '@/lib/api/theme/themeActions';
 
 interface Props {
-  initialThemes: Slide[];
   serverId: string;
 }
 
-export default function ThemeOverviewPanel({ initialThemes, serverId }: Props) {
+export default function ThemeOverviewPanel({ serverId }: Props) {
   const year = useAppSelector((state) => state.theme.year);
   const themes = useAppSelector((state) => state.theme.themes);
   const dispatch = useDispatch();
   const loading = useAppSelector((state) => !state.theme.loaded);
 
-  const didMountRef = useRef(false);
-
-  useEffect(() => {
-    if (!didMountRef.current) {
-      dispatch(setThemes(initialThemes));
-      didMountRef.current = true;
-    }
-  }, [initialThemes, dispatch]);
+  // useEffect(() => {
+  //   if (!didMountRef.current) {
+  //     dispatch(setThemes(initialThemes));
+  //     didMountRef.current = true;
+  //   }
+  // }, [initialThemes, dispatch]);
 
   const refetchThemes = async () => {
     const res = await fetch(`/api/themes?serverId=${serverId}&year=${year}`);

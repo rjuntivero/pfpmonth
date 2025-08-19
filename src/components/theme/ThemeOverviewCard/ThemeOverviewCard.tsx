@@ -3,7 +3,7 @@ import styles from './ThemeOverviewCard.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Slide } from '@/types/Slide';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createTheme, updateTheme, uploadThemeImage } from '@/lib/api/theme/themeActions';
 import getCookie from '@/lib/utils/getClientCookie';
 import ThemeControls from './ThemeControls';
@@ -30,6 +30,15 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
     description: theme.description,
     image_url: theme.image,
   });
+
+  // reset stale data when switching between themes
+  useEffect(() => {
+    setTempData({
+      name: theme.name,
+      description: theme.description,
+      image_url: theme.image,
+    });
+  }, [theme]);
 
   const handleImageChange = (file: File) => {
     setSelectedFile(file);

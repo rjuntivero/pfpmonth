@@ -25,6 +25,8 @@ export default function ThemeSlider({ serverName, display = 'both', monthClassNa
 
   const showDetails = display === 'date' || display === 'both';
   const showButton = display === 'button' || display === 'both';
+  console.log('do i show the details??: ', showDetails);
+  console.log('do i show the button??: ', showButton);
 
   return (
     <div id={id} className={styles.wrapper} role="region" aria-label="Monthly themes slider">

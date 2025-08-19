@@ -5,6 +5,7 @@ import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import { cookies } from 'next/headers';
 import { Metadata } from 'next';
+import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
 
 export const metadata: Metadata = {
   title: 'PFPMonth - Home',
@@ -68,7 +69,7 @@ export default async function Page() {
           <TrendingThemes />
         </section>
         <section role="region" aria-label="Current Server Themes">
-          <ThemeSlider id="themes" serverName={serverName as string} slides={themes ?? []} />
+          <ThemeSliderClientWrapper serverName={serverName as string} serverId={serverId as string} initialYear={currentYear} initialThemes={themes} isHomePage={true} />
         </section>
         <section className={styles.CallToAction}>
           <CallToAction />

@@ -18,13 +18,6 @@ export default function ThemeOverviewPanel({ serverId }: Props) {
   const dispatch = useDispatch();
   const loading = useAppSelector((state) => !state.theme.loaded);
 
-  // useEffect(() => {
-  //   if (!didMountRef.current) {
-  //     dispatch(setThemes(initialThemes));
-  //     didMountRef.current = true;
-  //   }
-  // }, [initialThemes, dispatch]);
-
   const refetchThemes = async () => {
     const res = await fetch(`/api/themes?serverId=${serverId}&year=${year}`);
     const data = await res.json();

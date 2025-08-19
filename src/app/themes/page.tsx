@@ -14,7 +14,6 @@ export default async function Page() {
   const serverId = (await cookies()).get('server_id')?.value;
   const server = await fetchServer();
   const { themes } = await fetchThemes(currentYear, serverId);
-  console.log('server fetch', server);
 
   // ensure user is authenticated
   await requireAuth();

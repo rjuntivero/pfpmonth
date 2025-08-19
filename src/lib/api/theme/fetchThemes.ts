@@ -33,15 +33,16 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   }
 
   let serverName: string | null = null;
-  const resolvedServerId = serverIdFromCookie ?? null;
+  let resolvedServerId = serverIdFromCookie ?? null;
 
   // fetch serverId from cookie or user server
   if (!resolvedServerId) {
     const userServer = await fetchServer();
 
-    if ('error' in userServer) {
+    if (userServer && 'error' in userServer) {
       console.error(userServer.error);
     }
+    resolvedServerId = userServer!.server_id;
   } else {
     const { data: server } = await supabase.from('servers').select('name').eq('id', resolvedServerId).single();
 
@@ -182,7 +183,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   });
 
   // log final slides
-  // console.log('📊 Final slides generated for theme slider:', slides);
+  console.log('📊 Final slides generated for theme slider:', slides);
 
   return { serverName, serverId: resolvedServerId, themes: slides };
 }

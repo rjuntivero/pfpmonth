@@ -16,10 +16,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const nowUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
 
   const isPast = dateObj && dateObj < nowUTC;
-
   const { themes: slides } = await fetchThemes(dateObj?.getFullYear() ?? now.getFullYear());
+  console.log('FETCHED SLIDES: ', slides);
 
   const currentSlide = slides.find((s) => s.theme_month === themeMonth);
+  console.log('CURRENT SLIDE CLICKED: ', currentSlide);
 
   if (!currentSlide) {
     return <EmptyPage slug={slug} />;

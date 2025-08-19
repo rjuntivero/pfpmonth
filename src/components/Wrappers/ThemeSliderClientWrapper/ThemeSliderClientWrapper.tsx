@@ -9,15 +9,18 @@ import { Slide } from '@/types/Slide';
 
 interface Props {
   serverId: string;
+  serverName?: string;
   initialThemes: Slide[];
   initialYear: number;
+  isHomePage?: boolean;
 }
 
-export default function ThemeSliderClientWrapper({ serverId, initialThemes, initialYear }: Props) {
+export default function ThemeSliderClientWrapper({ serverId, initialThemes, serverName, initialYear, isHomePage }: Props) {
   const dispatch = useDispatch();
   const year = useAppSelector((state) => state.theme.year);
   const loaded = useAppSelector((state) => state.theme.loaded);
   const [hydrated, setHydrated] = useState(false);
+  console.log('one the homeepage: ', isHomePage);
 
   const handleYearUpdate = (updatedYear: number) => {
     dispatch(setThemeYear(updatedYear));
@@ -50,7 +53,9 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [year, serverId, dispatch]);
-
+  if (isHomePage) {
+    return <ThemeSlider serverName={serverName} display="both" monthClassName={styles.themesPage} />;
+  }
   return (
     <>
       <div className={styles.yearNav}>
@@ -69,7 +74,7 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, init
           <div className={styles.loader}></div>
         </div>
       ) : (
-        <ThemeSlider display="none" monthClassName={styles.themesPage} />
+        <ThemeSlider display={'none'} monthClassName={styles.themesPage} />
       )}
     </>
   );

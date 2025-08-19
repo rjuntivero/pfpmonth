@@ -22,8 +22,8 @@
 
 .theme-sidebar {
   position: fixed;
-  top: -10;
-  left: 30;
+  top: -10px;
+  left: 30px;
   height: 3rem;
   background-color: var(--main);
   color: var(--background);
@@ -33,7 +33,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   z-index: 999;
   transition: all 0.25s ease-in-out;
 }
@@ -57,6 +57,6 @@
 
 @media (max-width: 900px) {
   .theme-slider {
-    right: -150;
+    right: -150px;
   }
 }

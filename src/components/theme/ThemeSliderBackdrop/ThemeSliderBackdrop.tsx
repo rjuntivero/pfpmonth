@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import styles from './ThemeSliderBackdrop.module.css';
 import { useAppSelector } from '@/state/hooks';
-import { useEffect } from 'react';
 
 interface Props {
   wrapperClassName?: string;

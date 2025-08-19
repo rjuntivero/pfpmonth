@@ -14,24 +14,28 @@ type SupabaseServerRow = {
   }[];
 };
 
-export async function fetchServer(): Promise<Server> {
+export async function fetchServer(): Promise<Server | undefined> {
   const supabase = await createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const { data, error } = await supabase.from('user_servers').select('server_id, servers( name )').eq('user_id', user?.id).maybeSingle<Server>();
+  if (!user) {
+    return undefined;
+  }
+  const { data, error } = await supabase.from('user_servers').select('server_id, servers( name )').eq('user_id', user.id).maybeSingle<SupabaseServerRow>();
 
   if (error) throw new Error(error.message);
 
-  return (
-    data || {
-      server_id: '',
-      name: 'Unknown Server',
-      icon_url: null,
-    }
-  );
+  if (!data) return undefined;
+  const server = Array.isArray(data.servers) ? data.servers[0] : data.servers;
+
+  return {
+    server_id: data.server_id,
+    name: server?.name ?? 'Unknown Server',
+    icon_url: server?.icon_url ?? null,
+  };
 }
 
 export async function fetchServers(): Promise<Server[]> {

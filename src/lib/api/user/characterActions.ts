@@ -49,11 +49,11 @@ export async function fetchCharacters(): Promise<Character[] | undefined> {
   return characterData;
 }
 
-export async function updateCharacterImage(themeId: string, userId: string, fileBuffer: Buffer, fileName: string, fileType?: string): Promise<Character | undefined> {
+export async function updateCharacterImage(themeId: string, userId: string, characterName: string, fileBuffer: Buffer, fileName: string, fileType?: string): Promise<Character | undefined> {
   const supabase = await createClient();
 
   // const filePath = `avatar-images/themes/${themeId}/users/${userId}/${fileName}`;
-  const filePath = `avatar-images/themes/${themeId}/users/${userId}/${fileName}`;
+  const filePath = `avatar-images/themes/${themeId}/users/${userId}/${characterName}/${fileName}`;
 
   // upload file
   const { error: uploadError } = await supabase.storage.from('avatar-images').upload(filePath, fileBuffer, {
@@ -75,16 +75,20 @@ export async function updateCharacterImage(themeId: string, userId: string, file
   }
 
   // upsert user_characters record with new image URL
-  const { data: characterData, error: upsertError } = await supabase.from('user_characters').upsert(
-    [
-      {
-        user_id: userId,
-        theme_id: themeId,
-        image_url: publicUrl,
-      },
-    ],
-    { onConflict: 'user_id,theme_id' }
-  );
+  const { data: characterData, error: upsertError } = await supabase
+    .from('user_characters')
+    .upsert(
+      [
+        {
+          user_id: userId,
+          theme_id: themeId,
+          image_url: publicUrl,
+          name: characterName,
+        },
+      ],
+      { onConflict: 'user_id,theme_id' }
+    )
+    .select();
 
   if (upsertError) {
     console.error('Error upserting character image:', upsertError);

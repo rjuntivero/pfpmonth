@@ -15,7 +15,8 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json();
-  const { themeId, fileBase64, fileName, fileType } = body;
+  const { themeId, fileBase64, fileName, fileType, name } = body;
+  console.log('CHARACTRE TO UPDATE: ', name);
 
   if (!fileBase64 || !fileName) {
     return NextResponse.json({ success: false, error: 'Missing file data' }, { status: 400 });
@@ -26,7 +27,7 @@ export async function POST(req: Request) {
   const fileBuffer = Buffer.from(base64Data, 'base64');
 
   // Call your reusable function here
-  const updatedCharacter = await updateCharacterImage(themeId, user.id, fileBuffer, fileName, fileType);
+  const updatedCharacter = await updateCharacterImage(themeId, user.id, name, fileBuffer, fileName, fileType);
 
   if (!updatedCharacter) {
     return NextResponse.json({ success: false, error: 'Failed to update character image' }, { status: 500 });

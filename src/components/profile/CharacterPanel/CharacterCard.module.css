@@ -28,6 +28,7 @@
   border-radius: 50%;
   display: flex;
   aspect-ratio: 1/1;
+  outline: 1px solid black;
 }
 
 .serverName {

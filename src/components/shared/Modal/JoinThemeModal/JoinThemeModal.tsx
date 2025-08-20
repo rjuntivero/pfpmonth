@@ -3,23 +3,22 @@
 import styles from './JoinThemeModal.module.css';
 import Avatar from '@/components/user/Avatar/Avatar';
 import CharacterSearch from '@/components/character/CharacterSearch/CharacterSearch';
-import { Participant } from '@/types/Participant';
-import User from '@/components/user/User';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { updateCharacterImage } from '@/features/characterSlice';
+import ParticipantList from '@/components/theme/ParticipantList/ParticipantList';
 
 interface Props {
   themeTitle?: string;
   themeId: string;
-  participants?: Participant[] | undefined;
   username?: string;
 }
 
-export default function JoinThemeModal({ themeTitle, themeId, participants, username }: Props) {
+export default function JoinThemeModal({ themeTitle, themeId, username }: Props) {
   const character = useAppSelector((state) => state.character.chosenCharacter[themeId]) || {
     name: 'No Character',
     image_url: '/no-image-placeholder.jpg',
   };
+
   const dispatch = useAppDispatch();
 
   // change character image
@@ -29,6 +28,11 @@ export default function JoinThemeModal({ themeTitle, themeId, participants, user
     reader.onload = async () => {
       const base64Data = (reader.result as string).split(',')[1];
 
+      const previewUrl = reader.result as string;
+
+      // ui image preview
+      dispatch(updateCharacterImage({ themeId, image_url: previewUrl }));
+
       const res = await fetch('/api/user/character/image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -36,6 +40,7 @@ export default function JoinThemeModal({ themeTitle, themeId, participants, user
           themeId,
           fileBase64: base64Data,
           fileName: file.name,
+          name: character.name,
         }),
       });
 
@@ -72,7 +77,7 @@ export default function JoinThemeModal({ themeTitle, themeId, participants, user
           </div>
           <div className={styles.participants}>
             <h1 className={styles.participantTitle}>Claimed Characters</h1>
-            {participants && participants?.length > 0 ? participants?.map((participant) => <User participant={participant} key={participant.character_name} />) : 'No current participants'}
+            <ParticipantList />
           </div>
         </div>
       </div>

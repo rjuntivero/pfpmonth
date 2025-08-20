@@ -32,8 +32,8 @@
 
 .frameWrapper {
   position: absolute;
-  top: -60;
-  left: 0;
+  top: -60px;
+  left: 0px;
   width: 100vw;
   height: auto;
   aspect-ratio: 1606 / 552;

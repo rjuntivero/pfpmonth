@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import styles from './ThemePage.module.css';
 import ThemeBackground from '@/components/theme/ThemeBackground/ThemeBackground';
-import User from '@/components/user/User';
 import { fetchThemeData } from '@/lib/api/theme/fetchThemeData';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 import JoinThemeModal from '@/components/shared/Modal/JoinThemeModal/JoinThemeModal';
@@ -9,6 +8,7 @@ import { Slide } from '@/types/Slide';
 import Avatar from '@/components/user/Avatar/Avatar';
 import { fetchCharacter } from '@/lib/api/user/characterActions';
 import CharacterInitWrapper from '@/components/wrappers/CharacterInitWrapper/CharacterInitWrapper';
+import ParticipantList from '@/components/theme/ParticipantList/ParticipantList';
 // import Figure from '@/components/ui/Figure/Figure';
 // import Avatar from '@/components/user/Avatar/Avatar';
 // import fetchUser from '@/lib/api/user/fetchUser';
@@ -44,7 +44,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
           <h1>{themeData?.name || 'null'}</h1>
           {!inPast && (
             <ButtonModalWrapper buttonText="Join Theme" modalClassName="joinModal">
-              <JoinThemeModal themeTitle={themeData?.name} themeId={themeData!.id} participants={themeData?.participants} username={themeData?.created_by.username} />
+              <JoinThemeModal themeTitle={themeData?.name} themeId={themeData!.id} username={themeData?.created_by.username} />
             </ButtonModalWrapper>
           )}
           <div className={styles.reviews}>
@@ -67,9 +67,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
           <section className={styles.participants}>
             <h1>{themeData?.participants.length} participants:</h1>
             <div className={styles.users}>
-              {themeData?.participants.map((participant, i: number) => (
-                <User key={`${participant.username}-${i}`} participant={participant} />
-              ))}
+              <ParticipantList />
             </div>
           </section>
           <section className={styles.stats}>

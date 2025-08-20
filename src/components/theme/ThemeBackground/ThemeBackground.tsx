@@ -13,7 +13,6 @@ interface ThemeProps {
 
 export default function ThemeBackground({ themeImage, wrapperClassName = '', imageClassName = '', style = {} }: ThemeProps) {
   const safeThemeImage = themeImage ? encodeURI(themeImage) : '/no-image-placeholder.jpg';
-  const activeSlide = useAppSelector((state) => state.theme.activeSlide);
 
   return (
     <div className={`${wrapperClassName}  ${styles.fadeInZoom}`} style={style}>

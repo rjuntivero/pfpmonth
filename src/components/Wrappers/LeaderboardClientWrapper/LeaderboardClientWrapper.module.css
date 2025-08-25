@@ -34,10 +34,6 @@
   font-family: var(--font-baloo);
 }
 
-.header h2:last-child {
-  color: var(--accent);
-}
-
 .themeTitle {
   font-size: 4rem;
   color: var(--main);
@@ -79,7 +75,7 @@
 }
 
 .topUser::before {
-  content: 'raipunzel';
+  content: attr(data-name);
   display: flex;
   justify-content: center;
   padding-bottom: 1rem;

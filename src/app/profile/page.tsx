@@ -12,12 +12,16 @@ import CharacterPanel from '@/components/profile/CharacterPanel/CharacterPanel';
 import ThemePanel from '@/components/profile/ThemePanel/ThemePanel';
 import ThemePreview from '@/components/profile/ThemePanel/ThemePreview';
 import TimelinePanel from '@/components/profile/TimelinePanel/TimelinePanel';
+import Image from 'next/image';
 
 export default async function Profile() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
   const themes = await fetchThemes(currentYear, serverId);
-  const badges = [];
+  const badges = [
+    { title: 'fastest to participate!', image: '/badge.png' },
+    { title: 'Most often to participate!', image: '/badge.png' },
+  ];
 
   const { username, joined_at, avatar_url } = await fetchUserData();
   const characters = await fetchCharacters();
@@ -46,11 +50,9 @@ export default async function Profile() {
             </div>
             <div className={styles.milestoneWrapper}>
               <div className={`${styles.badgeWrapper} ${styles.wrapper}`}>
-                {badges.length > 0 && (
-                  <ProfilePanel className={styles.badges}>
-                    <i>badges</i>
-                  </ProfilePanel>
-                )}
+                <ProfilePanel className={styles.badges} contentClassName={styles.rowWrap}>
+                  <i>{badges.length > 0 ? badges.map((badge) => <Image key={badge.title} src={badge.image} alt="badge image" width={150} height={150} />) : 'no badges, go out and join some themes!'}</i>
+                </ProfilePanel>
               </div>
               <div className={`${styles.timelineWrapper} ${styles.wrapper}`}>
                 <TimelinePanel themes={themes.themes} />

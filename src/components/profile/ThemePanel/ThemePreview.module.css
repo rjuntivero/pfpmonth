@@ -5,6 +5,7 @@
   justify-content: center;
   text-align: center;
   gap: 1rem;
+  overflow-y: auto;
 }
 
 .container .image {
@@ -20,7 +21,10 @@
 }
 
 .container .themeTitle {
-  font-size: 1.5rem;
+  font-size: clamp(1.5rem, 8vw, 3rem);
+  word-wrap: break-word;
+  text-align: center;
+  line-height: 1.2;
 }
 
 .container .themeYear {
@@ -32,7 +36,10 @@
   font-weight: 400;
 }
 
-.container .image .imageContainer {
+.container .imageContainer {
   display: flex;
   object-fit: cover;
+  max-width: 400px;
+  aspect-ratio: 3/4;
+  width: 100%;
 }

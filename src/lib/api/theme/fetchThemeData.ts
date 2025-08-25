@@ -74,6 +74,7 @@ export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?:
       description, 
       image_url,
       status, 
+      theme_month,
       created_by:users!themes_created_by_fkey ( 
         username, 
         avatar_url

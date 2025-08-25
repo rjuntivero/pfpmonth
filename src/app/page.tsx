@@ -6,6 +6,7 @@ import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import { cookies } from 'next/headers';
 import { Metadata } from 'next';
 import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
+import Button from '@/components/shared/Button/Button';
 
 export const metadata: Metadata = {
   title: 'PFPMonth - Home',
@@ -75,6 +76,7 @@ export default async function Page() {
           <CallToAction />
         </section>
       </main>
+      <Button className={styles.pollButton}>Whats popping?</Button>
     </div>
   );
 }

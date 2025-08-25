@@ -1,6 +1,7 @@
 'use client';
 
 import styles from './ThemePanel.module.css';
+import { AnimatePresence } from 'motion/react';
 
 interface Props {
   heading?: string;
@@ -16,7 +17,9 @@ export default function ThemePanel({ heading, children, className = '', headingC
       {heading && <h1 className={`${styles.heading} ${headingClassName}`}>{heading}</h1>}
 
       <section className={`${styles.panel} ${className}`}>
-        <div className={`${styles.content} ${contentClassName}`}>{children}</div>
+        <div className={`${styles.content} ${contentClassName}`}>
+          <AnimatePresence>{children}</AnimatePresence>
+        </div>
       </section>
     </div>
   );

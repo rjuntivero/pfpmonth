@@ -8,7 +8,7 @@ import ThemeOverviewPanel from '@/components/layout/ThemeOverviewPanel/ThemeOver
 import { requireAuth } from '@/lib/auth/requireAuth';
 import { fetchServer } from '@/lib/api/server/fetchServer';
 import ThemeSliderBackdrop from '@/components/theme/ThemeSliderBackdrop/ThemeSliderBackdrop';
-
+import Link from 'next/link';
 export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
@@ -20,6 +20,10 @@ export default async function Page() {
 
   return (
     <div className={styles.page}>
+      <Link href={`/themes/vote`} className={styles.pollButton}>
+        Whats popping?
+      </Link>
+
       <main className={styles.main}>
         <div className={styles.heading}>
           <ThemeSliderBackdrop wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />

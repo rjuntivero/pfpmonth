@@ -165,3 +165,8 @@ a.secondary {
   border-radius: 20px;
   font-size: 1.25rem;
 }
+
+.pollButton {
+  position: fixed;
+  z-index: 2000;
+}

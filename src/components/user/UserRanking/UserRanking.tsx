@@ -23,7 +23,7 @@ export default function UserRanking({ member, index }: Props) {
       <div className={styles.info}>
         <h1>{member.discord_users.username}</h1>
         {/* {!member?.user_id ? <p>not yet participated</p> : ''} */}
-        <p>2 day streak</p>
+        {!member?.user_id ? <p>No participation</p> : <p>2 day streak</p>}
       </div>
     </motion.div>
   );

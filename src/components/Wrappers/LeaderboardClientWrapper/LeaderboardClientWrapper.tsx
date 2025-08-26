@@ -5,23 +5,46 @@ import styles from './LeaderboardClientWrapper.module.css';
 import UserRanking from '@/components/user/UserRanking/UserRanking';
 import { useEffect, useState } from 'react';
 import { GuildMember } from '@/types/User';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import DropdownIcon from '@/components/shared/Dropdown/DropdownIcon/DropdownIcon';
+import Dropdown from '@/components/shared/Dropdown/Dropdown';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { setChosenMonth, setChosenYear } from '@/features/leaderboardSlice';
 
-export default function LeaderboardClientWrapper({ serverName }: { serverName?: string }) {
-  const [year, _setYear] = useState('2025');
+interface Props {
+  serverName: string;
+  serverId?: string;
+}
+
+export default function LeaderboardClientWrapper({ serverName, serverId }: Props) {
+  const [currentYear, _setYear] = useState('2025');
   const [guildMembers, setGuildMembers] = useState<GuildMember[]>([]);
 
   const now = new Date();
   const currentMonth = now.toLocaleString('default', { month: 'long' });
-  const [chosenMonth, setChosenMonth] = useState<string>(currentMonth);
-  const [chosenYear, setChosenYear] = useState<string>(year);
+
+  const dispatch = useAppDispatch();
+  const chosenMonth = useAppSelector((state) => state.leaderboard.chosenMonth);
+  const chosenYear = useAppSelector((state) => state.leaderboard.chosenYear);
+
+  // initialize chosenYear and chosenMonth
+  useEffect(() => {
+    dispatch(setChosenYear(currentYear));
+    dispatch(setChosenMonth(currentMonth));
+  }, [dispatch, currentYear, currentMonth]);
+
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
+  const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState(false);
 
   //temp test data for top users
   const users = [
     { name: 'rjflavorred', imageURL: '/profile.webp' },
     { name: 'raipunzel', imageURL: '/bubblegum.jpg' },
-    { name: 'Aurora', imageURL: '/simpsons.avif' },
+    { name: 'pluviosprout', imageURL: '/simpsons.avif' },
   ];
+
+  const years = ['2015', '2016', '2017', '2018', '2019', '2020'];
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   // // test data of 20 users
   // const testGuildMembers: GuildMember[] = Array.from({ length: 20 }, (_, i) => ({
@@ -53,6 +76,7 @@ export default function LeaderboardClientWrapper({ serverName }: { serverName?: 
         });
         const guildData = await guildRes.json();
         setGuildMembers(guildData);
+        // await fetchRankings(chosenMonth, chosenYear, serverId, guildData);
         console.log(guildData);
       } catch (err) {
         console.error('Failed to fetch guild data:', err);
@@ -61,17 +85,62 @@ export default function LeaderboardClientWrapper({ serverName }: { serverName?: 
     fetchGuild();
   }, []);
 
+  // dropdown logic
+  const toggleMonthDropdown = () => {
+    setIsMonthDropdownOpen((prev) => !prev);
+  };
+
+  const toggleYearDropdown = () => {
+    setIsYearDropdownOpen((prev) => !prev);
+  };
+
+  const handleMonthSelect = (month: string) => {
+    dispatch(setChosenMonth(month));
+    setIsMonthDropdownOpen(false);
+  };
+
+  const handleYearSelect = (year: string) => {
+    dispatch(setChosenYear(year));
+    setIsYearDropdownOpen(false);
+  };
+
   return (
     <>
       <section className={styles.pedestals}>
         <div className={styles.themeDetails}>
-          <div className={styles.header}>
-            <h2 className={styles.serverName}>{serverName}</h2>
-          </div>
+          <h2 className={styles.serverName}>{serverName}</h2>
           <h1 className={styles.themeTitle}>Adventure Time</h1>
           <div className={styles.filters}>
-            <button>{chosenMonth}</button>
-            <button>{chosenYear}</button>
+            <div className={styles.dropdownContainer}>
+              <button onClick={toggleMonthDropdown} className={`${isMonthDropdownOpen && styles.openDropdown}`}>
+                {chosenMonth}
+                <DropdownIcon />
+              </button>
+              <AnimatePresence>
+                {isMonthDropdownOpen && (
+                  <motion.div className={styles.dropdownWrapper} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+                    <Dropdown onSelect={handleMonthSelect} selected={chosenMonth}>
+                      {monthNames}
+                    </Dropdown>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+            <div className={styles.dropdownContainer}>
+              <button onClick={toggleYearDropdown} className={`${isYearDropdownOpen && styles.openDropdown}`}>
+                {chosenYear}
+                <DropdownIcon />
+              </button>
+              <AnimatePresence>
+                {isYearDropdownOpen && (
+                  <motion.div className={styles.dropdownWrapper} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+                    <Dropdown onSelect={handleYearSelect} selected={chosenYear}>
+                      {years}
+                    </Dropdown>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
         <div className={styles.topUsers}>

@@ -9,7 +9,7 @@ export default async function Leaderboard() {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <LeaderboardClientWrapper serverName={serverName} />
+        <LeaderboardClientWrapper serverName={serverName} serverId={server?.server_id} />
       </main>
     </div>
   );

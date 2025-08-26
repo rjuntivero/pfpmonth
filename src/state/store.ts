@@ -3,6 +3,7 @@ import themeReducer from '../features/themeSlice';
 import modalReducer from '../features/modalSlice';
 import characterReducer from '../features/characterSlice';
 import profileReducer from '../features/profileSlice';
+import leaderboardReducer from '../features/leaderboardSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     modal: modalReducer,
     character: characterReducer,
     profile: profileReducer,
+    leaderboard: leaderboardReducer,
   },
 });
 

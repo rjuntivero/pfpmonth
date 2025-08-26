@@ -55,7 +55,7 @@ export default async function Profile() {
                 </ProfilePanel>
               </div>
               <div className={`${styles.timelineWrapper} ${styles.wrapper}`}>
-                <TimelinePanel themes={themes.themes} />
+                <TimelinePanel themes={themes.themes} userCharacters={characters ?? []} />
               </div>
             </div>
           </section>

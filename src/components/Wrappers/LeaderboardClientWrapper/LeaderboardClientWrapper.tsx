@@ -111,36 +111,8 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
           <h2 className={styles.serverName}>{serverName}</h2>
           <h1 className={styles.themeTitle}>Adventure Time</h1>
           <div className={styles.filters}>
-            <div className={styles.dropdownContainer}>
-              <button onClick={toggleMonthDropdown} className={`${isMonthDropdownOpen && styles.openDropdown}`}>
-                {chosenMonth}
-                <DropdownIcon />
-              </button>
-              <AnimatePresence>
-                {isMonthDropdownOpen && (
-                  <motion.div className={styles.dropdownWrapper} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
-                    <Dropdown onSelect={handleMonthSelect} selected={chosenMonth}>
-                      {monthNames}
-                    </Dropdown>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-            <div className={styles.dropdownContainer}>
-              <button onClick={toggleYearDropdown} className={`${isYearDropdownOpen && styles.openDropdown}`}>
-                {chosenYear}
-                <DropdownIcon />
-              </button>
-              <AnimatePresence>
-                {isYearDropdownOpen && (
-                  <motion.div className={styles.dropdownWrapper} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
-                    <Dropdown onSelect={handleYearSelect} selected={chosenYear}>
-                      {years}
-                    </Dropdown>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            <div className={styles.dropdownContainer}>{<Dropdown onSelect={handleMonthSelect} selected={chosenMonth} items={monthNames} />}</div>
+            <div className={styles.dropdownContainer}>{<Dropdown onSelect={handleYearSelect} selected={chosenYear} items={years} />}</div>
           </div>
         </div>
         <div className={styles.topUsers}>

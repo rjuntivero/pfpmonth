@@ -23,5 +23,18 @@
   font-size: clamp(1.25rem, 2.5vw, 1.5rem);
 }
 
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  outline: 1px solid red;
+}
+
+.headerAction {
+  display: flex;
+  align-items: center;
+}
+
 @media screen and (max-width: 600px) {
 }

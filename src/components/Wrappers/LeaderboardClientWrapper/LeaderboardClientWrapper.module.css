@@ -53,29 +53,9 @@
   min-width: 150px;
 }
 
-.filters button.openDropdown {
-  border-bottom-right-radius: 0px;
-  border-bottom-left-radius: 0px;
-  transition: 0.3s all ease-out;
-}
-
-.filters button .dropdownWrapper {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  transform-origin: top;
-  z-index: 5;
-}
-
 .filters button {
   position: relative;
   z-index: 6;
-}
-
-.dropdownContainer {
-  position: relative;
-  z-index: 99;
 }
 
 .topUsers {

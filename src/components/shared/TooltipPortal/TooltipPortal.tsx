@@ -39,10 +39,10 @@ export default function TooltipPortal({ children, position }: Props) {
     ? createPortal(
         <motion.div
           ref={tooltipRef}
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
+          transition={{ duration: 0.2, ease: 'easeOut', delay: 0.3 }}
           style={{
             position: 'fixed',
             top: adjustedPos.top,

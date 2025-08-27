@@ -1,12 +1,10 @@
 import TrendingThemes from '@/components/theme/TrendingThemes/TrendingThemes';
 import styles from './page.module.css';
 import CallToAction from '@/components/layout/CallToAction/CallToAction';
-import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import { cookies } from 'next/headers';
 import { Metadata } from 'next';
 import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
-import Button from '@/components/shared/Button/Button';
 
 export const metadata: Metadata = {
   title: 'PFPMonth - Home',
@@ -76,7 +74,6 @@ export default async function Page() {
           <CallToAction />
         </section>
       </main>
-      <Button className={styles.pollButton}>Whats popping?</Button>
     </div>
   );
 }

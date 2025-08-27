@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { Slide } from '@/types/Slide';
 import ProfilePanel from '../ProfilePanel/ProfilePanel';
 import TooltipPortal from '@/components/shared/TooltipPortal/TooltipPortal';
@@ -8,6 +8,8 @@ import styles from './TimelinePanel.module.css';
 import ErrorIcon from '@/components/shared/ErrorIcon/ErrorIcon';
 import JoinIcon from '@/components/shared/JoinIcon/JoinIcon';
 import LeaveIcon from '@/components/shared/LeaveIcon/LeaveIcon';
+import User from '@/components/user/User';
+import Dropdown from '@/components/shared/Dropdown/Dropdown';
 
 interface Props {
   themes: Slide[];
@@ -15,15 +17,15 @@ interface Props {
 }
 
 export default function TimelinePanel({ themes, userCharacters }: Props) {
-  const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
+  const [tooltip, setTooltip] = useState<{ content: ReactNode; x: number; y: number } | null>(null);
 
-  const handleMouseEnter = (e: React.MouseEvent, text: string) => {
+  const handleMouseEnter = (e: React.MouseEvent, content: ReactNode) => {
     const rect = (e.target as HTMLElement).getBoundingClientRect();
-    setTooltip({ text, x: rect.left + rect.width / 2, y: rect.top });
+    setTooltip({ content, x: rect.left + rect.width / 2, y: rect.top });
   };
 
-  const handleMouseMove = (e: React.MouseEvent, text: string) => {
-    setTooltip({ text, x: e.clientX, y: e.clientY });
+  const handleMouseMove = (e: React.MouseEvent, content: ReactNode) => {
+    setTooltip({ content, x: e.clientX, y: e.clientY });
   };
 
   const handleMouseLeave = () => {
@@ -31,9 +33,9 @@ export default function TimelinePanel({ themes, userCharacters }: Props) {
   };
 
   // for mobile devices
-  const handleTouchStart = (e: React.TouchEvent, text: string) => {
+  const handleTouchStart = (e: React.TouchEvent, content: ReactNode) => {
     const touch = e.touches[0];
-    setTooltip({ text, x: touch.clientX, y: touch.clientY });
+    setTooltip({ content, x: touch.clientX, y: touch.clientY });
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -45,14 +47,15 @@ export default function TimelinePanel({ themes, userCharacters }: Props) {
     setTooltip(null);
   };
 
+  const testArray = ['hello', 'annyeong'];
   return (
-    <ProfilePanel heading="Timeline" className={styles.timeline} contentClassName={styles.timelineContent}>
+    <ProfilePanel heading="Timeline" className={styles.timeline} contentClassName={styles.timelineContent} headerAction={<Dropdown selected="All" onSelect={(val) => console.log(val)} content={['All', 'Joined', 'Not Joined']} />}>
       {themes?.map((theme) => {
         const monthLabel = theme?.theme_month ? new Date(Number(theme.theme_month.split('-')[0]), Number(theme.theme_month.split('-')[1]) - 1).toLocaleString('default', { month: 'long' }) : 'N/A';
 
         const hasTheme = Boolean(theme.id);
         const userJoined = userCharacters.some((char) => char.theme_id === theme.id);
-        const tooltipText = hasTheme ? (userJoined ? 'You joined this theme!' : 'You did not join this theme') : 'No theme this month';
+        const tooltipText = hasTheme ? userJoined ? <User /> : 'You did not join this theme' : 'No theme';
 
         return (
           <div
@@ -75,7 +78,7 @@ export default function TimelinePanel({ themes, userCharacters }: Props) {
         );
       })}
 
-      {tooltip && <TooltipPortal position={{ x: tooltip.x, y: tooltip.y }}>{tooltip.text}</TooltipPortal>}
+      {tooltip && <TooltipPortal position={{ x: tooltip.x, y: tooltip.y }}>{tooltip.content}</TooltipPortal>}
     </ProfilePanel>
   );
 }

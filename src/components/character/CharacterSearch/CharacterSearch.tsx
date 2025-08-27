@@ -17,7 +17,7 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
   const [filteredResults, setFilteredResults] = useState<ClaimedCharacter[]>([]);
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState(false);
-  const claimedCharacter = useAppSelector((state) => state.character.chosenCharacter[themeId]);
+  const claimedCharacter = useAppSelector((state) => state.character.chosenCharacter[themeId as string]);
 
   const dispatch = useAppDispatch();
 

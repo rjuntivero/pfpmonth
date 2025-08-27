@@ -71,7 +71,7 @@
 .milestoneWrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 2rem;
 }
 
 .badgeWrapper {
@@ -94,7 +94,7 @@
 
 .timelineWrapper {
   padding: var(--padding-panel-lg);
-  & h1 {
+  & h1:not(:first-child) {
     color: var(--main);
   }
 }

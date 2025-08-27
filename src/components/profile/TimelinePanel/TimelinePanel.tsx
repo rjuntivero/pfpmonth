@@ -47,9 +47,8 @@ export default function TimelinePanel({ themes, userCharacters }: Props) {
     setTooltip(null);
   };
 
-  const testArray = ['hello', 'annyeong'];
   return (
-    <ProfilePanel heading="Timeline" className={styles.timeline} contentClassName={styles.timelineContent} headerAction={<Dropdown selected="All" onSelect={(val) => console.log(val)} content={['All', 'Joined', 'Not Joined']} />}>
+    <ProfilePanel heading="Timeline" className={styles.timeline} contentClassName={styles.timelineContent} headerAction={<Dropdown selected="2025" onSelect={(val) => console.log(val)} items={['2025', '2024', '2023']} />}>
       {themes?.map((theme) => {
         const monthLabel = theme?.theme_month ? new Date(Number(theme.theme_month.split('-')[0]), Number(theme.theme_month.split('-')[1]) - 1).toLocaleString('default', { month: 'long' }) : 'N/A';
 

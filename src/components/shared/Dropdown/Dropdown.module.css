@@ -12,8 +12,25 @@
   z-index: 99;
 }
 
-.openDropdown {
+button.filtersButton.openDropdown {
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
   transition: 0.3s all ease-out;
+  outline: 2px solid var(--text);
+}
+
+button.filtersButton {
+  font-size: 1.5rem;
+  font-weight: 400;
+  padding-inline: 1rem;
+  padding-block: 0.75rem;
+  border-radius: 20px;
+  background-color: var(--main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  transition: 0.3s all ease-out;
+  min-width: 150px;
 }

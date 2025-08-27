@@ -5,7 +5,8 @@
   text-align: start;
   left: 0;
   background-color: var(--text);
-  border-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   box-shadow: var(--shadow);
   color: var(--foreground);
   z-index: 99;

@@ -111,8 +111,8 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
           <h2 className={styles.serverName}>{serverName}</h2>
           <h1 className={styles.themeTitle}>Adventure Time</h1>
           <div className={styles.filters}>
-            <div className={styles.dropdownContainer}>{<Dropdown onSelect={handleMonthSelect} selected={chosenMonth} items={monthNames} />}</div>
-            <div className={styles.dropdownContainer}>{<Dropdown onSelect={handleYearSelect} selected={chosenYear} items={years} />}</div>
+            <Dropdown onSelect={handleMonthSelect} selected={chosenMonth} items={monthNames} />
+            <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={years} />
           </div>
         </div>
         <div className={styles.topUsers}>

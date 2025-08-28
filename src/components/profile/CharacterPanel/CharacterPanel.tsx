@@ -1,8 +1,7 @@
 'use client';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/state/store';
-import { setLoading, setSelectedCharacterName } from '@/features/profileSlice';
+import { useDispatch } from 'react-redux';
+import { setLoading, setSelectedCharacterName, setSelectedCharacterYear } from '@/features/profileSlice';
 import ProfilePanel from '../ProfilePanel/ProfilePanel';
 import CharacterCard from '@/components/profile/CharacterPanel/CharacterCard';
 import styles from './CharacterPanel.module.css';
@@ -56,7 +55,8 @@ interface Props {
 
 export default function CharacterPanel({ characters }: Props) {
   const dispatch = useDispatch();
-  const selectedCharacter = useSelector((state: RootState) => state.profile.selectedCharacter);
+  const selectedCharacter = useAppSelector((state) => state.profile.selectedCharacter);
+  const selectedCharacterYear = useAppSelector((state) => state.profile.selectedCharacterYear);
   const [filteredCharacters, setFilteredCharacters] = useState<Character[]>([]);
   const loading = useAppSelector((state) => state.profile.loading);
 
@@ -67,8 +67,6 @@ export default function CharacterPanel({ characters }: Props) {
         dispatch(setSelectedCharacterName(characters[0]));
       }
       dispatch(setLoading(false));
-    } else {
-      dispatch(setLoading(true));
     }
   }, [characters, dispatch]);
 
@@ -86,7 +84,7 @@ export default function CharacterPanel({ characters }: Props) {
       contentClassName={styles.characterContent}
       headerAction={
         <>
-          <Dropdown selected="2025" onSelect={(val) => console.log(val)} items={['2025', '2024', '2023']} />
+          <Dropdown selected={selectedCharacterYear} onSelect={(val: string) => dispatch(setSelectedCharacterYear(val))} items={['2025', '2024', '2023']} />
         </>
       }
     >

@@ -5,12 +5,16 @@ interface ProfileState {
   selectedServerId: string | null;
   selectedCharacter: Character | null;
   loading?: boolean;
+  selectedCharacterYear: string;
+  selectedTimelineYear: string;
 }
 
 const initialState: ProfileState = {
   selectedServerId: null,
   selectedCharacter: null,
-  loading: false,
+  loading: true,
+  selectedCharacterYear: '2025',
+  selectedTimelineYear: '2025',
 };
 
 const profileSlice = createSlice({
@@ -27,8 +31,14 @@ const profileSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.loading = action.payload;
     },
+    setSelectedCharacterYear(state, action: PayloadAction<string>) {
+      state.selectedCharacterYear = action.payload;
+    },
+    setSelectedTimelineYear(state, action: PayloadAction<string>) {
+      state.selectedTimelineYear = action.payload;
+    },
   },
 });
 
-export const { setSelectedServerId, setSelectedCharacterName, setLoading } = profileSlice.actions;
+export const { setSelectedServerId, setSelectedCharacterName, setLoading, setSelectedCharacterYear, setSelectedTimelineYear } = profileSlice.actions;
 export default profileSlice.reducer;

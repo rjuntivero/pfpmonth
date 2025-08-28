@@ -1,6 +1,5 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
 import { Slide } from '@/types/Slide';
 import ProfilePanel from '../ProfilePanel/ProfilePanel';
 import TooltipPortal from '@/components/shared/TooltipPortal/TooltipPortal';
@@ -10,6 +9,10 @@ import JoinIcon from '@/components/shared/JoinIcon/JoinIcon';
 import LeaveIcon from '@/components/shared/LeaveIcon/LeaveIcon';
 import User from '@/components/user/User';
 import Dropdown from '@/components/shared/Dropdown/Dropdown';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '@/state/hooks';
+import { setSelectedTimelineYear } from '@/features/profileSlice';
+import { useTooltip } from '@/hooks/useTooltip';
 
 interface Props {
   themes: Slide[];
@@ -17,38 +20,19 @@ interface Props {
 }
 
 export default function TimelinePanel({ themes, userCharacters }: Props) {
-  const [tooltip, setTooltip] = useState<{ content: ReactNode; x: number; y: number } | null>(null);
+  const dispatch = useDispatch();
 
-  const handleMouseEnter = (e: React.MouseEvent, content: ReactNode) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    setTooltip({ content, x: rect.left + rect.width / 2, y: rect.top });
-  };
+  const selectedTimelineYear = useAppSelector((state) => state.profile.selectedTimelineYear);
 
-  const handleMouseMove = (e: React.MouseEvent, content: ReactNode) => {
-    setTooltip({ content, x: e.clientX, y: e.clientY });
-  };
-
-  const handleMouseLeave = () => {
-    setTooltip(null);
-  };
-
-  // for mobile devices
-  const handleTouchStart = (e: React.TouchEvent, content: ReactNode) => {
-    const touch = e.touches[0];
-    setTooltip({ content, x: touch.clientX, y: touch.clientY });
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    setTooltip((prev) => (prev ? { ...prev, x: touch.clientX, y: touch.clientY } : null));
-  };
-
-  const handleTouchEnd = () => {
-    setTooltip(null);
-  };
+  const { tooltip, handleMouseEnter, handleMouseMove, handleMouseLeave, handleTouchStart, handleTouchMove, handleTouchEnd } = useTooltip();
 
   return (
-    <ProfilePanel heading="Timeline" className={styles.timeline} contentClassName={styles.timelineContent} headerAction={<Dropdown selected="2025" onSelect={(val) => console.log(val)} items={['2025', '2024', '2023']} />}>
+    <ProfilePanel
+      heading="Timeline"
+      className={styles.timeline}
+      contentClassName={styles.timelineContent}
+      headerAction={<Dropdown selected={selectedTimelineYear} onSelect={(val: string) => dispatch(setSelectedTimelineYear(val))} items={['2025', '2024', '2023']} />}
+    >
       {themes?.map((theme) => {
         const monthLabel = theme?.theme_month ? new Date(Number(theme.theme_month.split('-')[0]), Number(theme.theme_month.split('-')[1]) - 1).toLocaleString('default', { month: 'long' }) : 'N/A';
 

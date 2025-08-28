@@ -32,5 +32,6 @@
 }
 
 .selected {
-  background-color: var(--main);
+  pointer-events: none;
+  background-color: color-mix(in srgb, var(--main) 80%, black 40%);
 }

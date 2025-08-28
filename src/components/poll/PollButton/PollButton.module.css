@@ -21,7 +21,7 @@
   background: var(--text);
   z-index: 0;
   height: 100px;
-  box-shadow: 0px 1px 8px 3px var(--main);
+  box-shadow: inset 0px 1px 1px 2px var(--accent), 0px 1px 10px 3px var(--text);
 }
 
 .pollButtonText {
@@ -31,4 +31,5 @@
   text-align: center;
   width: min-content;
   font-weight: 400;
+  text-shadow: var(--text-outline);
 }

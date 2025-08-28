@@ -9,7 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import DropdownIcon from '@/components/shared/Dropdown/DropdownIcon/DropdownIcon';
 import Dropdown from '@/components/shared/Dropdown/Dropdown';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { setChosenMonth, setChosenYear } from '@/features/leaderboardSlice';
+import { setChosenMonth, setChosenYear, setLoaded } from '@/features/leaderboardSlice';
 
 interface Props {
   serverName: string;
@@ -55,7 +55,7 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
   //   },
   //   rank: i + 1, // pretend rank is index + 1
   // }));
-
+  const loading = useAppSelector((state) => state.leaderboard.loaded);
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 6; // max users per page
@@ -71,6 +71,7 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
   useEffect(() => {
     async function fetchGuild() {
       try {
+        dispatch(setLoaded(true));
         const guildRes = await fetch('/api/server/members', {
           method: 'GET',
         });
@@ -78,6 +79,7 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
         setGuildMembers(guildData);
         // await fetchRankings(chosenMonth, chosenYear, serverId, guildData);
         console.log(guildData);
+        dispatch(setLoaded(false));
       } catch (err) {
         console.error('Failed to fetch guild data:', err);
       }
@@ -116,11 +118,17 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
           </div>
         </div>
         <div className={styles.topUsers}>
-          {users.map((user, index) => (
-            <motion.div key={user.name} className={styles.topUser} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.2 }} data-name={user.name}>
-              <Avatar imageURL={user.imageURL} className={styles.topUserAvatar} />
-            </motion.div>
-          ))}
+          {loading ? (
+            <div className={styles.loaderWrapper}>
+              <div className={styles.loader}></div>
+            </div>
+          ) : (
+            users.map((user, index) => (
+              <motion.div key={user.name} className={styles.topUser} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.2 }} data-name={user.name}>
+                <Avatar imageURL={user.imageURL} className={styles.topUserAvatar} />
+              </motion.div>
+            ))
+          )}
         </div>
       </section>
       {/* <section className={styles.rankingList}>
@@ -144,12 +152,17 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
             {'>'}
           </button>
         </div>
-
-        {currentMembers.map((member, i) => (
-          <div key={member.discord_users.username}>
-            <UserRanking member={member} index={startIndex + i} />
+        {loading ? (
+          <div className={styles.loaderWrapper}>
+            <div className={styles.loader}></div>
           </div>
-        ))}
+        ) : (
+          currentMembers.map((member, i) => (
+            <div key={member.discord_users.username}>
+              <UserRanking member={member} index={startIndex + i} />
+            </div>
+          ))
+        )}
       </section>
     </>
   );

@@ -6,12 +6,14 @@ interface LeaderboardState {
   chosenMonth: string;
   chosenYear: string;
   rankings: string[];
+  loaded?: boolean;
 }
 
 const initialState: LeaderboardState = {
   chosenMonth: 'August',
   chosenYear: '2025',
   rankings: [],
+  loaded: false,
 };
 
 const leaderboardSlice = createSlice({
@@ -27,8 +29,11 @@ const leaderboardSlice = createSlice({
     setRankings(state, action: PayloadAction<string[]>) {
       state.rankings = action.payload;
     },
+    setLoaded(state, action: PayloadAction<boolean>) {
+      state.loaded = action.payload;
+    },
   },
 });
 
-export const { setChosenYear, setChosenMonth, setRankings } = leaderboardSlice.actions;
+export const { setChosenYear, setChosenMonth, setRankings, setLoaded } = leaderboardSlice.actions;
 export default leaderboardSlice.reducer;

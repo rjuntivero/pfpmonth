@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation';
 import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/theme/Carousel/Carousel';
-import { Slide } from '@/types/Slide';
 import { useAppSelector } from '@/state/hooks';
 import { useEffect } from 'react';
 

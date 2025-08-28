@@ -12,6 +12,7 @@
   --lg-gap: 2.5rem;
   --panel-padding-lg: 1rem;
   --panel-padding-sm: 0.3rem;
+  --text-outline: 0px 7px 0px rgba(0, 0, 0, 0.75), -2px -2px 0 #251628, 2px -2px 0 #251628, -2px 2px 0 #251628, 2px 2px 0 #251628;
 
   /* Global styles for accessibility */
   :focus-visible {

@@ -7,18 +7,32 @@ import { Character } from '@/types/Character';
 
 interface Props {
   characters: Character[];
-  onSelect?: (character: Character) => void;
+  onSearch?: (results: Character[], chosen?: Character) => void;
 }
 
-export default function Searchbar({ characters, onSelect }: Props) {
+export default function Searchbar({ characters, onSearch }: Props) {
   const [query, setQuery] = useState('');
   const [filteredResults, setFilteredResults] = useState<Character[]>([]);
   const [focused, setFocused] = useState(false);
 
   useEffect(() => {
+    if (query.trim() === '') {
+      setFilteredResults(characters);
+      onSearch?.(characters);
+      return;
+    }
+
     const filtered = characters.filter((char) => char.name.toLowerCase().includes(query.toLowerCase()));
     setFilteredResults(filtered);
+    onSearch?.(filtered);
   }, [query, characters]);
+
+  const handleSelect = (char: Character) => {
+    setQuery(char.name);
+    setFilteredResults([char]);
+    onSearch?.([char], char);
+    setFocused(false);
+  };
 
   return (
     <div className={styles.container}>
@@ -29,15 +43,15 @@ export default function Searchbar({ characters, onSelect }: Props) {
       <div className={`${styles.resultsWrapper} ${focused ? styles.show : ''}`}>
         <ul className={styles.results}>
           {filteredResults.length > 0 ? (
-            filteredResults.map((char, i) => (
-              <li key={i}>
-                <Button variant="character-result" className={`${styles.searchItem} `} onClick={() => onSelect?.(char)}>
+            filteredResults.map((char) => (
+              <li key={char.id}>
+                <Button variant="character-result" className={`${styles.searchItem} `} onClick={() => handleSelect(char)}>
                   {char.name}
                 </Button>
               </li>
             ))
           ) : (
-            <li>No characters found</li>
+            <></>
           )}
         </ul>
       </div>

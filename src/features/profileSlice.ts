@@ -4,11 +4,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface ProfileState {
   selectedServerId: string | null;
   selectedCharacter: Character | null;
+  loading?: boolean;
 }
 
 const initialState: ProfileState = {
   selectedServerId: null,
   selectedCharacter: null,
+  loading: false,
 };
 
 const profileSlice = createSlice({
@@ -22,8 +24,11 @@ const profileSlice = createSlice({
     setSelectedCharacterName(state, action: PayloadAction<Character | null>) {
       state.selectedCharacter = action.payload;
     },
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.loading = action.payload;
+    },
   },
 });
 
-export const { setSelectedServerId, setSelectedCharacterName } = profileSlice.actions;
+export const { setSelectedServerId, setSelectedCharacterName, setLoading } = profileSlice.actions;
 export default profileSlice.reducer;

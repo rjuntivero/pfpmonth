@@ -1,6 +1,6 @@
 'use client';
 
-import Avatar from '@/components/user/Avatar/Avatar';
+import Avatar from '@/components/shared/Avatar/Avatar';
 import styles from './LeaderboardClientWrapper.module.css';
 import UserRanking from '@/components/user/UserRanking/UserRanking';
 import { useEffect, useState } from 'react';

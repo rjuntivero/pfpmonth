@@ -1,4 +1,7 @@
+'use client';
+
 import { AnimatePresence, motion } from 'framer-motion';
+import ReactDOM from 'react-dom';
 import styles from './BaseModal.module.css';
 
 interface BaseModalProps {
@@ -9,7 +12,9 @@ interface BaseModalProps {
 }
 
 export default function BaseModal({ isOpen, onClose, children, className = '' }: BaseModalProps) {
-  return (
+  if (typeof document === 'undefined') return null; // SSR guard
+
+  return ReactDOM.createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div className={styles.overlay} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose}>
@@ -18,6 +23,7 @@ export default function BaseModal({ isOpen, onClose, children, className = '' }:
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }

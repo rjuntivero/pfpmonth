@@ -4,7 +4,7 @@ import LikeButton from '../../shared/Button/Like/LikeButton';
 import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import Avatar from '../../user/Avatar/Avatar';
+import Avatar from '../../shared/Avatar/Avatar';
 import { Poll as PollType } from '@/types/Polls';
 // import User from '../User/User';
 

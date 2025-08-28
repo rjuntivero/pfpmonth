@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import ThemeSlider from '@/components/theme/ThemeSlider/ThemeSlider';
+import ThemeSlider from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSlider/ThemeSlider';
 import styles from './ThemeSliderClientWrapper.module.css';
 import { useDispatch } from 'react-redux';
 import { setLoaded, setThemeYear, setThemes } from '@/features/themeSlice';
@@ -20,7 +20,6 @@ export default function ThemeSliderClientWrapper({ serverId, initialThemes, serv
   const year = useAppSelector((state) => state.theme.year);
   const loaded = useAppSelector((state) => state.theme.loaded);
   const [hydrated, setHydrated] = useState(false);
-  console.log('one the homeepage: ', isHomePage);
 
   const handleYearUpdate = (updatedYear: number) => {
     dispatch(setThemeYear(updatedYear));

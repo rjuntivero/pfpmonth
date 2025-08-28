@@ -1,5 +1,7 @@
 import Button from '@/components/shared/Button/Button';
 import styles from './ThemeOverviewCard.module.css';
+import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
+import SuggestionsModal from '@/components/shared/Modal/SuggestionsModal/SuggestionsModal';
 
 interface Props {
   editing: boolean;
@@ -44,6 +46,9 @@ export default function ThemeControls({ editing, type, onSave, onCancel, onEdit,
       <Button variant="theme-card" onClick={onEdit}>
         edit
       </Button>
+      <ButtonModalWrapper variant="theme-card" buttonText="suggestions" modalClassName="suggestionsModal">
+        <SuggestionsModal />
+      </ButtonModalWrapper>
     </div>
   );
 }

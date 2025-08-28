@@ -5,7 +5,7 @@ import { fetchThemeData } from '@/lib/api/theme/fetchThemeData';
 import ButtonModalWrapper from '@/components/wrappers/ButtonModalWrapper/ButtonModalWrapper';
 import JoinThemeModal from '@/components/shared/Modal/JoinThemeModal/JoinThemeModal';
 import { Slide } from '@/types/Slide';
-import Avatar from '@/components/user/Avatar/Avatar';
+import Avatar from '@/components/shared/Avatar/Avatar';
 import { fetchCharacter } from '@/lib/api/user/characterActions';
 import CharacterInitWrapper from '@/components/wrappers/CharacterInitWrapper/CharacterInitWrapper';
 import ParticipantList from '@/components/theme/ParticipantList/ParticipantList';

@@ -1,5 +1,5 @@
 import styles from './page.module.css';
-import Avatar from '@/components/user/Avatar/Avatar';
+import Avatar from '@/components/shared/Avatar/Avatar';
 import fetchUserData from '@/lib/api/user/fetchUserData';
 import ProfilePanel from '@/components/profile/ProfilePanel/ProfilePanel';
 import { fetchCharacters } from '@/lib/api/user/characterActions';

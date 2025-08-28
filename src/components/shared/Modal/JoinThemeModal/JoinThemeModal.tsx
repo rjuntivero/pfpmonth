@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import styles from './JoinThemeModal.module.css';
-import Avatar from '@/components/user/Avatar/Avatar';
+import Avatar from '@/components/shared/Avatar/Avatar';
 import CharacterSearch from '@/components/character/CharacterSearch/CharacterSearch';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { updateCharacterImage } from '@/features/characterSlice';

@@ -1,7 +1,7 @@
 'use client';
 import Button from '@/components/shared/Button/Button';
 import styles from './ThemeOverviewPanel.module.css';
-import ThemeOverviewCard from '@/components/theme/ThemeOverviewCard/ThemeOverviewCard';
+import ThemeOverviewCard from '@/components/layout/ThemeOverviewPanel/ThemeOverviewCard/ThemeOverviewCard';
 import { useRef, useState } from 'react';
 import { useAppSelector } from '@/state/hooks';
 import { useDispatch } from 'react-redux';

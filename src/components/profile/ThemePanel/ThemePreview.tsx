@@ -51,10 +51,10 @@ export default function ThemePreview() {
         onTouchEnd={handleTouchEnd}
       >
         <Link href={`/themes/month/${themeSlug}`}>
-          <Image src={theme?.image_url || '/no-image-placeholder.jpg'} alt="Theme Preview" width={300} height={400} className={styles.image} />
+          <Image src={theme?.image_url || '/no-image-placeholder.jpg'} alt="Theme Preview" width={400} height={500} className={styles.image} />
         </Link>
       </div>
-      {tooltip && <TooltipPortal position={{ x: tooltip.x, y: tooltip.y }}>{<h1>{tooltip.content}</h1>}</TooltipPortal>}
+      {tooltip && <TooltipPortal position={{ x: tooltip.x, y: tooltip.y }}>{<h1 className={styles.themeTitle}>{tooltip.content}</h1>}</TooltipPortal>}
     </motion.div>
   );
 }

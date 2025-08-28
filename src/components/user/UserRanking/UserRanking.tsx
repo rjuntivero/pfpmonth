@@ -1,6 +1,6 @@
 import { GuildMember } from '@/types/User';
 import styles from './UserRanking.module.css';
-import Avatar from '../Avatar/Avatar';
+import Avatar from '../../shared/Avatar/Avatar';
 import { motion } from 'framer-motion';
 interface Props {
   member: GuildMember;

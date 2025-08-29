@@ -47,6 +47,7 @@
 .header.noTheme h3 {
   color: gray;
   font-weight: 500;
+  font-style: italic;
 }
 
 .header.noTheme h2 {

@@ -12,7 +12,7 @@ interface BaseModalProps {
 }
 
 export default function BaseModal({ isOpen, onClose, children, className = '' }: BaseModalProps) {
-  if (typeof document === 'undefined') return null; // SSR guard
+  if (typeof document === 'undefined') return null;
 
   return ReactDOM.createPortal(
     <AnimatePresence>

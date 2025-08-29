@@ -17,3 +17,9 @@
   z-index: 1000;
   box-shadow: var(--shadow);
 }
+
+@media screen and (max-width: 600px) {
+  .modalContent {
+    padding: 0.2em;
+  }
+}

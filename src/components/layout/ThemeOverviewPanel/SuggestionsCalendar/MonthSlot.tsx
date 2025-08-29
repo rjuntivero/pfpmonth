@@ -27,20 +27,19 @@ export default function MonthSlot({ month, activeSuggestion, onUnassign }: { mon
               ${hasValidTheme ? styles.filled : ''}`}
       style={{ '--bg-image': `url(${month.image ?? '/no-image-placeholder.jpg'})` } as React.CSSProperties & Record<string, string>}
     >
-      <div className={styles.overlay}>
-        {hasValidTheme ? (
-          <>
-            <p>{month.assignedThemeName}</p>
-            {!month.isPreassigned && !month.isDisabled && month.assignedTheme && (
-              <button className={styles.unassignBtn} onClick={() => onUnassign(month.id)}>
-                ×
-              </button>
-            )}
-          </>
-        ) : (
-          <p>{month.month}</p>
-        )}
-      </div>
+      {hasValidTheme ? (
+        <>
+          <p className={styles.monthName}>{month.month}</p>
+          <p className={styles.themeName}>{month.assignedThemeName}</p>
+          {!month.isPreassigned && !month.isDisabled && month.assignedTheme && (
+            <button className={styles.unassignBtn} onClick={() => onUnassign(month.id)}>
+              ×
+            </button>
+          )}
+        </>
+      ) : (
+        <p className={styles.monthName}>{month.month}</p>
+      )}
     </div>
   );
 }

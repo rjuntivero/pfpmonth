@@ -5,6 +5,7 @@ import { Poll } from '@/types/Polls';
 import SuggestionsCalendar, { MonthSlotType, SuggestionType } from '@/components/layout/ThemeOverviewPanel/SuggestionsCalendar/SuggestionsCalendar';
 import { useState } from 'react';
 import { useAppSelector } from '@/state/hooks';
+import Button from '../../Button/Button';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -33,8 +34,8 @@ export default function SuggestionModal() {
 
   const initialSuggestions: SuggestionType[] = [
     { id: 's1', name: 'Superhero Theme', image: '/bubblegum.jpg' },
-    { id: 's2', name: 'Halloween Vibes', image: '/bubblegum.jpg' },
-    { id: 's3', name: 'Winter Wonderland', image: '/bubblegum.jpg' },
+    { id: 's2', name: 'Halloween Vibes', image: '/simpsons.avif' },
+    { id: 's3', name: 'Winter Wonderland', image: '/profile.webp' },
     { id: 's4', name: 'Beach Party', image: '/bubblegum.jpg' },
   ];
 
@@ -68,7 +69,6 @@ export default function SuggestionModal() {
             assignedTheme: suggestion.id,
             assignedThemeName: suggestion.name,
             image: suggestion.image,
-            // save previous assigned suggestion in a temporary property if needed
             previousAssigned: month.assignedTheme
               ? {
                   id: month.assignedTheme,
@@ -106,17 +106,19 @@ export default function SuggestionModal() {
 
     const { assignedTheme, assignedThemeName, image } = month;
 
-    // Clear month
+    // clear month
     setMonths((prev) => prev.map((m) => (m.id === monthId ? { ...m, assignedTheme: undefined, assignedThemeName: undefined, image: undefined } : m)));
 
-    // Add back to pool
+    // add back to pool
     setAvailableSuggestions((prev) => [...prev, { id: assignedTheme, name: assignedThemeName, image: image }]);
   };
 
   return (
     <div className={styles.modalWrapper}>
-      <h2 className={styles.yearTitle}>2025 Overview</h2>
       <SuggestionsCalendar months={visibleMonths} suggestions={availableSuggestions} onAssign={handleAssign} onUnassign={handleUnassign} />
+      <div className={styles.buttonWrapper}>
+        <Button className={styles.confirmButton}>Confirm</Button>
+      </div>
     </div>
   );
 }

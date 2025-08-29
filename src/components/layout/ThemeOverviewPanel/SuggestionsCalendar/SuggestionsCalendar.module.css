@@ -1,20 +1,37 @@
 .container {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  justify-content: center;
   padding: 1rem;
   width: 100%;
   height: 70vh;
+  gap: 1rem;
   box-sizing: border-box;
+}
+
+.calendarWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: stretch;
+  flex: 2;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.calendarWrapper h2 {
+  display: flex;
+  flex-direction: column;
+  font-size: 2rem;
 }
 
 .calendar {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1rem;
-  flex: 2;
   overflow-y: auto;
-  padding: 0.5em;
+  padding: 0.25em;
+  height: 100%;
 }
 
 .monthSlot {
@@ -22,27 +39,42 @@
   border-radius: 8px;
   padding: 0.75rem;
   min-height: 120px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #fefefe;
   transition: all 0.2s ease;
   text-align: center;
   font-weight: 600;
   font-size: 1rem;
   position: relative;
+  line-height: 1.1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.monthSlot p {
+.monthSlot p.themeName {
+  flex: 1;
   transition: transform 0.4s ease;
   max-width: 12ch;
+  font-size: clamp(0.9rem, 1vw, 1rem);
 }
 
-.monthSlot:hover p {
+.monthSlot p.monthName {
+  font-weight: 500;
+  flex: 1;
+  color: var(--accent);
+  font-size: clamp(0.7rem, 1vw, 1rem);
+}
+
+.monthSlot:hover p.themeName {
   transition: transform 0.4s ease;
   transform: scale(1.4);
   color: white;
+}
+
+.monthSlot.filled {
+  border-color: var(--text);
+  background-color: var(--main);
+  filter: saturate(1) brightness(1.4);
+  outline: 4px solid var(--main);
 }
 
 .monthSlot::before {
@@ -66,11 +98,10 @@
   background-color: var(--text);
 }
 
-.monthSlot.filled {
-  border-color: var(--text);
-  background-color: var(--main);
-  filter: saturate(1) brightness(1.4);
-  outline: 4px solid var(--main);
+.yearTitle {
+  text-align: center;
+  font-size: clamp(1rem, 2vw, 2.5em);
+  color: var(--accent);
 }
 
 .monthSlot.over {
@@ -79,27 +110,95 @@
   filter: brightness(1);
 }
 
-.suggestions {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  overflow-y: auto;
-  max-height: 100%;
-  border-left: 2px solid #ddd;
-  padding-left: 1rem;
+.suggestionImageWrapper {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
 }
 
-.suggestion {
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  background-color: #fafafa;
-  cursor: grab;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.suggestionsWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+  border-left: 2px solid gray;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.suggestionsWrapper h2 {
+  font-size: clamp(1rem, 2vw, 2rem);
+  width: max-content;
+}
+
+.suggestions {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 1rem;
+  height: 100%;
+  overflow-y: auto;
+  max-height: 100%;
+  overflow-x: hidden;
+  padding-block: 1rem;
+}
+
+.suggestionCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 200;
+}
+
+.suggestionImage {
+  border-radius: 15px;
+  object-fit: cover;
+  box-shadow: var(--shadow);
+  filter: brightness(0.3) saturate(0.8);
+}
+
+.suggestionNameOverlay {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
 }
 
 .suggestion:active {
   cursor: grabbing;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 1000px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .suggestionsWrapper {
+    border-left: none;
+    border-top: 2px solid gray;
+  }
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    overflow-y: auto;
+    padding: 0.25em;
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .suggestions {
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(75px, 1fr));
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .suggestions {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(50px, 1fr));
+  }
 }

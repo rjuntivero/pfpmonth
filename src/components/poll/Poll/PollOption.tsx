@@ -5,7 +5,8 @@ import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Avatar from '../../shared/Avatar/Avatar';
-import { Poll as PollType } from '@/types/Polls';
+import { PollOption as PollType } from '@/lib/api/poll/fetchPollOptions';
+
 // import User from '../User/User';
 
 const UploadThemeModal = dynamic(() => import('../../shared/Modal/BaseModal'), { ssr: false });

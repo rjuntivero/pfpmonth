@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import styles from './ThemeSlider.module.css';
 import Carousel from '@/components/wrappers/ThemeSliderClientWrapper/Carousel/Carousel';
 import { useAppSelector } from '@/state/hooks';
-import { useEffect } from 'react';
 
 interface Props {
   serverName?: string;
@@ -17,15 +16,9 @@ export default function ThemeSlider({ serverName, display = 'both', monthClassNa
   const router = useRouter();
   const activeSlide = useAppSelector((state) => state.theme.activeSlide);
   const slides = useAppSelector((state) => state.theme.themes);
-  console.log('ThemeSlider slides:', slides);
-  useEffect(() => {
-    console.log('ThemeSlider slides:', slides);
-  }, [slides]);
 
   const showDetails = display === 'date' || display === 'both';
   const showButton = display === 'button' || display === 'both';
-  console.log('do i show the details??: ', showDetails);
-  console.log('do i show the button??: ', showButton);
 
   return (
     <div id={id} className={styles.wrapper} role="region" aria-label="Monthly themes slider">

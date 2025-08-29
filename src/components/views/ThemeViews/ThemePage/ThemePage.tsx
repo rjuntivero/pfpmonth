@@ -7,11 +7,9 @@ import JoinThemeModal from '@/components/shared/Modal/JoinThemeModal/JoinThemeMo
 import { Slide } from '@/types/Slide';
 import Avatar from '@/components/shared/Avatar/Avatar';
 import { fetchCharacter } from '@/lib/api/user/characterActions';
-import CharacterInitWrapper from '@/components/wrappers/CharacterInitWrapper/CharacterInitWrapper';
+import CharacterInitClientWrapper from '@/components/wrappers/CharacterInitClientWrapper/CharacterInitClientWrapper';
 import ParticipantList from '@/components/theme/ParticipantList/ParticipantList';
-// import Figure from '@/components/ui/Figure/Figure';
-// import Avatar from '@/components/user/Avatar/Avatar';
-// import fetchUser from '@/lib/api/user/fetchUser';
+
 interface Props {
   theme: Slide;
   inPast?: boolean;
@@ -30,7 +28,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
 
   return (
     <div className={styles.page}>
-      <CharacterInitWrapper character={character} participants={participants} />
+      <CharacterInitClientWrapper character={character} participants={participants} />
       <main className={styles.main}>
         <ThemeBackground themeImage={themeData?.image_url} wrapperClassName={styles.backgroundWrapper} imageClassName={styles.image} />
         <div className={styles.fadeOverlay} />

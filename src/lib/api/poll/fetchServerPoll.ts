@@ -1,7 +1,7 @@
-import { Poll } from '@/types/Polls';
 import { createClient } from '@/lib/supabase/supabase';
+import { PollOption } from './fetchPollOptions';
 
-export async function fetchServerPoll(serverId: string): Promise<Poll> {
+export async function fetchServerPoll(serverId: string): Promise<PollOption> {
   const supabase = createClient();
 
   const { data: poll, error } = await supabase.from('polls').select('*').eq('server_id', serverId).maybeSingle();

@@ -21,6 +21,7 @@ type SupabaseOptionRow = {
     username: string;
     avatar_url: string;
   } | null;
+  created_at: string;
 };
 
 export type PollOption = {
@@ -41,6 +42,7 @@ export type PollOption = {
     avatar_url: string;
   }[];
   hasVoted: boolean;
+  created_at: string;
 };
 
 export async function fetchPollOptions(pollId: string): Promise<{ pollOptions?: PollOption[]; error?: string }> {
@@ -53,7 +55,6 @@ export async function fetchPollOptions(pollId: string): Promise<{ pollOptions?: 
 
   const { data, error } = await supabase
     .from('poll_options_with_vote_count')
-    // assert return type ONCE here
     .select(
       `
       id,
@@ -63,6 +64,7 @@ export async function fetchPollOptions(pollId: string): Promise<{ pollOptions?: 
       image_url,
       server_id,
       name,
+      created_at,
       poll_votes (
         user_id,
         users (
@@ -102,6 +104,7 @@ export async function fetchPollOptions(pollId: string): Promise<{ pollOptions?: 
         avatar_url: vote.users?.avatar_url ?? '',
       })) ?? [],
     hasVoted: option.poll_votes?.some((vote) => vote.user_id === user.id) ?? false,
+    created_at: option.created_at,
   }));
 
   return { pollOptions };

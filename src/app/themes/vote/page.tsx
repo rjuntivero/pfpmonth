@@ -7,7 +7,6 @@ export default async function Page() {
   const serverId = (await cookies()).get('server_id')?.value;
   const serverName = (await cookies()).get('server_name')?.value;
   const poll = await fetchServerPoll(serverId as string);
-  console.log('Fetched poll:', poll);
 
   return (
     <div className={styles.page}>

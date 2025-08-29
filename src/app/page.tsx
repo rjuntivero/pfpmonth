@@ -5,6 +5,9 @@ import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import { cookies } from 'next/headers';
 import { Metadata } from 'next';
 import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
+import PollInitClientWrapper from '@/components/wrappers/PollInitClientWrapper/PollInitClientWrapper';
+import { fetchServerPoll } from '@/lib/api/poll/fetchServerPoll';
+import { fetchPollOptions } from '@/lib/api/poll/fetchPollOptions';
 
 export const metadata: Metadata = {
   title: 'PFPMonth - Home',
@@ -40,9 +43,12 @@ export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
   const { serverName, themes } = await fetchThemes(currentYear, serverId);
+  const poll = await fetchServerPoll(serverId as string);
+  const { pollOptions } = await fetchPollOptions(poll.id as string);
 
   return (
     <div className={styles.page}>
+      <PollInitClientWrapper polls={pollOptions} />
       <a href="#themes" className="sr-only focus:not-sr-only">
         Skip to themes
       </a>

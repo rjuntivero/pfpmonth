@@ -1,24 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Poll as PollType } from '@/types/Polls';
 import PollOption from '../PollOption';
+import { PollOption as PollType } from '@/lib/api/poll/fetchPollOptions';
+import { useAppSelector } from '@/state/hooks';
+import { setSuggestions } from '@/features/pollSlice';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   poll: PollType;
 }
 
 export default function PollList({ poll }: Props) {
-  const [pollOptions, setPollOptions] = useState<PollType[]>([]);
-
+  const suggestions = useAppSelector((state) => state.poll.suggestions);
+  const dispatch = useDispatch();
   const [refreshKey, setRefreshKey] = useState(0);
 
-  // fetch server polls on mount and on poll update
+  // fetch server polls on poll update
   useEffect(() => {
     async function fetchPolls() {
       const res = await fetch(`/api/polls/options?pollId=${poll.id}`);
       const data = await res.json();
-      console.log('Fetched poll options:', data.pollOptions);
 
       const sorted = (data.pollOptions || []).sort((a: PollType, b: PollType) => {
         const aVotes = a.vote_count ?? 0;
@@ -32,12 +34,11 @@ export default function PollList({ poll }: Props) {
         return bTime - aTime;
       });
 
-      setPollOptions(sorted);
-      setPollOptions(sorted);
+      dispatch(setSuggestions(sorted));
     }
 
     fetchPolls();
-  }, [poll?.id, refreshKey]);
+  }, [poll?.id, refreshKey, dispatch]);
 
   // refresh page when poll is updated
   function forceRefresh() {
@@ -46,8 +47,8 @@ export default function PollList({ poll }: Props) {
 
   return (
     <>
-      {pollOptions.map((option) => (
-        <PollOption key={option?.id} poll={option} type="theme" />
+      {suggestions.map((suggestion) => (
+        <PollOption key={suggestion?.id} poll={suggestion} type="theme" />
       ))}
       <PollOption type="upload" poll={poll} refetchThemes={forceRefresh} />
     </>

@@ -1,11 +1,11 @@
 'use client';
 import { useDraggable } from '@dnd-kit/core';
 import styles from './SuggestionsCalendar.module.css';
-import { SuggestionType } from './SuggestionsCalendar';
 import Image from 'next/image';
+import { PollOption } from '@/lib/api/poll/fetchPollOptions';
 
 interface Props {
-  suggestion: SuggestionType;
+  suggestion: PollOption;
   setActiveSuggestion: (id: string | null) => void;
 }
 
@@ -22,7 +22,7 @@ export default function DraggableSuggestion({ suggestion, setActiveSuggestion }:
 
   return (
     <div ref={setNodeRef} style={style} {...listeners} {...attributes} className={styles.suggestionCard} onMouseDown={() => setActiveSuggestion(suggestion.id)} onMouseUp={() => setActiveSuggestion(null)}>
-      <div className={styles.suggestionImageWrapper}>{suggestion.image && <Image src={suggestion.image} alt={suggestion.name} fill className={styles.suggestionImage} />}</div>
+      <div className={styles.suggestionImageWrapper}>{suggestion.image_url && <Image src={suggestion.image_url} alt={suggestion.name} fill className={styles.suggestionImage} />}</div>
       <div className={styles.suggestionNameOverlay}>
         <p>{suggestion.name}</p>
       </div>

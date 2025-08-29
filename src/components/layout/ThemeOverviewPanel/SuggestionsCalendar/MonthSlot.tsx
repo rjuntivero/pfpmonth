@@ -2,21 +2,15 @@
 import { useDroppable } from '@dnd-kit/core';
 import styles from './SuggestionsCalendar.module.css';
 import { MonthSlotType } from './SuggestionsCalendar';
-import { CSSProperties } from 'react';
 
 interface Props {
   month: MonthSlotType;
-  activeSuggestion: string | null;
   onUnassign: (monthId: string) => void;
 }
 
-export default function MonthSlot({ month, activeSuggestion, onUnassign }: { month: MonthSlotType; activeSuggestion: string | null; onUnassign: (monthId: string) => void }) {
+export default function MonthSlot({ month, onUnassign }: Props) {
   const { isOver, setNodeRef } = useDroppable({ id: month.id, disabled: month.isDisabled || month.isPreassigned });
   const hasValidTheme = month.assignedThemeName && month.assignedThemeName !== 'No Theme';
-
-  const bgStyle: CSSProperties & Record<string, string> = {
-    '--bg-image': month.image ? `url(${month.image})` : '',
-  };
 
   return (
     <div

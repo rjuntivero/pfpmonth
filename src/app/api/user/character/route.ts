@@ -33,5 +33,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, characterError }, { status: 500 });
   }
 
+  // update user streak automatically
+  const { error: streakError } = await supabase.rpc('update_user_streak', {
+    p_user_id: user.id,
+    p_theme_id: theme_id,
+    p_theme_month: new Date().toISOString().slice(0, 10),
+  });
+
+  if (streakError) {
+    console.error('RPC error:', streakError);
+    return NextResponse.json({ success: false, streakError }, { status: 500 });
+  }
+
   return NextResponse.json({ success: true });
 }

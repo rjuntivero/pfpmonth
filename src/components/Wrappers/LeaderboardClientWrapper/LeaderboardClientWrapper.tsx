@@ -4,21 +4,28 @@ import Avatar from '@/components/shared/Avatar/Avatar';
 import styles from './LeaderboardClientWrapper.module.css';
 import UserRanking from '@/components/user/UserRanking/UserRanking';
 import { useEffect, useState } from 'react';
-import { GuildMember } from '@/types/User';
-import { AnimatePresence, motion } from 'framer-motion';
-import DropdownIcon from '@/components/shared/Dropdown/DropdownIcon/DropdownIcon';
+import { GuildMemberRank } from '@/types/User';
+import { motion } from 'framer-motion';
 import Dropdown from '@/components/shared/Dropdown/Dropdown';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { setChosenMonth, setChosenYear, setLoaded } from '@/features/leaderboardSlice';
+import { MONTHS as monthNames } from '@/lib/utils/stringUtils';
+import { ThemeData } from '@/lib/api/theme/fetchThemeData';
 
 interface Props {
   serverName: string;
-  serverId?: string;
 }
 
-export default function LeaderboardClientWrapper({ serverName, serverId }: Props) {
+interface TopUser {
+  name?: string;
+  imageURL?: string;
+}
+
+export default function LeaderboardClientWrapper({ serverName }: Props) {
   const [currentYear, _setYear] = useState('2025');
-  const [guildMembers, setGuildMembers] = useState<GuildMember[]>([]);
+  const [guildMembers, setGuildMembers] = useState<GuildMemberRank[]>([]);
+  const [chosenTheme, setChosenTheme] = useState<ThemeData>();
+  const [topUsers, setTopUsers] = useState<TopUser[]>([]);
 
   const now = new Date();
   const currentMonth = now.toLocaleString('default', { month: 'long' });
@@ -27,34 +34,18 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
   const chosenMonth = useAppSelector((state) => state.leaderboard.chosenMonth);
   const chosenYear = useAppSelector((state) => state.leaderboard.chosenYear);
 
+  const years = ['2025', '2026', '2015', '2016', '2017', '2018', '2019', '2020'];
+  const pedestalOrder = [1, 0, 2];
+
   // initialize chosenYear and chosenMonth
   useEffect(() => {
     dispatch(setChosenYear(currentYear));
     dispatch(setChosenMonth(currentMonth));
   }, [dispatch, currentYear, currentMonth]);
 
-  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
-  const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState(false);
+  const [_isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
+  const [_isMonthDropdownOpen, setIsMonthDropdownOpen] = useState(false);
 
-  //temp test data for top users
-  const users = [
-    { name: 'rjflavorred', imageURL: '/profile.webp' },
-    { name: 'raipunzel', imageURL: '/bubblegum.jpg' },
-    { name: 'pluviosprout', imageURL: '/simpsons.avif' },
-  ];
-
-  const years = ['2015', '2016', '2017', '2018', '2019', '2020'];
-  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-  // // test data of 20 users
-  // const testGuildMembers: GuildMember[] = Array.from({ length: 20 }, (_, i) => ({
-  //   user_id: `user-${i + 1}`,
-  //   discord_users: {
-  //     username: `User${i + 1}`,
-  //     avatar_url: '/profile.webp',
-  //   },
-  //   rank: i + 1, // pretend rank is index + 1
-  // }));
   const loading = useAppSelector((state) => state.leaderboard.loaded);
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,6 +59,7 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
   const goToPrevPage = () => setCurrentPage((p) => Math.max(p - 1, 1));
   const goToNextPage = () => setCurrentPage((p) => Math.min(p + 1, totalPages));
 
+  // fetch all guildMembers in the server given serverId
   useEffect(() => {
     async function fetchGuild() {
       try {
@@ -77,24 +69,33 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
         });
         const guildData = await guildRes.json();
         setGuildMembers(guildData);
-        // await fetchRankings(chosenMonth, chosenYear, serverId, guildData);
+
+        const rankRes = await fetch(`/api/server/members/rankings`, {
+          method: 'POST',
+          body: JSON.stringify({
+            chosenMonth,
+            chosenYear,
+            guildData,
+          }),
+        });
+
         console.log(guildData);
         dispatch(setLoaded(false));
+        const { sortedMembers, topUsers, theme } = await rankRes.json();
+        setChosenTheme(theme);
+        setGuildMembers(sortedMembers);
+        setTopUsers(
+          topUsers.map((m: GuildMemberRank) => ({
+            name: m.discord_users?.username ?? 'Unknown',
+            imageURL: m.discord_users?.avatar_url ?? null,
+          }))
+        );
       } catch (err) {
         console.error('Failed to fetch guild data:', err);
       }
     }
     fetchGuild();
-  }, []);
-
-  // dropdown logic
-  const toggleMonthDropdown = () => {
-    setIsMonthDropdownOpen((prev) => !prev);
-  };
-
-  const toggleYearDropdown = () => {
-    setIsYearDropdownOpen((prev) => !prev);
-  };
+  }, [chosenMonth, chosenYear, dispatch]);
 
   const handleMonthSelect = (month: string) => {
     dispatch(setChosenMonth(month));
@@ -111,7 +112,7 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
       <section className={styles.pedestals}>
         <div className={styles.themeDetails}>
           <h2 className={styles.serverName}>{serverName}</h2>
-          <h1 className={styles.themeTitle}>Adventure Time</h1>
+          <h1 className={styles.themeTitle}>{chosenTheme?.name ?? 'No Theme'}</h1>
           <div className={styles.filters}>
             <Dropdown onSelect={handleMonthSelect} selected={chosenMonth} items={monthNames} />
             <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={years} />
@@ -123,24 +124,18 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
               <div className={styles.loader}></div>
             </div>
           ) : (
-            users.map((user, index) => (
-              <motion.div key={user.name} className={styles.topUser} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.2 }} data-name={user.name}>
-                <Avatar imageURL={user.imageURL} className={styles.topUserAvatar} />
-              </motion.div>
-            ))
+            pedestalOrder.map((rank, i) => {
+              const user = topUsers[rank];
+              return (
+                <motion.div key={rank} className={styles.topUser} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.2 }} data-name={user?.name ?? 'N/A'}>
+                  <Avatar imageURL={user?.imageURL ?? '/no-image-placeholder.jpg'} className={styles.topUserAvatar} zoom={user?.imageURL ? false : true} />
+                </motion.div>
+              );
+            })
           )}
         </div>
       </section>
-      {/* <section className={styles.rankingList}>
-        <div className={styles.pageNav}>
-          <button>{'<  '} </button>1 of 1 <button>{'  >'}</button>
-        </div>
-        {guildMembers?.map((member, i) => (
-          <div key={member.discord_users.username}>
-            <UserRanking member={member} index={i} />
-          </div>
-        ))}
-      </section> */}
+
       {/* pagination test */}
       <section className={styles.rankingList}>
         <div className={styles.pageNav}>
@@ -159,7 +154,7 @@ export default function LeaderboardClientWrapper({ serverName, serverId }: Props
         ) : (
           currentMembers.map((member, i) => (
             <div key={member.discord_users.username}>
-              <UserRanking member={member} index={startIndex + i} />
+              <UserRanking score={member.score} member={member} index={startIndex + i} />
             </div>
           ))
         )}

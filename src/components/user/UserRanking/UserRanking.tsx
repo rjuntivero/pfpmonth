@@ -1,13 +1,14 @@
-import { GuildMember } from '@/types/User';
+import { GuildMemberRank } from '@/types/User';
 import styles from './UserRanking.module.css';
 import Avatar from '../../shared/Avatar/Avatar';
 import { motion } from 'framer-motion';
 interface Props {
-  member: GuildMember;
+  member: GuildMemberRank;
   index: number;
+  score?: number;
 }
 
-export default function UserRanking({ member, index }: Props) {
+export default function UserRanking({ member, index, score }: Props) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -23,7 +24,7 @@ export default function UserRanking({ member, index }: Props) {
       <div className={styles.info}>
         <h1>{member.discord_users.username}</h1>
         {/* {!member?.user_id ? <p>not yet participated</p> : ''} */}
-        {!member?.user_id ? <p>No participation</p> : <p>2 day streak</p>}
+        {!member?.user_id ? <p>User has not logged in</p> : !member?.participated ? <p>No participation</p> : <p>{score} month streak</p>}
       </div>
     </motion.div>
   );

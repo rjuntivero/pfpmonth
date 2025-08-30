@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { useAppSelector } from '@/state/hooks';
 import Button from '../../Button/Button';
 import { PollOption } from '@/lib/api/poll/fetchPollOptions';
-
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+import { MONTHS } from '@/lib/utils/stringUtils';
+import getCookie from '@/lib/utils/getClientCookie';
 
 export default function SuggestionModal() {
   const themes = useAppSelector((state) => state.theme.themes);
@@ -15,7 +15,7 @@ export default function SuggestionModal() {
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth();
 
-  // Build month slots
+  // month slots
   const initialMonths: MonthSlotType[] = MONTHS.map((month, index) => {
     const theme = themes?.find((t) => new Date(t.theme_month).getFullYear() === currentYear && parseInt(t.theme_month.split('-')[1], 10) - 1 === index && t.type === 'final');
 
@@ -26,6 +26,7 @@ export default function SuggestionModal() {
     return {
       id: month,
       month,
+      assignedSuggestion: undefined,
       assignedTheme: theme?.id,
       assignedThemeName: theme?.name,
       isDisabled: isPastMonth,
@@ -34,7 +35,6 @@ export default function SuggestionModal() {
     };
   });
 
-  // keep PollOption objects intact
   const [availableSuggestions, setAvailableSuggestions] = useState<PollOption[]>(pollSuggestions);
   const [months, setMonths] = useState(initialMonths);
 
@@ -47,23 +47,22 @@ export default function SuggestionModal() {
     const suggestion = availableSuggestions.find((s) => s.id === suggestionId);
     if (!suggestion) return;
 
+    // console.log('Assign triggered');
+    // console.log('Month ID:', monthId);
+    // console.log('Suggestion being assigned:', suggestion);
+
     setMonths((prevMonths) =>
       prevMonths.map((month) => {
         if (month.id === monthId) {
-          return {
+          const updated = {
             ...month,
             assignedSuggestion: suggestion,
             assignedTheme: suggestion.id,
             assignedThemeName: suggestion.name,
             image: suggestion.image_url ?? undefined,
-            previousAssigned: month.assignedTheme
-              ? {
-                  id: month.assignedTheme,
-                  name: month.assignedThemeName!,
-                  image: month.image,
-                }
-              : undefined,
           };
+          // console.log('Updated month slot:', updated);
+          return updated;
         }
         return month;
       })
@@ -73,22 +72,31 @@ export default function SuggestionModal() {
       const filtered = prev.filter((s) => s.id !== suggestionId);
 
       const month = months.find((m) => m.id === monthId);
-      if (month?.assignedTheme && month?.assignedThemeName) {
-        filtered.push({
-          ...month.assignedSuggestion!,
-          id: month.assignedTheme,
-          name: month.assignedThemeName,
-          image_url: month.image as string,
-        });
+      if (month?.assignedSuggestion) {
+        filtered.push(month.assignedSuggestion);
       }
 
+      console.log('available suggestions after assign:', filtered);
       return filtered;
     });
+
+    console.table(
+      months.map((m) => ({
+        id: m.id,
+        assignedTheme: m.assignedTheme,
+        assignedThemeName: m.assignedThemeName,
+        assignedSuggestion: m.assignedSuggestion || null,
+      }))
+    );
   };
 
   const handleUnassign = (monthId: string) => {
     const month = months.find((m) => m.id === monthId);
     if (!month || !month.assignedSuggestion) return;
+
+    // console.log('Unassign triggered');
+    // console.log('Month ID:', monthId);
+    // console.log('Month before unassign:', month);
 
     const { assignedSuggestion } = month;
 
@@ -106,14 +114,51 @@ export default function SuggestionModal() {
       )
     );
 
-    setAvailableSuggestions((prev) => [...prev, assignedSuggestion]);
+    setAvailableSuggestions((prev) => {
+      const updated = [...prev, assignedSuggestion];
+      // console.log('available suggestions after unassign:', updated);
+      return updated;
+    });
+
+    // console.table(
+    //   months.map((m) => ({
+    //     id: m.id,
+    //     assignedTheme: m.assignedTheme,
+    //     assignedThemeName: m.assignedThemeName,
+    //     assignedSuggestion: m.assignedSuggestion || null,
+    //   }))
+    // );
   };
 
+  // promote themes
+  const handleConfirm = async () => {
+    const serverId = getCookie('server_id');
+    const year = new Date().getFullYear();
+
+    try {
+      const res = await fetch('/api/polls/promote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ months, year, serverId }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        console.log('all assigned suggestions promoted to themes');
+      } else {
+        console.error('failed to promote:', data.error);
+      }
+    } catch (err) {
+      console.error('error calling API:', err);
+    }
+  };
   return (
     <div className={styles.modalWrapper}>
       <SuggestionsCalendar months={visibleMonths} suggestions={availableSuggestions} onAssign={handleAssign} onUnassign={handleUnassign} />
       <div className={styles.buttonWrapper}>
-        <Button className={styles.confirmButton}>Confirm</Button>
+        <Button onClick={handleConfirm} className={styles.confirmButton}>
+          Confirm
+        </Button>
       </div>
     </div>
   );

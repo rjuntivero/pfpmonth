@@ -1,4 +1,7 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
+import { MonthSlotType } from '@/components/layout/ThemeOverviewPanel/SuggestionsCalendar/SuggestionsCalendar';
+import { PollOption } from '@/lib/api/poll/fetchPollOptions';
+import { MONTHS } from '@/lib/utils/stringUtils';
 
 export async function createServerPoll(serverId: string): Promise<void> {
   const supabase = await createClient();
@@ -56,4 +59,34 @@ export async function uploadPollImage({ fileName, fileBuffer, serverId }: { file
   const { data: publicUrlData } = supabase.storage.from('theme-images').getPublicUrl(filePath);
 
   return publicUrlData.publicUrl;
+}
+
+export async function promoteAssignedSuggestionsToThemes(months: MonthSlotType[], year: number, serverId: string) {
+  const supabase = await createClient();
+
+  for (const month of months) {
+    // skip preassigned months or months without assignedSuggestion
+    if (month.isPreassigned || !month.assignedSuggestion) continue;
+
+    const suggestion: PollOption = month.assignedSuggestion;
+
+    // prepare theme data
+    const themeData = {
+      theme_month: `${year}-${String(MONTHS.indexOf(month.month) + 1).padStart(2, '0')}-01`,
+      name: suggestion.name,
+      type: 'final',
+      image: suggestion.image_url ?? null,
+      poll_id: suggestion.id,
+      server_id: serverId,
+    };
+
+    // insert the theme
+    const { data, error } = await supabase.from('themes').upsert(themeData, { onConflict: 'theme_month,server_id' });
+
+    if (error) {
+      console.error(`Failed to update theme for ${month.month}:`, error);
+    } else {
+      console.log(`✅ Updated theme for ${month.month}:`, data);
+    }
+  }
 }

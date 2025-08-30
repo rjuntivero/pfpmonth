@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
-interface ThemeData {
+export interface ThemeData {
   id: string;
   name: string;
   description: string;

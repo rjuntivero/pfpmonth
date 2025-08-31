@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { setChosenMonth, setChosenYear, setLoaded } from '@/features/leaderboardSlice';
 import { MONTHS as monthNames } from '@/lib/utils/stringUtils';
 import { ThemeData } from '@/lib/api/theme/fetchThemeData';
+import { AvailableTime } from '@/lib/api/user/fetchRankings';
 
 interface Props {
   serverName: string;
@@ -22,10 +23,12 @@ interface TopUser {
 }
 
 export default function LeaderboardClientWrapper({ serverName }: Props) {
-  const [currentYear, _setYear] = useState('2025');
+  const [currentYear] = useState(new Date().getFullYear().toString());
   const [guildMembers, setGuildMembers] = useState<GuildMemberRank[]>([]);
   const [chosenTheme, setChosenTheme] = useState<ThemeData>();
   const [topUsers, setTopUsers] = useState<TopUser[]>([]);
+  const [monthsDropdown, setMonthsDropdown] = useState<string[]>([]);
+  const [yearsDropdown, setYearsDropdown] = useState<string[]>([]);
 
   const now = new Date();
   const currentMonth = now.toLocaleString('default', { month: 'long' });
@@ -34,10 +37,9 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
   const chosenMonth = useAppSelector((state) => state.leaderboard.chosenMonth);
   const chosenYear = useAppSelector((state) => state.leaderboard.chosenYear);
 
-  const years = ['2025', '2026', '2015', '2016', '2017', '2018', '2019', '2020'];
   const pedestalOrder = [1, 0, 2];
 
-  // initialize chosenYear and chosenMonth
+  // Initialize chosenYear and chosenMonth
   useEffect(() => {
     dispatch(setChosenYear(currentYear));
     dispatch(setChosenMonth(currentMonth));
@@ -47,11 +49,11 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
   const [_isMonthDropdownOpen, setIsMonthDropdownOpen] = useState(false);
 
   const loading = useAppSelector((state) => state.leaderboard.loaded);
-  // pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 6; // max users per page
-  const totalPages = Math.max(1, Math.ceil(guildMembers.length / pageSize));
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 6;
+  const totalPages = Math.max(1, Math.ceil(guildMembers.length / pageSize));
   const startIndex = (currentPage - 1) * pageSize;
   const currentMembers = guildMembers.slice(startIndex, startIndex + pageSize);
 
@@ -59,41 +61,61 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
   const goToPrevPage = () => setCurrentPage((p) => Math.max(p - 1, 1));
   const goToNextPage = () => setCurrentPage((p) => Math.min(p + 1, totalPages));
 
-  // fetch all guildMembers in the server given serverId
   useEffect(() => {
     async function fetchGuild() {
       try {
         dispatch(setLoaded(true));
-        const guildRes = await fetch('/api/server/members', {
-          method: 'GET',
-        });
-        const guildData = await guildRes.json();
+
+        // Fetch members
+        const guildRes = await fetch('/api/server/members');
+        const guildData: GuildMemberRank[] = await guildRes.json();
         setGuildMembers(guildData);
 
-        const rankRes = await fetch(`/api/server/members/rankings`, {
+        // Fetch rankings
+        const rankRes = await fetch('/api/server/members/rankings', {
           method: 'POST',
-          body: JSON.stringify({
-            chosenMonth,
-            chosenYear,
-            guildData,
-          }),
+          body: JSON.stringify({ chosenMonth, chosenYear, guildData }),
         });
 
-        console.log(guildData);
-        dispatch(setLoaded(false));
-        const { sortedMembers, topUsers, theme } = await rankRes.json();
-        setChosenTheme(theme);
+        const {
+          sortedMembers,
+          topUsers: topUserRanks,
+          theme,
+          availableTimes,
+        }: {
+          sortedMembers: GuildMemberRank[];
+          topUsers: GuildMemberRank[];
+          theme: ThemeData | null;
+          availableTimes: AvailableTime[];
+        } = await rankRes.json();
+
+        setChosenTheme(theme ?? undefined);
         setGuildMembers(sortedMembers);
+
+        // Update dropdowns
+        const uniqueYears = Array.from(new Set(availableTimes.map((t) => t.year.toString()))).sort();
+        setYearsDropdown(uniqueYears);
+
+        const monthsForYear = availableTimes
+          .filter((t) => t.year.toString() === chosenYear)
+          .map((t) => t.month)
+          .sort((a, b) => a - b);
+        setMonthsDropdown(monthsForYear.map((m) => monthNames[m - 1]));
+
         setTopUsers(
-          topUsers.map((m: GuildMemberRank) => ({
+          topUserRanks.map((m) => ({
             name: m.discord_users?.username ?? 'Unknown',
             imageURL: m.discord_users?.avatar_url ?? null,
           }))
         );
+
+        dispatch(setLoaded(false));
       } catch (err) {
         console.error('Failed to fetch guild data:', err);
+        dispatch(setLoaded(false));
       }
     }
+
     fetchGuild();
   }, [chosenMonth, chosenYear, dispatch]);
 
@@ -114,8 +136,8 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
           <h2 className={styles.serverName}>{serverName}</h2>
           <h1 className={styles.themeTitle}>{chosenTheme?.name ?? 'No Theme'}</h1>
           <div className={styles.filters}>
-            <Dropdown onSelect={handleMonthSelect} selected={chosenMonth} items={monthNames} />
-            <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={years} />
+            <Dropdown onSelect={handleMonthSelect} selected={chosenMonth} items={monthsDropdown} />
+            <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={yearsDropdown} />
           </div>
         </div>
         <div className={styles.topUsers}>
@@ -136,7 +158,6 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         </div>
       </section>
 
-      {/* pagination test */}
       <section className={styles.rankingList}>
         <div className={styles.pageNav}>
           <button onClick={goToPrevPage} disabled={currentPage === 1}>

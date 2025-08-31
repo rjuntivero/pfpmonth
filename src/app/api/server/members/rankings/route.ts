@@ -8,7 +8,7 @@ export async function POST(req: Request) {
   const server = await fetchServer();
   const serverId = server?.server_id;
 
-  const { leaderboard: guildMembers, theme: theme } = await fetchRankings(chosenMonth, chosenYear, serverId as string, guildData);
+  const { leaderboard: guildMembers, theme: theme, availableTimes: availableTimes } = await fetchRankings(chosenMonth, chosenYear, serverId as string, guildData);
 
   if (!guildMembers) {
     return NextResponse.json({ error: 'could not fetch guildMembers' });
@@ -20,8 +20,10 @@ export async function POST(req: Request) {
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
 
+  console.log('HERE ARE THE AVAILABLE TIMES: ', availableTimes);
+
   // leaderboard: everyone
   const sortedMembers = [...guildMembers].sort((a, b) => b.score - a.score);
 
-  return NextResponse.json({ sortedMembers, topUsers, theme });
+  return NextResponse.json({ sortedMembers, topUsers, theme, availableTimes });
 }

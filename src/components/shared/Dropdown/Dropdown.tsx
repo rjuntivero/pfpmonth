@@ -13,9 +13,10 @@ interface Props {
   label?: string;
   isOpen?: boolean;
   setIsOpen?: (open: boolean) => void;
+  disabled?: boolean;
 }
 
-export default function Dropdown({ items, selected, onSelect, label, isOpen, setIsOpen }: Props) {
+export default function Dropdown({ items, selected, onSelect, label, isOpen, setIsOpen, disabled }: Props) {
   const [internalOpen, setInternalOpen] = useState(false);
 
   const openState = isOpen ?? internalOpen;
@@ -38,7 +39,7 @@ export default function Dropdown({ items, selected, onSelect, label, isOpen, set
 
   return (
     <div className={styles.dropdownContainer}>
-      <button className={`${styles.filtersButton} ${openState ? styles.openDropdown : ''}`} onClick={toggleOpen}>
+      <button disabled={disabled} className={`${styles.filtersButton} ${openState ? styles.openDropdown : ''}`} onClick={toggleOpen}>
         {label || selected}
         <DropdownIcon />
       </button>

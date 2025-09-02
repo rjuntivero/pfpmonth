@@ -13,7 +13,10 @@ interface RankingsResult {
   theme: ThemeData | null;
   availableTimes: AvailableTime[] | [];
 }
-export default async function fetchRankings(chosenMonth: string, chosenYear: string, serverId: string, guildMembers: GuildMemberRank[]): Promise<RankingsResult> {
+
+export type RankingType = 'All Time' | 'Monthly' | null;
+
+export default async function fetchRankings(chosenMonth: string, chosenYear: string, serverId: string, guildMembers: GuildMemberRank[], rankingType: RankingType): Promise<RankingsResult> {
   const supabase = await createClient();
 
   try {
@@ -67,22 +70,47 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
     }
 
     // Fetch participations and compute leaderboard
-    const { data: participations, error: participationError } = await supabase.from('user_streaks').select('user_id, streak_count, longest_streak').eq('theme_id', theme.id);
+    let leaderboard: GuildMemberRank[] = [];
+    if (rankingType === 'All Time') {
+      // global: across server
+      const { data: participations, error } = await supabase.from('user_streaks').select('user_id, streak_count, longest_streak').eq('server_id', serverId);
 
-    if (participationError) console.error('Error fetching participations:', participationError);
+      if (error) console.error('Error fetching all-time participations:', error);
 
-    const leaderboard: GuildMemberRank[] = guildMembers.map((member) => {
-      const participation = participations?.find((p) => p.user_id === member.user_id);
-      return {
-        ...member,
-        score: participation?.streak_count ?? 0,
-        longest_streak: participation?.longest_streak ?? null,
-        participated: !!participation,
-      };
-    });
+      leaderboard = guildMembers.map((member) => {
+        const participation = participations?.find((p) => p.user_id === member.user_id);
+        return {
+          ...member,
+          score: participation?.streak_count ?? 0,
+          longest_streak: participation?.longest_streak ?? null,
+          participated: !!participation,
+        };
+      });
 
-    leaderboard.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+      leaderboard.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    } else if (rankingType === 'Monthly') {
+      const { data: participations, error } = await supabase.from('user_characters').select('user_id, created_at').eq('theme_id', theme.id).order('created_at', { ascending: true });
 
+      if (error) console.error('Error fetching fastest participations:', error);
+
+      leaderboard = guildMembers.map((member) => {
+        const participation = participations?.find((p) => p.user_id === member.user_id);
+        return {
+          ...member,
+          // rank by order of participation
+          score: participation ? 1 : 0,
+          fastestTime: participation?.created_at ?? null,
+          participated: !!participation,
+        };
+      });
+
+      // sort: earliest participation first
+      leaderboard.sort((a, b) => {
+        if (!a.fastestTime) return 1;
+        if (!b.fastestTime) return -1;
+        return new Date(a.fastestTime).getTime() - new Date(b.fastestTime).getTime();
+      });
+    }
     return { leaderboard, theme, availableTimes };
   } catch (err) {
     console.error('fetchRankings failed:', err);

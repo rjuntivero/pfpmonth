@@ -34,3 +34,7 @@ button.filtersButton {
   transition: 0.3s all ease-out;
   min-width: 150px;
 }
+
+button.filtersButton:disabled {
+  filter: grayscale(1) brightness(0.6);
+}

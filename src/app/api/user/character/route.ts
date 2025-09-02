@@ -1,3 +1,4 @@
+import { fetchServer } from '@/lib/api/server/fetchServer';
 import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextResponse } from 'next/server';
 
@@ -11,6 +12,9 @@ export async function POST(req: Request) {
   if (!user) {
     return NextResponse.json({ success: false, error: 'No user session found' }, { status: 401 });
   }
+
+  const server = await fetchServer();
+  const server_id = server?.server_id;
   const body = await req.json();
   const { characterName, theme_id } = body;
 
@@ -36,7 +40,7 @@ export async function POST(req: Request) {
   // update user streak automatically
   const { error: streakError } = await supabase.rpc('update_user_streak', {
     p_user_id: user.id,
-    p_theme_id: theme_id,
+    p_server_id: server_id,
     p_theme_month: new Date().toISOString().slice(0, 10),
   });
 

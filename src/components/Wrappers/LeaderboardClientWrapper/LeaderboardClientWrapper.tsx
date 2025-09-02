@@ -23,16 +23,13 @@ interface TopUser {
 }
 
 export default function LeaderboardClientWrapper({ serverName }: Props) {
-  const [currentYear] = useState(new Date().getFullYear().toString());
   const [guildMembers, setGuildMembers] = useState<GuildMemberRank[]>([]);
   const [chosenTheme, setChosenTheme] = useState<ThemeData>();
   const [topUsers, setTopUsers] = useState<TopUser[]>([]);
   const [monthsDropdown, setMonthsDropdown] = useState<string[]>([]);
   const [yearsDropdown, setYearsDropdown] = useState<string[]>([]);
   const [availableTimes, setAvailableTimes] = useState<AvailableTime[]>([]);
-
-  const now = new Date();
-  const currentMonth = now.toLocaleString('default', { month: 'long' });
+  const [rankingType, setRankingType] = useState<'All Time' | 'Monthly'>('Monthly');
 
   const dispatch = useAppDispatch();
   const chosenMonth = useAppSelector((state) => state.leaderboard.chosenMonth);
@@ -42,12 +39,17 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
 
   // Initialize chosenYear and chosenMonth
   useEffect(() => {
-    dispatch(setChosenYear(currentYear));
-    dispatch(setChosenMonth(currentMonth));
-  }, [dispatch, currentYear, currentMonth]);
+    if (availableTimes.length > 0 && (!chosenYear || !chosenMonth)) {
+      const first = availableTimes[0];
+      dispatch(setChosenYear(first.year.toString()));
+      dispatch(setChosenMonth(monthNames[first.month - 1]));
+    }
+  }, [availableTimes, chosenYear, chosenMonth, dispatch]);
 
+  // Dropdown states
   const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
   const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState(false);
+  const [isRankingDropdownOpen, setIsRankingDropdownOpen] = useState(false);
 
   const loading = useAppSelector((state) => state.leaderboard.loaded);
 
@@ -75,7 +77,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         // Fetch rankings
         const rankRes = await fetch('/api/server/members/rankings', {
           method: 'POST',
-          body: JSON.stringify({ chosenMonth, chosenYear, guildData }),
+          body: JSON.stringify({ chosenMonth, chosenYear, guildData, rankingType }),
         });
 
         const {
@@ -119,7 +121,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
     }
 
     fetchGuild();
-  }, [chosenMonth, chosenYear, dispatch]);
+  }, [chosenMonth, chosenYear, dispatch, rankingType]);
 
   const handleYearSelect = (year: string) => {
     setIsYearDropdownOpen(false);
@@ -148,8 +150,9 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
           <h2 className={styles.serverName}>{serverName}</h2>
           <h1 className={styles.themeTitle}>{chosenTheme?.name ?? 'No Theme'}</h1>
           <div className={styles.filters}>
-            <Dropdown selected={chosenMonth} items={monthsDropdown} onSelect={handleMonthSelect} isOpen={isMonthDropdownOpen} setIsOpen={setIsMonthDropdownOpen} />
-            <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={yearsDropdown} isOpen={isYearDropdownOpen} setIsOpen={setIsYearDropdownOpen} />
+            <Dropdown selected={chosenMonth} items={monthsDropdown} onSelect={handleMonthSelect} isOpen={isMonthDropdownOpen} setIsOpen={setIsMonthDropdownOpen} disabled={rankingType === 'All Time'} />
+            <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={yearsDropdown} isOpen={isYearDropdownOpen} setIsOpen={setIsYearDropdownOpen} disabled={rankingType === 'All Time'} />{' '}
+            <Dropdown selected={rankingType} items={['All Time', 'Monthly']} onSelect={(val) => setRankingType(val as 'All Time' | 'Monthly')} isOpen={isRankingDropdownOpen} setIsOpen={setIsRankingDropdownOpen} />
           </div>
         </div>
         <div className={styles.topUsers}>
@@ -187,7 +190,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         ) : (
           currentMembers.map((member, i) => (
             <div key={member.discord_users.username}>
-              <UserRanking score={member.score} member={member} index={startIndex + i} />
+              <UserRanking score={member.score} member={member} index={startIndex + i} rankingType={rankingType} />
             </div>
           ))
         )}

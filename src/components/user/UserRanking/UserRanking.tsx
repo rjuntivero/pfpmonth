@@ -6,9 +6,10 @@ interface Props {
   member: GuildMemberRank;
   index: number;
   score?: number;
+  rankingType?: 'All Time' | 'Monthly';
 }
 
-export default function UserRanking({ member, index, score }: Props) {
+export default function UserRanking({ member, index, score, rankingType }: Props) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -24,7 +25,31 @@ export default function UserRanking({ member, index, score }: Props) {
       <div className={styles.info}>
         <h1>{member.discord_users.username}</h1>
         {/* {!member?.user_id ? <p>not yet participated</p> : ''} */}
-        {!member?.user_id ? <p>User has not logged in</p> : !member?.participated ? <p>No participation</p> : <p>{score} month streak</p>}
+        {rankingType === 'All Time' ? !member?.user_id ? <p>User has not logged in</p> : score ?? 0 < 1 ? <p>No participation</p> : <p>{score} month streak</p> : ''}
+        {rankingType === 'Monthly' ? (
+          !member?.user_id ? (
+            <p>User has not logged in</p>
+          ) : !member?.participated ? (
+            <p>No participation</p>
+          ) : (
+            <p>
+              joined{' '}
+              {member.fastestTime
+                ? new Date(member.fastestTime).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: true,
+                  })
+                : ''}
+            </p>
+          )
+        ) : (
+          ''
+        )}
       </div>
     </motion.div>
   );

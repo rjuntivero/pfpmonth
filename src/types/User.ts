@@ -15,4 +15,5 @@ export interface GuildMemberRank {
   rank: number | null;
   longest_streak: number | null;
   participated: boolean;
+  fastestTime: string;
 }

@@ -10,26 +10,41 @@ interface Props {
   items: string[];
   selected: string;
   onSelect: (value: string) => void;
-  label?: string; // button label
+  label?: string;
+  isOpen?: boolean;
+  setIsOpen?: (open: boolean) => void;
 }
 
-export default function Dropdown({ items, selected, onSelect, label }: Props) {
-  const [open, setOpen] = useState(false);
+export default function Dropdown({ items, selected, onSelect, label, isOpen, setIsOpen }: Props) {
+  const [internalOpen, setInternalOpen] = useState(false);
+
+  const openState = isOpen ?? internalOpen;
+  const toggleOpen = () => {
+    if (setIsOpen) {
+      setIsOpen(!openState);
+    } else {
+      setInternalOpen((prev) => !prev);
+    }
+  };
 
   const handleSelect = (val: string) => {
     onSelect(val);
-    setOpen(false);
+    if (setIsOpen) {
+      setIsOpen(false);
+    } else {
+      setInternalOpen(false);
+    }
   };
 
   return (
     <div className={styles.dropdownContainer}>
-      <button className={`${styles.filtersButton} ${open ? styles.openDropdown : ''}`} onClick={() => setOpen((prev) => !prev)}>
+      <button className={`${styles.filtersButton} ${openState ? styles.openDropdown : ''}`} onClick={toggleOpen}>
         {label || selected}
         <DropdownIcon />
       </button>
 
       <AnimatePresence>
-        {open && (
+        {openState && (
           <motion.div className={styles.dropdownWrapper} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
             <DropdownContent items={items} selected={selected} onSelect={handleSelect} />
           </motion.div>

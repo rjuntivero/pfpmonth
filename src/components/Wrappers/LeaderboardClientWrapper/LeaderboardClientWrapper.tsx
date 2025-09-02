@@ -29,6 +29,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
   const [topUsers, setTopUsers] = useState<TopUser[]>([]);
   const [monthsDropdown, setMonthsDropdown] = useState<string[]>([]);
   const [yearsDropdown, setYearsDropdown] = useState<string[]>([]);
+  const [availableTimes, setAvailableTimes] = useState<AvailableTime[]>([]);
 
   const now = new Date();
   const currentMonth = now.toLocaleString('default', { month: 'long' });
@@ -45,8 +46,8 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
     dispatch(setChosenMonth(currentMonth));
   }, [dispatch, currentYear, currentMonth]);
 
-  const [_isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
-  const [_isMonthDropdownOpen, setIsMonthDropdownOpen] = useState(false);
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
+  const [isMonthDropdownOpen, setIsMonthDropdownOpen] = useState(false);
 
   const loading = useAppSelector((state) => state.leaderboard.loaded);
 
@@ -89,6 +90,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
           availableTimes: AvailableTime[];
         } = await rankRes.json();
 
+        setAvailableTimes(availableTimes);
         setChosenTheme(theme ?? undefined);
         setGuildMembers(sortedMembers);
 
@@ -119,14 +121,24 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
     fetchGuild();
   }, [chosenMonth, chosenYear, dispatch]);
 
-  const handleMonthSelect = (month: string) => {
-    dispatch(setChosenMonth(month));
+  const handleYearSelect = (year: string) => {
+    setIsYearDropdownOpen(false);
     setIsMonthDropdownOpen(false);
+    dispatch(setChosenYear(year));
+
+    // Use the availableTimes from state
+    const monthsForYear = availableTimes.filter((t) => t.year.toString() === year).map((t) => monthNames[t.month - 1]);
+
+    // Pick first available month if current chosenMonth is invalid
+    const newMonth = monthsForYear.includes(chosenMonth) ? chosenMonth : monthsForYear[0];
+
+    dispatch(setChosenMonth(newMonth));
   };
 
-  const handleYearSelect = (year: string) => {
-    dispatch(setChosenYear(year));
+  const handleMonthSelect = (month: string) => {
+    setIsMonthDropdownOpen(false);
     setIsYearDropdownOpen(false);
+    dispatch(setChosenMonth(month));
   };
 
   return (
@@ -136,8 +148,8 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
           <h2 className={styles.serverName}>{serverName}</h2>
           <h1 className={styles.themeTitle}>{chosenTheme?.name ?? 'No Theme'}</h1>
           <div className={styles.filters}>
-            <Dropdown onSelect={handleMonthSelect} selected={chosenMonth} items={monthsDropdown} />
-            <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={yearsDropdown} />
+            <Dropdown selected={chosenMonth} items={monthsDropdown} onSelect={handleMonthSelect} isOpen={isMonthDropdownOpen} setIsOpen={setIsMonthDropdownOpen} />
+            <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={yearsDropdown} isOpen={isYearDropdownOpen} setIsOpen={setIsYearDropdownOpen} />
           </div>
         </div>
         <div className={styles.topUsers}>

@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 export default async function Page() {
   const serverId = (await cookies()).get('server_id')?.value;
   const serverName = (await cookies()).get('server_name')?.value;
-  const poll = await fetchServerPoll(serverId as string);
+  const serverPoll = await fetchServerPoll(serverId as string);
 
   return (
     <div className={styles.page}>
@@ -16,7 +16,7 @@ export default async function Page() {
           <h2>Vote for a Theme</h2>
         </div>
         <div className={styles.polls}>
-          <PollList poll={poll} />
+          <PollList serverPoll={serverPoll} />
         </div>
       </main>
     </div>

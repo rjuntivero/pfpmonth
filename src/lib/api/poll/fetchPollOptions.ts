@@ -45,7 +45,7 @@ export type PollOption = {
   created_at: string;
 };
 
-export async function fetchPollOptions(pollId: string): Promise<{ pollOptions?: PollOption[]; error?: string }> {
+export async function fetchPollOptions(serverPollId: string): Promise<{ pollOptions?: PollOption[]; error?: string }> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -78,7 +78,7 @@ export async function fetchPollOptions(pollId: string): Promise<{ pollOptions?: 
       )
     `
     )
-    .eq('poll_id', pollId);
+    .eq('poll_id', serverPollId);
 
   if (error || !data) return { error: error?.message };
 

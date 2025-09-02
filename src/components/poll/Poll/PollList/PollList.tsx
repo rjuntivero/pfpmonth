@@ -4,22 +4,23 @@ import { useEffect, useState } from 'react';
 import PollOption from '../PollOption';
 import { PollOption as PollType } from '@/lib/api/poll/fetchPollOptions';
 import { useAppSelector } from '@/state/hooks';
-import { setSuggestions } from '@/features/pollSlice';
+import { setPollOptions } from '@/features/pollSlice';
 import { useDispatch } from 'react-redux';
+import { ServerPoll } from '@/lib/api/poll/fetchServerPoll';
 
 interface Props {
-  poll: PollType;
+  serverPoll: ServerPoll;
 }
 
-export default function PollList({ poll }: Props) {
-  const suggestions = useAppSelector((state) => state.poll.suggestions);
+export default function PollList({ serverPoll }: Props) {
+  const pollOptions = useAppSelector((state) => state.poll.pollOptions);
   const dispatch = useDispatch();
   const [refreshKey, setRefreshKey] = useState(0);
 
   // fetch server polls on poll update
   useEffect(() => {
     async function fetchPolls() {
-      const res = await fetch(`/api/polls/options?pollId=${poll.id}`);
+      const res = await fetch(`/api/polls/${serverPoll.id}`);
       const data = await res.json();
 
       const sorted = (data.pollOptions || []).sort((a: PollType, b: PollType) => {
@@ -34,11 +35,11 @@ export default function PollList({ poll }: Props) {
         return bTime - aTime;
       });
 
-      dispatch(setSuggestions(sorted));
+      dispatch(setPollOptions(sorted));
     }
 
     fetchPolls();
-  }, [poll?.id, refreshKey, dispatch]);
+  }, [serverPoll?.id, refreshKey, dispatch]);
 
   // refresh page when poll is updated
   function forceRefresh() {
@@ -47,10 +48,10 @@ export default function PollList({ poll }: Props) {
 
   return (
     <>
-      {suggestions.map((suggestion) => (
-        <PollOption key={suggestion?.id} poll={suggestion} type="theme" />
+      {pollOptions.map((option) => (
+        <PollOption poll={serverPoll} key={option?.id} option={option} type="theme" />
       ))}
-      <PollOption type="upload" poll={poll} refetchThemes={forceRefresh} />
+      <PollOption poll={serverPoll} type="upload" refetchThemes={forceRefresh} />
     </>
   );
 }

@@ -2,23 +2,23 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PollOption } from '@/lib/api/poll/fetchPollOptions';
 
 interface Poll {
-  suggestions: PollOption[];
+  pollOptions: PollOption[];
 }
 
 const initialState: Poll = {
-  suggestions: [],
+  pollOptions: [],
 };
 
 const pollSlice = createSlice({
   name: 'poll',
   initialState,
   reducers: {
-    setSuggestions: (state, action: PayloadAction<PollOption[]>) => {
-      state.suggestions = action.payload;
+    setPollOptions: (state, action: PayloadAction<PollOption[]>) => {
+      state.pollOptions = action.payload;
     },
   },
 });
 
-export const { setSuggestions } = pollSlice.actions;
+export const { setPollOptions } = pollSlice.actions;
 
 export default pollSlice.reducer;

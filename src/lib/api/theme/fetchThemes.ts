@@ -26,7 +26,7 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
   // fetch existing poll themes
   const pollExists = await fetchServerPoll(serverIdFromCookie as string);
   if (pollExists) {
-    const pollOptionsExist = await fetchPollOptions(pollExists.poll_id as string);
+    const pollOptionsExist = await fetchPollOptions(pollExists.id as string);
     if (pollOptionsExist) {
       pollOptionsExist.pollOptions?.map((poll) => poll);
     }

@@ -43,8 +43,8 @@ export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
   const { serverName, themes } = await fetchThemes(currentYear, serverId);
-  const poll = await fetchServerPoll(serverId as string);
-  const { pollOptions } = await fetchPollOptions(poll.id as string);
+  const serverPoll = await fetchServerPoll(serverId as string);
+  const { pollOptions } = await fetchPollOptions(serverPoll.id as string);
 
   return (
     <div className={styles.page}>

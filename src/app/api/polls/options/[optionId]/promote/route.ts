@@ -2,16 +2,20 @@ import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextResponse } from 'next/server';
 import { uploadPollImage } from '@/lib/api/poll/pollActions';
 
-export async function POST(req: Request, { params }: { params: Promise<{ pollId: string }> }) {
+interface Props {
+  pollId: string;
+  optionId: string;
+}
+// promote a poll option to a theme (confirm modal)
+export async function POST(req: Request, { params }: { params: Promise<Props> }) {
   const { pollId } = await params;
+  const { optionId } = await params;
   const { searchParams } = new URL(req.url);
   const monthParam = searchParams.get('month');
   const supabase = await createClient();
-  console.log('Poll Id:', pollId);
 
-  // fetch poll data
-  const { data: pollData, error: fetchError } = await supabase.from('poll_options').select('*, polls (server_id), created_by:users (id, username, avatar_url)').eq('id', pollId).single();
-  console.log('Poll Data:', pollData);
+  // fetch poll option data
+  const { data: pollData, error: fetchError } = await supabase.from('poll_options_with_vote_count').select('*, polls (server_id), created_by:users (id, username, avatar_url)').eq('id', optionId).eq('poll_id', pollId).single();
   if (fetchError || !pollData) {
     return NextResponse.json({ error: 'Poll not found' }, { status: 404 });
   }
@@ -57,13 +61,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ pollId:
     return NextResponse.json({ error: 'Failed to promote poll to theme' }, { status: 500 });
   } else {
     // delete poll option votes first after promotion
-    const { error: voteDeleteError } = await supabase.from('poll_votes').delete().eq('poll_option_id', pollId);
+    const { error: voteDeleteError } = await supabase.from('poll_votes').delete().eq('poll_option_id', optionId);
     if (voteDeleteError) {
       console.error('Error deleting poll votes:', voteDeleteError);
       return NextResponse.json({ error: 'Failed to remove poll from poll options' }, { status: 500 });
     }
     // delete poll option after deleting
-    const { error: pollDeleteError } = await supabase.from('poll_options').delete().eq('id', pollId);
+    const { error: pollDeleteError } = await supabase.from('poll_options').delete().eq('id', optionId);
     if (pollDeleteError) {
       console.error('Error deleting poll:', pollDeleteError);
       return NextResponse.json({ error: 'Failed to remove poll from poll options' }, { status: 500 });

@@ -70,12 +70,12 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         dispatch(setLoaded(true));
 
         // Fetch members
-        const guildRes = await fetch('/api/server/members');
-        const guildData: GuildMemberRank[] = await guildRes.json();
-        setGuildMembers(guildData);
+        const guildRes = await fetch('/api/server');
+        const guildData = await guildRes.json();
+        setGuildMembers(guildData.sortedMembers as GuildMemberRank[]);
 
         // Fetch rankings
-        const rankRes = await fetch('/api/server/members/rankings', {
+        const rankRes = await fetch('/api/server/rankings', {
           method: 'POST',
           body: JSON.stringify({ chosenMonth, chosenYear, guildData, rankingType }),
         });

@@ -10,7 +10,7 @@ import getCookie from '@/lib/utils/getClientCookie';
 
 export default function SuggestionModal() {
   const themes = useAppSelector((state) => state.theme.themes);
-  const pollSuggestions = useAppSelector((state) => state.poll.suggestions) as PollOption[];
+  const pollOptions = useAppSelector((state) => state.poll.pollOptions) as PollOption[];
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth();
@@ -35,7 +35,7 @@ export default function SuggestionModal() {
     };
   });
 
-  const [availableSuggestions, setAvailableSuggestions] = useState<PollOption[]>(pollSuggestions);
+  const [availableSuggestions, setAvailableSuggestions] = useState<PollOption[]>(pollOptions);
   const [months, setMonths] = useState(initialMonths);
 
   const visibleMonths = months.filter((month, index) => {

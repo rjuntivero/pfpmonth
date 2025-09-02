@@ -6,17 +6,23 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Avatar from '../../shared/Avatar/Avatar';
 import { PollOption as PollType } from '@/lib/api/poll/fetchPollOptions';
-
-// import User from '../User/User';
+import { ServerPoll } from '@/lib/api/poll/fetchServerPoll';
 
 const UploadThemeModal = dynamic(() => import('../../shared/Modal/BaseModal'), { ssr: false });
 const ThemeDetailsModal = dynamic(() => import('../../shared/Modal/BaseModal'), { ssr: false });
 
-export default function PollOption({ poll: pollOptions, type, refetchThemes }: { poll?: PollType; type: string; refetchThemes?: () => void }) {
+interface Props {
+  poll: ServerPoll;
+  option?: PollType;
+  type: string;
+  refetchThemes?: () => void;
+}
+
+export default function PollOption({ poll, option, type, refetchThemes }: Props) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [voteCount, setVoteCount] = useState<number | null>(pollOptions?.vote_count || 0);
-  const [hasVoted, setHasVoted] = useState(pollOptions?.hasVoted || false);
+  const [voteCount, setVoteCount] = useState<number | null>(option?.vote_count || 0);
+  const [hasVoted, setHasVoted] = useState(option?.hasVoted || false);
 
   const handlePollClick = () => setIsThemeModalOpen(true);
   const handleUploadClick = () => setIsUploadModalOpen(true);
@@ -30,9 +36,9 @@ export default function PollOption({ poll: pollOptions, type, refetchThemes }: {
       const userData = await userRes.json();
       const userId = userData.user?.user_id;
 
-      if (!userId || !pollOptions?.id) return;
+      if (!userId || !option?.id) return;
 
-      const res = await fetch(`/api/poll/${pollOptions.id}/vote`, {
+      const res = await fetch(`/api/polls/options/${option.id}/vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId }),
@@ -52,7 +58,7 @@ export default function PollOption({ poll: pollOptions, type, refetchThemes }: {
     }
   }
 
-  // handle poll upload
+  // handle poll option upload
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -61,11 +67,15 @@ export default function PollOption({ poll: pollOptions, type, refetchThemes }: {
 
     const formData = new FormData(form);
 
-    formData.append('poll_id', pollOptions?.id as string);
-    formData.append('server_id', pollOptions?.server_id as string);
+    const serverRes = await fetch('/api/server');
+    const serverData = await serverRes.json();
+    const serverId = serverData.server?.server_id;
 
-    // upload poll
-    const res = await fetch('/api/polls', {
+    formData.append('poll_id', option?.id as string);
+    formData.append('server_id', serverId as string);
+
+    // upload poll option
+    const res = await fetch(`/api/polls/${poll?.id}`, {
       method: 'POST',
       body: formData,
     });
@@ -97,15 +107,15 @@ export default function PollOption({ poll: pollOptions, type, refetchThemes }: {
 
       {/* Poll Modal */}
       <ThemeDetailsModal isOpen={isThemeModalOpen} onClose={() => setIsThemeModalOpen(false)} className={styles.themeModalContainer}>
-        <h1 className={styles.themeTitle}>{pollOptions?.name}</h1>
+        <h1 className={styles.themeTitle}>{option?.name}</h1>
         <div className={styles.themeContainer}>
           <div className={styles.imageWrapper}>
-            <Image src={pollOptions?.image_url || '/no-image-placeholder.jpg'} alt="themeImage" fill className={styles.themeImage} />
+            <Image src={option?.image_url || '/no-image-placeholder.jpg'} alt="themeImage" fill className={styles.themeImage} />
           </div>
           <div className={styles.themeDetails}>
-            <Avatar imageURL={pollOptions?.created_by?.avatar_url || '/no-image-placeholder.jpg'} className={styles.avatar} zoom={!pollOptions?.created_by?.avatar_url} />
-            <h1 className={styles.themeAuthor}>{pollOptions?.created_by?.username}</h1>
-            <p className={styles.themeComment}>{pollOptions?.description}</p>
+            <Avatar imageURL={option?.created_by?.avatar_url || '/no-image-placeholder.jpg'} className={styles.avatar} zoom={!option?.created_by?.avatar_url} />
+            <h1 className={styles.themeAuthor}>{option?.created_by?.username}</h1>
+            <p className={styles.themeComment}>{option?.description}</p>
             <h1 className={styles.themeVotes}>
               {voteCount} {voteCount === 1 ? 'vote' : 'votes'}
             </h1>
@@ -126,7 +136,7 @@ export default function PollOption({ poll: pollOptions, type, refetchThemes }: {
         className={styles.poll}
         style={
           {
-            '--bg-image': `${`url(${pollOptions?.image_url})` || null}`,
+            '--bg-image': `${`url(${option?.image_url})` || null}`,
           } as React.CSSProperties
         }
         onClick={type === 'theme' ? handlePollClick : handleUploadClick}
@@ -134,7 +144,7 @@ export default function PollOption({ poll: pollOptions, type, refetchThemes }: {
         <div className={styles.content}>
           {type === 'theme' && (
             <>
-              <h1>{pollOptions?.name}</h1>
+              <h1>{option?.name}</h1>
               <div className={styles.votes}>
                 <h2>{voteCount}</h2>
                 <h2>{voteCount === 1 ? 'vote' : 'votes'}</h2>

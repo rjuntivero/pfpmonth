@@ -5,10 +5,10 @@ import Button from '../../Button/Button';
 import styles from './ConfirmModal.module.css';
 import { closeModal } from '@/features/modalSlice';
 import { useRouter } from 'next/navigation';
-import { PollDetails } from '@/types/Polls';
+import { PollOption } from '@/lib/api/poll/fetchPollOptions';
 
 interface Props {
-  poll: PollDetails;
+  poll: PollOption;
   themeMonth: string;
 }
 
@@ -17,7 +17,8 @@ export default function ConfirmModal({ poll, themeMonth }: Props) {
   const router = useRouter();
   const promoteToTheme = async (): Promise<void> => {
     try {
-      const promoteRes = await fetch(`/api/poll/${poll.id}/promote?month=${themeMonth}`, {
+      // promote poll option to theme
+      const promoteRes = await fetch(`/api/polls/${poll.poll_id}/options/${poll.id}/promote?month=${themeMonth}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });

@@ -13,5 +13,5 @@ export async function GET() {
     return bHasUser - aHasUser;
   });
 
-  return NextResponse.json(sortedMembers);
+  return NextResponse.json({ sortedMembers, server });
 }

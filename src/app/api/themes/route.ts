@@ -8,6 +8,5 @@ export async function GET(req: Request) {
 
   const result = await fetchThemes(year, serverId);
 
-  console.log('FETCHED THEMES RESULTS: ', result);
   return NextResponse.json({ slides: result.themes });
 }

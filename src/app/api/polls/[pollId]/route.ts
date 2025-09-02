@@ -1,17 +1,45 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
 import { NextRequest, NextResponse } from 'next/server';
+import { fetchPollOptions } from '@/lib/api/poll/fetchPollOptions';
 import { uploadPollImage } from '@/lib/api/poll/pollActions';
 
-export async function POST(req: NextRequest) {
+interface Props {
+  pollId: string;
+}
+
+// get poll options for the server
+export async function GET(req: NextRequest, { params }: { params: Promise<Props> }) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log('User data:', user?.id);
   if (!user) {
     return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
   }
+  const { pollId } = await params;
+
+  if (!pollId) {
+    return NextResponse.json({ error: 'Missing pollId' }, { status: 400 });
+  }
+
+  const { pollOptions } = await fetchPollOptions(pollId);
+
+  return NextResponse.json({ pollOptions });
+}
+
+// create a poll option
+export async function POST(req: NextRequest, { params }: { params: Promise<Props> }) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+  }
+
+  const { pollId: poll_id } = await params;
 
   const form = await req.formData();
 
@@ -20,7 +48,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Image file is required' }, { status: 400 });
   }
 
-  const poll_id = form.get('poll_id')?.toString();
   const name = form.get('theme-name')?.toString();
   const option_text = form.get('theme-description')?.toString();
   const serverId = form.get('server_id')?.toString();

@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setSuggestions } from '@/features/pollSlice';
+import { setPollOptions } from '@/features/pollSlice';
 import { useAppSelector } from '@/state/hooks';
 import { PollOption } from '@/lib/api/poll/fetchPollOptions';
 
@@ -11,7 +11,7 @@ interface Props {
 }
 export default function PollInitClientWrapper({ polls }: Props) {
   const dispatch = useDispatch();
-  const suggestions = useAppSelector((state) => state.poll.suggestions);
+  const pollOptions = useAppSelector((state) => state.poll.pollOptions);
 
   useEffect(() => {
     const sorted = [...(polls || [])].sort((a: PollOption, b: PollOption) => {
@@ -25,8 +25,7 @@ export default function PollInitClientWrapper({ polls }: Props) {
 
       return bTime - aTime;
     });
-    dispatch(setSuggestions(sorted));
+    dispatch(setPollOptions(sorted));
   }, [dispatch, polls]);
-  console.log('SUGGESTIONS', suggestions);
   return null;
 }

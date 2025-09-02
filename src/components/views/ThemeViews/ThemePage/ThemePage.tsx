@@ -44,14 +44,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
               <JoinThemeModal themeTitle={themeData?.name} themeId={themeData!.id} username={themeData?.created_by.username} />
             </ButtonModalWrapper>
           )}
-          <div className={styles.reviews}>
-            {/* <button className={`${styles.dislikesBtn} ${styles.btn}`}>
-              <Feedback color={'#d9d9d9'} />
-            </button>
-            <button className={`${styles.likesBtn} ${styles.btn}`}>
-              <Feedback color={'#d9d9d9'} />
-            </button> */}
-          </div>
+          <div className={styles.reviews}></div>
           <p className={styles.comment}>{`"${themeData?.description}"` || 'No Description'}</p>
         </div>
         <section className={styles.userDetails}>
@@ -67,11 +60,7 @@ export default async function ThemePage({ theme, inPast }: Props) {
               <ParticipantList />
             </div>
           </section>
-          <section className={styles.stats}>
-            {/* <Figure />
-            <Figure />
-            <Figure /> */}
-          </section>
+          <section className={styles.stats}></section>
         </section>
       </main>
     </div>

@@ -15,12 +15,13 @@ export default function SuggestionModal() {
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth();
 
+  const year = useAppSelector((state) => state.theme.year);
+
   // month slots
   const initialMonths: MonthSlotType[] = MONTHS.map((month, index) => {
     const theme = themes?.find((t) => new Date(t.theme_month).getFullYear() === currentYear && parseInt(t.theme_month.split('-')[1], 10) - 1 === index && t.type === 'final');
 
     const isPastMonth = currentYear < today.getFullYear() || (currentYear === today.getFullYear() && index < currentMonth);
-
     const isPreassigned = !!theme?.id && theme.name !== 'No Theme';
 
     return {
@@ -61,7 +62,6 @@ export default function SuggestionModal() {
             assignedThemeName: suggestion.name,
             image: suggestion.image_url ?? undefined,
           };
-          // console.log('Updated month slot:', updated);
           return updated;
         }
         return month;
@@ -92,10 +92,6 @@ export default function SuggestionModal() {
   const handleUnassign = (monthId: string) => {
     const month = months.find((m) => m.id === monthId);
     if (!month || !month.assignedSuggestion) return;
-
-    // console.log('Unassign triggered');
-    // console.log('Month ID:', monthId);
-    // console.log('Month before unassign:', month);
 
     const { assignedSuggestion } = month;
 
@@ -132,7 +128,6 @@ export default function SuggestionModal() {
   // promote themes
   const handleConfirm = async () => {
     const serverId = getCookie('server_id');
-    const year = new Date().getFullYear();
 
     try {
       const res = await fetch('/api/polls/promote', {

@@ -18,6 +18,7 @@ type SupabaseOptionRow = {
   name: string;
   poll_votes?: SupabaseVoteRow[] | null;
   created_by?: {
+    id: string;
     username: string;
     avatar_url: string;
   } | null;
@@ -33,6 +34,7 @@ export type PollOption = {
   server_id: string;
   poll_id: string;
   created_by: {
+    id: string;
     username: string;
     avatar_url: string;
   };
@@ -73,6 +75,7 @@ export async function fetchPollOptions(serverPollId: string): Promise<{ pollOpti
         )
       ),
       created_by:users (
+        id,
         username,
         avatar_url
       )
@@ -91,6 +94,7 @@ export async function fetchPollOptions(serverPollId: string): Promise<{ pollOpti
     image_url: option.image_url,
     vote_count: option.vote_count,
     created_by: {
+      id: option.created_by?.id ?? '',
       username: option.created_by?.username ?? '',
       avatar_url: option.created_by?.avatar_url ?? '',
     },

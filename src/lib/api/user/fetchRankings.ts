@@ -25,7 +25,7 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
     } = await supabase.auth.getUser();
     if (!user) return { leaderboard: [], theme: null, availableTimes: [] };
 
-    // Fetch all available years and months
+    // fetch all available years and months
     const { data: themeTimes, error: themeTimesError } = await supabase.from('server_theme_calendar').select('year, months').eq('server_id', serverId);
 
     if (themeTimesError) {
@@ -38,7 +38,7 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
       months.forEach((month: number) => availableTimes.push({ year, month }));
     });
 
-    // Filter months for the chosen year
+    // filter months for the chosen year
     const monthsForYear = availableTimes
       .filter((t) => t.year.toString() === chosenYear)
       .map((t) => t.month)
@@ -49,7 +49,7 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
       return { leaderboard: [], theme: null, availableTimes };
     }
 
-    // Determine month to query
+    // determine month to query
     let monthNumber = monthNames.indexOf(chosenMonth) + 1;
     if (!monthsForYear.includes(monthNumber)) {
       // pick first available month if invalid
@@ -61,7 +61,7 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
     const monthStr = monthNumber.toString().padStart(2, '0');
     const lastDay = new Date(Number(chosenYear), monthNumber, 0).getDate();
 
-    // Query theme safely
+    // query theme safely
     const { data: theme, error: themeError } = await supabase.from('themes').select('*').gte('theme_month', `${chosenYear}-${monthStr}-01`).lte('theme_month', `${chosenYear}-${monthStr}-${lastDay}`).single();
 
     if (themeError || !theme) {
@@ -69,7 +69,7 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
       return { leaderboard: [], theme: null, availableTimes };
     }
 
-    // Fetch participations and compute leaderboard
+    // fetch participations and compute leaderboard
     let leaderboard: GuildMemberRank[] = [];
     if (rankingType === 'All Time') {
       // global: across server

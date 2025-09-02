@@ -77,7 +77,7 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
 
       // if no theme exists yet, POST
       if (!themeId) {
-        const createRes = await fetch(`/api/themes/new`, {
+        const createRes = await fetch(`/api/theme`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

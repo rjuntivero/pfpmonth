@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { deleteTheme, createTheme, updateTheme } from '@/lib/api/theme/themeActions';
+import { deleteTheme, updateTheme } from '@/lib/api/theme/themeActions';
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
@@ -42,24 +42,6 @@ export async function PATCH(req: Request, { params }: { params: { themeId: strin
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error updating theme:', error);
-    return NextResponse.json({ error: getErrorMessage(error) }, { status: 500 });
-  }
-}
-
-// create new theme
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const { name, description, image_url, server_id, created_by, theme_month } = body;
-
-    if (!name || !server_id || !created_by || !theme_month) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-    }
-
-    const { id } = await createTheme({ name, description, image_url, server_id, created_by, theme_month });
-    return NextResponse.json({ id });
-  } catch (error) {
-    console.error('Error creating theme:', error);
     return NextResponse.json({ error: getErrorMessage(error) }, { status: 500 });
   }
 }

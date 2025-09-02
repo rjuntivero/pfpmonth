@@ -12,6 +12,7 @@ import { setChosenMonth, setChosenYear, setLoaded } from '@/features/leaderboard
 import { MONTHS as monthNames } from '@/lib/utils/stringUtils';
 import { ThemeData } from '@/lib/api/theme/fetchThemeData';
 import { AvailableTime } from '@/lib/api/user/fetchRankings';
+import Image from 'next/image';
 
 interface Props {
   serverName: string;
@@ -37,7 +38,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
 
   const pedestalOrder = [1, 0, 2];
 
-  // Initialize chosenYear and chosenMonth
+  // initialize chosenYear and chosenMonth
   useEffect(() => {
     if (availableTimes.length > 0 && (!chosenYear || !chosenMonth)) {
       const first = availableTimes[0];
@@ -69,15 +70,15 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
       try {
         dispatch(setLoaded(true));
 
-        // Fetch members
+        // fetch members
         const guildRes = await fetch('/api/server');
         const guildData = await guildRes.json();
         setGuildMembers(guildData.sortedMembers as GuildMemberRank[]);
 
-        // Fetch rankings
+        // fetch rankings
         const rankRes = await fetch('/api/server/rankings', {
           method: 'POST',
-          body: JSON.stringify({ chosenMonth, chosenYear, guildData, rankingType }),
+          body: JSON.stringify({ chosenMonth, chosenYear, guildData: guildData.sortedMembers, rankingType }),
         });
 
         const {
@@ -96,7 +97,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         setChosenTheme(theme ?? undefined);
         setGuildMembers(sortedMembers);
 
-        // Update dropdowns
+        // update dropdowns
         const uniqueYears = Array.from(new Set(availableTimes.map((t) => t.year.toString()))).sort();
         setYearsDropdown(uniqueYears);
 
@@ -109,7 +110,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         setTopUsers(
           topUserRanks.map((m) => ({
             name: m.discord_users?.username ?? 'Unknown',
-            imageURL: m.discord_users?.avatar_url ?? null,
+            imageURL: m.discord_users?.avatar_url ? `${m.discord_users.avatar_url}?size=512` : undefined,
           }))
         );
 
@@ -128,10 +129,10 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
     setIsMonthDropdownOpen(false);
     dispatch(setChosenYear(year));
 
-    // Use the availableTimes from state
+    // use the availableTimes from state
     const monthsForYear = availableTimes.filter((t) => t.year.toString() === year).map((t) => monthNames[t.month - 1]);
 
-    // Pick first available month if current chosenMonth is invalid
+    // pick first available month if current chosenMonth is invalid
     const newMonth = monthsForYear.includes(chosenMonth) ? chosenMonth : monthsForYear[0];
 
     dispatch(setChosenMonth(newMonth));
@@ -143,6 +144,13 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
     dispatch(setChosenMonth(month));
   };
 
+  const handleTypeSelect = (type: string) => {
+    setIsRankingDropdownOpen(false);
+    setIsMonthDropdownOpen(false);
+    setIsYearDropdownOpen(false);
+    setRankingType(type as 'All Time' | 'Monthly');
+  };
+
   return (
     <>
       <section className={styles.pedestals}>
@@ -152,7 +160,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
           <div className={styles.filters}>
             <Dropdown selected={chosenMonth} items={monthsDropdown} onSelect={handleMonthSelect} isOpen={isMonthDropdownOpen} setIsOpen={setIsMonthDropdownOpen} disabled={rankingType === 'All Time'} />
             <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={yearsDropdown} isOpen={isYearDropdownOpen} setIsOpen={setIsYearDropdownOpen} disabled={rankingType === 'All Time'} />{' '}
-            <Dropdown selected={rankingType} items={['All Time', 'Monthly']} onSelect={(val) => setRankingType(val as 'All Time' | 'Monthly')} isOpen={isRankingDropdownOpen} setIsOpen={setIsRankingDropdownOpen} />
+            <Dropdown selected={rankingType} items={['All Time', 'Monthly']} onSelect={handleTypeSelect} isOpen={isRankingDropdownOpen} setIsOpen={setIsRankingDropdownOpen} />
           </div>
         </div>
         <div className={styles.topUsers}>

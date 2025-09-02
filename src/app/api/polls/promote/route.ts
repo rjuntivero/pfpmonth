@@ -3,11 +3,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { promoteAssignedSuggestionsToThemes } from '@/lib/api/poll/pollActions';
 import { MonthSlotType } from '@/components/layout/ThemeOverviewPanel/SuggestionsCalendar/SuggestionsCalendar';
 
+// map and promote all assigned suggestions in calendar to a theme
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { months, year, serverId } = body as { months: MonthSlotType[]; year: number; serverId: string };
 
+    console.log('year chosen', year);
     await promoteAssignedSuggestionsToThemes(months, year, serverId);
 
     return NextResponse.json({ success: true });

@@ -1,7 +1,7 @@
 import styles from './page.module.css';
 import Image from 'next/image';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
-import { CurtainDrapes } from '@/components/theme/CurtainDrapes/CurtainDrapes';
+import { CurtainDrapes } from '@/components/wrappers/ThemeSliderClientWrapper/CurtainDrapes/CurtainDrapes';
 import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWrapper/ThemeSliderClientWrapper';
 import { cookies } from 'next/headers';
 import ThemeOverviewPanel from '@/components/layout/ThemeOverviewPanel/ThemeOverviewPanel';

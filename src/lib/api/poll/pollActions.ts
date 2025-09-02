@@ -72,12 +72,12 @@ export async function promoteAssignedSuggestionsToThemes(months: MonthSlotType[]
 
     // prepare theme data
     const themeData = {
-      theme_month: `${year}-${String(MONTHS.indexOf(month.month) + 1).padStart(2, '0')}-01`,
       name: suggestion.name,
-      type: 'final',
-      image: suggestion.image_url ?? null,
-      poll_id: suggestion.id,
+      description: suggestion.description,
+      theme_month: `${year}-${String(MONTHS.indexOf(month.month) + 1).padStart(2, '0')}-01`,
+      image_url: suggestion.image_url ?? null,
       server_id: serverId,
+      created_by: suggestion.created_by.id,
     };
 
     // insert the theme
@@ -85,7 +85,20 @@ export async function promoteAssignedSuggestionsToThemes(months: MonthSlotType[]
 
     if (error) {
       console.error(`Failed to update theme for ${month.month}:`, error);
-    } else {
+      continue;
+    }
+    // delete all votes for this poll option
+    const { error: voteDeleteError } = await supabase.from('poll_votes').delete().eq('poll_option_id', suggestion.id);
+
+    if (voteDeleteError) {
+      console.error(`Failed to delete votes for poll option ${suggestion.id}:`, voteDeleteError);
+    }
+
+    // delete the poll option itself
+    const { error: pollDeleteError } = await supabase.from('poll_options').delete().eq('id', suggestion.id);
+
+    if (pollDeleteError) {
+      console.error(`Failed to delete poll option ${suggestion.id}:`, pollDeleteError);
     }
   }
 }

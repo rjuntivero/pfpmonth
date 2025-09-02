@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/state/hooks';
 import { setSelectedTimelineYear } from '@/features/profileSlice';
 import { useTooltip } from '@/hooks/useTooltip';
+import { MONTHS } from '@/lib/utils/stringUtils';
 
 interface Props {
   themes: Slide[];
@@ -25,7 +26,7 @@ export default function TimelinePanel({ themes, userCharacters }: Props) {
   const selectedTimelineYear = useAppSelector((state) => state.profile.selectedTimelineYear);
 
   const { tooltip, handleMouseEnter, handleMouseMove, handleMouseLeave, handleTouchStart, handleTouchMove, handleTouchEnd } = useTooltip();
-
+  const monthNames = MONTHS;
   return (
     <ProfilePanel
       heading="Timeline"
@@ -34,8 +35,7 @@ export default function TimelinePanel({ themes, userCharacters }: Props) {
       headerAction={<Dropdown selected={selectedTimelineYear} onSelect={(val: string) => dispatch(setSelectedTimelineYear(val))} items={['2025', '2024', '2023']} />}
     >
       {themes?.map((theme) => {
-        const monthLabel = theme?.theme_month ? new Date(Number(theme.theme_month.split('-')[0]), Number(theme.theme_month.split('-')[1]) - 1).toLocaleString('default', { month: 'long' }) : 'N/A';
-
+        const monthLabel = theme?.theme_month ? monthNames[Number(theme.theme_month.split('-')[1]) - 1] : 'N/A';
         const hasTheme = Boolean(theme.id);
         const userJoined = userCharacters.some((char) => char.theme_id === theme.id);
         const tooltipText = hasTheme ? userJoined ? <User /> : 'You did not join this theme' : 'No theme';

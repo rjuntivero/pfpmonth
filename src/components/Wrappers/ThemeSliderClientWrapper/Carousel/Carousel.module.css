@@ -69,8 +69,7 @@
   background-color: var(--accent);
 }
 
-.suggestedTag,
-.tbdTag {
+.suggestedTag {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -112,12 +111,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
-  gap: 1.5rem;
 }
 
 .controls button {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .controls h1 a {

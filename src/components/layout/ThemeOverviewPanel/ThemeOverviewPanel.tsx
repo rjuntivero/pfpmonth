@@ -33,7 +33,7 @@ export default function ThemeOverviewPanel({ serverId }: Props) {
       const res = await fetch(`/api/themes/${themeId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete theme');
 
-      if (onResetFile) onResetFile(); // reset local file
+      if (onResetFile) onResetFile();
       await refetchThemes();
     } catch (err) {
       console.error('Error resetting theme:', err);

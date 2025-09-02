@@ -163,7 +163,8 @@
 }
 
 .themeModalContainer .themeDetails .avatar {
-  width: 125px;
+  display: flex;
+  flex: 1;
   box-shadow: var(--shadow);
 }
 

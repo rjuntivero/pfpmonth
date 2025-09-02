@@ -20,10 +20,12 @@ export default function ThemePreview() {
 
   const { tooltip, handleMouseEnter, handleMouseMove, handleMouseLeave, handleTouchStart, handleTouchMove, handleTouchEnd } = useTooltip();
 
+  // fetch theme data when selectedCharacter changes
   useEffect(() => {
+    console.log('Selected character changed:', selectedCharacter);
     try {
       async function fetchTheme() {
-        const res = await fetch(`/api/theme?characterId=${selectedCharacter?.id}`);
+        const res = await fetch(`/api/theme/${selectedCharacter?.id}`);
         const data = await res.json();
         setTheme(data);
       }

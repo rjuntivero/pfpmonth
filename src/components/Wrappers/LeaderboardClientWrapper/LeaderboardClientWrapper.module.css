@@ -89,7 +89,7 @@
   color: white;
   background-color: var(--ui-background);
   width: clamp(7rem, 22vw, 20.3125rem);
-  height: clamp(13rem, 15vw, 12.5rem);
+  height: clamp(11rem, 15vw, 12.5rem);
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -131,6 +131,7 @@
   box-shadow: var(--shadow);
   border: 2px solid black;
   display: flex;
+  flex: 1;
 }
 
 .rankingList {

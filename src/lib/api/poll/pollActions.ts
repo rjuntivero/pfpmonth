@@ -86,7 +86,6 @@ export async function promoteAssignedSuggestionsToThemes(months: MonthSlotType[]
     if (error) {
       console.error(`Failed to update theme for ${month.month}:`, error);
     } else {
-      console.log(`✅ Updated theme for ${month.month}:`, data);
     }
   }
 }

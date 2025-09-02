@@ -2,11 +2,9 @@
 import Button from '@/components/shared/Button/Button';
 import styles from './ThemeOverviewPanel.module.css';
 import ThemeOverviewCard from '@/components/layout/ThemeOverviewPanel/ThemeOverviewCard/ThemeOverviewCard';
-import { useRef, useState } from 'react';
-import { useAppSelector } from '@/state/hooks';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import { setThemes } from '@/features/themeSlice';
-// import { updateTheme } from '@/lib/api/theme/themeActions';
 
 interface Props {
   serverId: string;
@@ -15,8 +13,11 @@ interface Props {
 export default function ThemeOverviewPanel({ serverId }: Props) {
   const year = useAppSelector((state) => state.theme.year);
   const themes = useAppSelector((state) => state.theme.themes);
-  const dispatch = useDispatch();
   const loading = useAppSelector((state) => !state.theme.loaded);
+  const dispatch = useAppDispatch();
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const handleClick = () => setIsSidebarOpen((prev) => !prev);
 
   const refetchThemes = async () => {
     const res = await fetch(`/api/themes?serverId=${serverId}&year=${year}`);
@@ -24,28 +25,20 @@ export default function ThemeOverviewPanel({ serverId }: Props) {
     dispatch(setThemes(data.slides));
   };
 
-  const resetTheme = async (themeId: string) => {
+  const resetTheme = async (themeId: string, onResetFile?: () => void) => {
     const confirmed = window.confirm('Are you sure you want to reset this theme? This will delete it entirely from the database.');
-
     if (!confirmed) return;
 
     try {
-      const res = await fetch(`/api/themes/${themeId}`, {
-        method: 'DELETE',
-      });
+      const res = await fetch(`/api/themes/${themeId}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete theme');
 
-      if (!res.ok) {
-        throw new Error('Failed to delete theme');
-      }
-
+      if (onResetFile) onResetFile(); // reset local file
       await refetchThemes();
     } catch (err) {
       console.error('Error resetting theme:', err);
     }
   };
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const handleClick = () => setIsSidebarOpen((prev) => !prev);
 
   const currentDate = new Date();
   const editableThemes = themes.filter((theme) => {
@@ -67,8 +60,10 @@ export default function ThemeOverviewPanel({ serverId }: Props) {
             <div className={styles.loaderWrapper}>
               <div className={styles.loader}></div>
             </div>
-          ) : editableThemes.length >= 1 ? (
-            editableThemes.map((theme, index) => <ThemeOverviewCard type={theme.type} onUpdate={refetchThemes} index={index} key={index} theme={theme} onReset={() => resetTheme(theme.id as string)} onClaim={() => {}} />)
+          ) : editableThemes.length ? (
+            editableThemes.map((theme, index) => (
+              <ThemeOverviewCard key={index} index={index} theme={theme} type={theme.type} onUpdate={refetchThemes} onReset={(theme, resetLocalData) => resetTheme(theme.id as string, resetLocalData)} onClaim={() => {}} />
+            ))
           ) : (
             <div>No editable themes...</div>
           )}

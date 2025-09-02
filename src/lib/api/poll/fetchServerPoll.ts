@@ -15,6 +15,5 @@ export async function fetchServerPoll(serverId: string): Promise<ServerPoll> {
     console.error('❌ Failed to fetch polls:', error.message);
   }
 
-  console.log('Fetched Server poll:', poll);
   return poll;
 }

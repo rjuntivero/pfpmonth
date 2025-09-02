@@ -63,7 +63,6 @@ export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?:
       console.error('Character not found');
       return { error: 'Character not found' };
     }
-    console.log('themeId:', themeId.theme_id);
 
     const { data, error } = await supabase
       .from('themes')
@@ -102,10 +101,8 @@ export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?:
     if (error) {
       console.error('Error fetching theme:', error);
     } else {
-      console.log('Fetched theme:', data);
     }
     themeData = data;
-    console.log('themeData:', themeData);
   } else {
     const { data } = await supabase
       .from('themes')

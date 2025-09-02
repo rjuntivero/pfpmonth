@@ -16,7 +16,6 @@ export async function POST(req: Request) {
 
   const body = await req.json();
   const { themeId, fileBase64, fileName, fileType, name } = body;
-  console.log('CHARACTRE TO UPDATE: ', name);
 
   if (!fileBase64 || !fileName) {
     return NextResponse.json({ success: false, error: 'Missing file data' }, { status: 400 });

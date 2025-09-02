@@ -76,7 +76,6 @@ export default function SuggestionModal() {
         filtered.push(month.assignedSuggestion);
       }
 
-      console.log('available suggestions after assign:', filtered);
       return filtered;
     });
 
@@ -144,7 +143,6 @@ export default function SuggestionModal() {
 
       const data = await res.json();
       if (data.success) {
-        console.log('all assigned suggestions promoted to themes');
       } else {
         console.error('failed to promote:', data.error);
       }

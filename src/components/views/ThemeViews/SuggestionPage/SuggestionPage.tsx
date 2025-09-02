@@ -14,7 +14,6 @@ interface Props {
 
 export default async function SuggestionPage({ suggestionId, themeMonth }: Props) {
   const suggestion = await fetchPolLData(suggestionId);
-  console.log('SuggestionPage suggestion:', suggestion);
 
   return (
     <div className={styles.page}>

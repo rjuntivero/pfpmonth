@@ -22,7 +22,6 @@ export default async function ThemePage({ theme, inPast }: Props) {
     return <div>{themeData.error}</div>;
   }
 
-  console.log('Theme Data:', themeData);
   const character = await fetchCharacter(themeData?.id);
   const participants = themeData?.participants || [];
 

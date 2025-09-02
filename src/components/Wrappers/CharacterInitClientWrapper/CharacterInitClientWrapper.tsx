@@ -18,24 +18,13 @@ export default function CharacterInitClientWrapper({ character, participants }: 
   const participantsState = useSelector((state: RootState) => state.character.participants);
 
   useEffect(() => {
-    console.log('CharacterInitWrapper mounted or updated');
     if (character && character.id) {
-      console.log('Dispatching setChosenCharacter with:', character);
       dispatch(setChosenCharacter(character));
     }
     if (participants && participants.length > 0) {
-      console.log('Dispatching setParticipants with:', participants);
       dispatch(setParticipants(participants));
     }
   }, [character, participants, dispatch]);
-
-  useEffect(() => {
-    console.log('Redux chosenCharacter updated:', chosenCharacter);
-  }, [chosenCharacter]);
-
-  useEffect(() => {
-    console.log('Redux participants updated:', participantsState);
-  }, [participantsState]);
 
   return null;
 }

@@ -3,7 +3,7 @@ import styles from './ThemeOverviewCard.module.css';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Slide } from '@/types/Slide';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createTheme, updateTheme, uploadThemeImage } from '@/lib/api/theme/themeActions';
 import getCookie from '@/lib/utils/getClientCookie';
 import ThemeControls from './ThemeControls';
@@ -13,7 +13,7 @@ import ThemeImageUploader from './ThemeImageUploader';
 interface Props {
   type: string;
   theme: Slide;
-  onReset?: (_theme: Slide) => void;
+  onReset?: (_theme: Slide, resetLocalData?: () => void) => void;
   onClaim?: (_theme: Slide) => void;
   index?: number;
   onUpdate: () => void;
@@ -32,13 +32,20 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
   });
 
   // reset stale data when switching between themes
-  useEffect(() => {
-    setTempData({
+  const resetLocalData = useCallback(() => {
+    setSelectedFile(null);
+    setTempData((prev) => ({
       name: theme.name,
       description: theme.description,
-      image_url: theme.image,
-    });
-  }, [theme]);
+      image_url: selectedFile ? prev.image_url : theme.image,
+    }));
+  }, [theme.description, theme.image, theme.name, selectedFile]);
+
+  useEffect(() => {
+    if (!editing) {
+      resetLocalData();
+    }
+  }, [theme, resetLocalData, editing]);
 
   const handleImageChange = (file: File) => {
     setSelectedFile(file);
@@ -54,6 +61,7 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
     }));
   }
 
+  // save edited changes
   const saveChanges = async () => {
     try {
       let themeId = theme.id;
@@ -61,21 +69,53 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
       const { user } = await res.json();
       const userId = user?.user_id;
 
-      if (!themeId) {
-        const { id } = await createTheme({ ...tempData, server_id: serverId as string, created_by: userId, theme_month: theme.theme_month });
-        themeId = id;
-      }
-
+      // upload image first if a new file is selected
       let imageUrl = tempData.image_url;
       if (selectedFile) {
         imageUrl = await uploadThemeImage(serverId as string, selectedFile, theme.month, theme.year.toString());
       }
 
-      await updateTheme(themeId, { ...tempData, image_url: imageUrl });
+      // if no theme exists yet, POST
+      if (!themeId) {
+        const createRes = await fetch(`/api/themes/new`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...tempData,
+            image_url: imageUrl,
+            server_id: serverId as string,
+            created_by: userId,
+            theme_month: theme.theme_month,
+          }),
+        });
+
+        if (!createRes.ok) throw new Error('Failed to create theme');
+        const { id } = await createRes.json();
+        themeId = id;
+      } else {
+        // if theme exists, PATCH
+        const patchRes = await fetch(`/api/themes/${themeId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...tempData, image_url: imageUrl }),
+        });
+
+        if (!patchRes.ok) throw new Error('Failed to update theme');
+      }
+
       await onUpdate();
       setEditing(false);
+      resetLocalData();
     } catch (err) {
       console.error('Failed to save theme:', err);
+    }
+  };
+
+  const handleReset = async () => {
+    if (onReset) {
+      await onReset(theme, resetLocalData);
+    } else {
+      resetLocalData();
     }
   };
 
@@ -117,7 +157,7 @@ export default function ThemeOverviewCard({ type, theme, onReset, onClaim, index
                 setEditing(false);
               }}
               onEdit={() => setEditing(true)}
-              onReset={() => onReset?.(theme)}
+              onReset={handleReset}
               onClaim={() => onClaim?.(theme)}
             />
           </div>

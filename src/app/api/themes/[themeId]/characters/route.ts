@@ -3,11 +3,16 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { redis } from '@/lib/redis';
 import { createClient } from '@/lib/supabase/supabaseSSR';
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ themeId: string }> }) {
+interface Props {
+  themeId: string;
+}
+
+// fetch characters for a given theme
+export async function GET(req: NextRequest, { params }: { params: Promise<Props> }) {
   const supabase = await createClient();
   const { themeId } = await params;
-  console.log(`Fetching characters for themeId: ${themeId}`);
 
+  // fetch claimed characters for the theme
   const { data: claimedCharacters } = await supabase.from('user_characters').select('name').eq('theme_id', themeId);
   const claimedNames = claimedCharacters?.map((c) => c.name) ?? [];
 
@@ -15,10 +20,11 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ them
 
   if (!theme) return NextResponse.json({ error: 'Theme is required' }, { status: 400 });
 
-  console.log(`theme key : theme:${theme}`);
+  // fetch redis cache
   const cacheKey = `theme:${theme}`;
   const cached = await redis.get(cacheKey);
 
+  // if cached, return cached characters
   if (cached) {
     const characters = Array.isArray(cached) ? cached : [];
 
@@ -31,6 +37,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ them
 
     return NextResponse.json({ source: 'cache', characters: charactersWithStatus });
   }
+
+  // if not cached, call gemini api to generate characters
 
   const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY!);
   const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });

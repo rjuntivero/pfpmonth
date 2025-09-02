@@ -17,7 +17,6 @@ export default function ServerPanel({ servers }: { servers: Server[] }) {
     if (!selectedServerId && servers.length > 0) {
       dispatch(setSelectedServerId(servers[0].server_id));
     }
-    console.log('Selected Servers', servers);
   }, [dispatch, selectedServerId, servers]);
 
   return (

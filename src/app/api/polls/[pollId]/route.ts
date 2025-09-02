@@ -52,7 +52,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<Props
   const option_text = form.get('theme-description')?.toString();
   const serverId = form.get('server_id')?.toString();
 
-  console.log('Form fields:', { poll_id, name, option_text, serverId });
   if (!poll_id || !name || !option_text || !serverId) {
     return NextResponse.json({ error: 'Missing required form fields' }, { status: 400 });
   }

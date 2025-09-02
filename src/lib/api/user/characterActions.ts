@@ -17,7 +17,6 @@ export async function fetchCharacter(themeId: string): Promise<Character | undef
     console.error('Error fetching character:', error);
     return { name: 'No Character', image_url: '/no-image-placeholder.jpg', id: '', theme_id: '', user_id: '' };
   } else if (!characterData || characterData.length === 0) {
-    console.log('No character found for the user in this theme');
     return { name: 'No Character', image_url: '/no-image-placeholder.jpg', id: '', theme_id: '', user_id: '' };
   }
 
@@ -40,11 +39,8 @@ export async function fetchCharacters(): Promise<Character[] | undefined> {
     console.error('Error fetching character:', error);
     return [];
   } else if (!characterData || characterData.length === 0) {
-    console.log('No character found for the user in this theme');
     return [];
   }
-
-  console.log('Fetched character data:', characterData);
 
   return characterData;
 }

@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
-import { promoteTheme, deletePollOption, deleteTheme } from '@/lib/api/theme/themeActions';
+import { deleteTheme, createTheme, updateTheme } from '@/lib/api/theme/themeActions';
 
-// type safe error messages
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
   return String(error);
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ themeId: string }> }) {
+interface Props {
+  themeId: string;
+}
+
+// delete a theme given themeId
+export async function DELETE(req: Request, { params }: { params: Promise<Props> }) {
   const { themeId } = await params;
 
   if (!themeId) {
@@ -23,28 +27,39 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ theme
   }
 }
 
-export async function POST(req: Request, { params }: { params: Promise<{ themeId: string }> }) {
-  const { themeId } = await params;
-
-  const body = await req.json();
-  const { name, description, image_url, server_id, created_by, theme_month } = body;
-
-  if (!themeId || !name || !server_id || !created_by || !theme_month) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-  }
-
+// update existing theme
+export async function PATCH(req: Request, { params }: { params: { themeId: string } }) {
+  const { themeId } = params;
   try {
-    await promoteTheme({ name, description, image_url, server_id, created_by, theme_month });
-  } catch (insertError) {
-    console.error('Error inserting theme:', insertError);
-    return NextResponse.json({ error: getErrorMessage(insertError) }, { status: 500 });
-  }
+    const body = await req.json();
+    const { name, description, image_url } = body;
 
+    if (!themeId) {
+      return NextResponse.json({ error: 'Missing themeId' }, { status: 400 });
+    }
+
+    await updateTheme(themeId, { name, description, image_url });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error updating theme:', error);
+    return NextResponse.json({ error: getErrorMessage(error) }, { status: 500 });
+  }
+}
+
+// create new theme
+export async function POST(req: Request) {
   try {
-    await deletePollOption(themeId);
-  } catch (deleteError) {
-    console.warn('Inserted theme, but failed to delete poll_option:', deleteError);
-  }
+    const body = await req.json();
+    const { name, description, image_url, server_id, created_by, theme_month } = body;
 
-  return NextResponse.json({ success: true });
+    if (!name || !server_id || !created_by || !theme_month) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const { id } = await createTheme({ name, description, image_url, server_id, created_by, theme_month });
+    return NextResponse.json({ id });
+  } catch (error) {
+    console.error('Error creating theme:', error);
+    return NextResponse.json({ error: getErrorMessage(error) }, { status: 500 });
+  }
 }

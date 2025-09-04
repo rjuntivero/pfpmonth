@@ -1,3 +1,19 @@
+<h1>PFPMonth</h1>
+"PFPMonth" is a fun, interactive monthly theme planner for Discord servers.  
+It brings communities together by letting members **claim characters**, **track participation**, and celebrate creative themes every month.
+
+With PFPMonth, servers can:
+
+- 📅 Plan and display **monthly profile picture (PFP) themes**
+- 🎭 Claim characters from popular franchises and track who got them first
+- ⚡ Compete for **fastest claims** and **highest participation streaks**
+- 📊 Keep a record of all claims, votes, and winners over time
+- 🤝 Build community engagement through playful rivalry and collaboration
+
+---
+
+<img src="./public/PFPMonth.png"/>
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

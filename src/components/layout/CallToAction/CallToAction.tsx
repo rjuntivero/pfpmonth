@@ -6,14 +6,18 @@ import { animate, useScroll } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-function StaticText({ text, balooIndices = [] }: { text: string; startIndex?: number; balooIndices?: number[] }) {
+function StaticText({ text, balooIndices = [] }: { text: string; balooIndices?: number[] }) {
   return (
     <>
-      {text.split('').map((char, i) => (
-        <span key={i} className={`${balooIndices.includes(i) ? styles.baloo : ''}`} style={{ display: 'inline-block' }}>
-          {char}
-        </span>
-      ))}
+      {text.split('').map((char, i) =>
+        char === ' ' ? (
+          ' '
+        ) : (
+          <span key={i} className={balooIndices.includes(i) ? styles.baloo : ''} style={{ display: 'inline-block' }}>
+            {char}
+          </span>
+        )
+      )}
     </>
   );
 }
@@ -58,17 +62,25 @@ export default function CallToAction() {
 
   return (
     <section className={styles.wrapper}>
-      <h1 className={styles.floatingHeader}>
+      <h1 className={styles.header}>
         <span className={styles.vote}>
-          <StaticText text="VOTE " balooIndices={[1]} />
+          <StaticText text="VOTE" balooIndices={[1]} />
         </span>
-        <span style={{ display: 'inline-block', width: '0.3ch' }} />
-        <span className={styles.gradientText}>
-          <StaticText text="FOR" startIndex={3} balooIndices={[0]} />
-          <span style={{ display: 'inline-block', width: '0.1ch' }} /> <span style={{ display: 'inline-block', width: '0.01ch' }} />
-          <StaticText text="THE" startIndex={6} balooIndices={[0]} />
-          <StaticText text="NEXT" startIndex={9} balooIndices={[0, 1]} /> <span style={{ display: 'inline-block', width: '0.1ch' }} />
-          <StaticText text="  THEME" startIndex={12} balooIndices={[0, 4]} />
+
+        <span className={styles.word}>
+          <StaticText text="FOR" balooIndices={[0]} />
+        </span>
+
+        <span className={styles.word}>
+          <StaticText text="THE" balooIndices={[0]} />
+        </span>
+
+        <span className={styles.word}>
+          <StaticText text="NEXT" balooIndices={[0, 1]} />
+        </span>
+
+        <span className={styles.word}>
+          <StaticText text="THEME" balooIndices={[0, 4]} />
         </span>
       </h1>
 

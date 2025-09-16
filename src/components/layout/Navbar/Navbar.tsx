@@ -10,14 +10,6 @@ import { useAppSelector } from '@/state/hooks';
 import { useDispatch } from 'react-redux';
 import SideNav from './SideNav/SideNav';
 import { toggleNavbar } from '@/features/themeSlice';
-import { NavItem } from '@/types/NavItem';
-
-const navItems: NavItem[] = [
-  { name: 'Home', path: '/' },
-  { name: 'Leaderboard', path: '/leaderboard' },
-  { name: 'Themes', path: '/themes' },
-  { name: 'Profile', path: '/profile' },
-];
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -25,6 +17,21 @@ export default function Navbar() {
   const containerRef = useRef<HTMLUListElement>(null);
   const navbarOpen = useAppSelector((state) => state.theme.navbarOpen);
   const dispatch = useDispatch();
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Leaderboard', path: '/leaderboard' },
+    { name: 'Themes', path: '/themes' },
+    { name: 'Profile', path: '/profile' },
+  ];
+
+  // useEffect(() => {
+  //   async function checkAuth() {
+  //     const supabase = await createClient();
+  //     const { data: user } = await supabase.auth.getUser();
+
+  //   }
+  //   checkAuth();
+  // }, []);
 
   function toggleSideNav() {
     dispatch(toggleNavbar(!navbarOpen));

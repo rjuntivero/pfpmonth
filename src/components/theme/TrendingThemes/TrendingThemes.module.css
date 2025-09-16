@@ -3,7 +3,7 @@
   font-weight: 700;
   color: var(--main);
   opacity: 25%;
-  padding-block: 0.5rem;
+  padding-block: 1rem;
   align-items: center;
   display: flex;
   overflow: hidden;
@@ -24,5 +24,15 @@
 @keyframes scroll {
   to {
     transform: translateX(calc(-100% - var(--gap)));
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .marquee {
+    font-size: 1.3rem;
+    padding-block: 0.25rem;
+    & ul {
+      height: 2.5rem;
+    }
   }
 }

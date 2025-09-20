@@ -13,13 +13,15 @@ export default async function middleware(req: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (user) {
+  if (!user) {
     console.log('USER FOUND');
     const url = req.nextUrl.clone();
     url.pathname = '/login';
     url.search = `?from=${encodeURIComponent(req.nextUrl.pathname)}`;
     return NextResponse.redirect(url);
   }
+
+  console.log('USER ???');
 
   return NextResponse.next();
 }

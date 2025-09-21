@@ -22,6 +22,8 @@ export default function Carousel({ slides }: Props) {
     ...slides,
     ...slides.slice(0, CLONE_COUNT),
   ];
+
+  const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
   const dispatch = useDispatch();
 
   const trackRef = useRef<HTMLDivElement>(null);
@@ -138,21 +140,40 @@ export default function Carousel({ slides }: Props) {
 
                 router.push(clickedSlide.route as string);
               }}>
-              <Image
-                className={styles.image}
-                src={slide.image}
-                alt={slide.name}
-                fill
-                priority={true}
-                sizes="100vw"
-                style={{ objectFit: 'cover' }}
-              />
-              <div className={styles.tagStack}>
-                {/* {slide.tag?.includes('tbd') && (
-                  <div className={styles.tbdTag}>
-                    <span>TBD</span>
+              <div className={`${styles.flipCard} ${flippedIndex === i ? styles.flip : ''}`}>
+                <div className={styles.flipCardInner}>
+                  <button
+                    className={styles.viewDetails}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setFlippedIndex(flippedIndex === i ? null : i);
+                    }}>
+                    {flippedIndex === i ? 'X' : '?'}
+                  </button>
+                  <div className={styles.flipCardFront}>
+                    <Image
+                      className={styles.image}
+                      src={slide.image}
+                      alt={slide.name}
+                      fill
+                      priority={true}
+                      sizes="100vw"
+                      style={{ objectFit: 'cover' }}
+                    />
                   </div>
-                )} */}
+                  <div className={styles.flipCardBack}>
+                    <div>
+                      <h1>Title: </h1>
+                      <p>{slide.name}</p>
+                    </div>
+                    <div>
+                      <h1>Description: </h1>
+                      <p>{slide.description}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.tagStack}>
                 {slide.tag?.includes('suggested') && (
                   <div className={styles.suggestedTag} role="note" aria-label="Suggested theme">
                     <span>Suggested</span>

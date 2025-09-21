@@ -8,6 +8,7 @@ import { Slide } from '@/types/Slide';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { setActiveSlide } from '@/features/themeSlice';
+import Image from 'next/image';
 interface Props {
   slides: Slide[];
 }
@@ -16,7 +17,11 @@ export default function Carousel({ slides }: Props) {
   const router = useRouter();
   const CLONE_COUNT = 3;
   const originalLength = slides.length;
-  const extendedSlides = [...slides.slice(-CLONE_COUNT), ...slides, ...slides.slice(0, CLONE_COUNT)];
+  const extendedSlides = [
+    ...slides.slice(-CLONE_COUNT),
+    ...slides,
+    ...slides.slice(0, CLONE_COUNT),
+  ];
   const dispatch = useDispatch();
 
   const trackRef = useRef<HTMLDivElement>(null);
@@ -78,7 +83,10 @@ export default function Carousel({ slides }: Props) {
 
   useLayoutEffect(() => {
     const now = new Date();
-    const current = slides.findIndex((s) => s.month === now.toLocaleString('default', { month: 'long' }) && s.year === now.getFullYear());
+    const current = slides.findIndex(
+      (s) =>
+        s.month === now.toLocaleString('default', { month: 'long' }) && s.year === now.getFullYear()
+    );
 
     const startIndex = current !== -1 ? current : 0;
 
@@ -101,8 +109,7 @@ export default function Carousel({ slides }: Props) {
           x: springX,
           opacity: ready ? 1 : 0,
           transition: 'opacity 0.4s ease',
-        }}
-      >
+        }}>
         {extendedSlides.map((slide, i) => {
           const logicalIndex = (i - CLONE_COUNT + originalLength) % originalLength;
           const isActive = logicalIndex === activeIndex;
@@ -110,11 +117,14 @@ export default function Carousel({ slides }: Props) {
           return (
             <div
               key={`${slide.id ?? 'placeholder'}-${i}`}
-              className={`${styles.slide} ${isActive ? styles.active : styles.inactive} ${logicalIndex === currentMonthIndex ? styles.currentTheme : ''}`}
-              style={{ backgroundImage: `url(${slide.image})` }}
+              className={`${styles.slide} ${isActive ? styles.active : styles.inactive} ${
+                logicalIndex === currentMonthIndex ? styles.currentTheme : ''
+              }`}
               role="group"
               aria-roledescription="slide"
-              aria-label={`${slide.name}${logicalIndex === currentMonthIndex ? ', Current Month' : ''}`}
+              aria-label={`${slide.name}${
+                logicalIndex === currentMonthIndex ? ', Current Month' : ''
+              }`}
               onClick={() => {
                 setActiveIndex(logicalIndex);
                 dispatch(setActiveSlide(slides[logicalIndex]));
@@ -127,8 +137,16 @@ export default function Carousel({ slides }: Props) {
                 if (!isClickingActive || !clickedSlide?.route) return;
 
                 router.push(clickedSlide.route as string);
-              }}
-            >
+              }}>
+              <Image
+                className={styles.image}
+                src={slide.image}
+                alt={slide.name}
+                fill
+                priority={true}
+                sizes="100vw"
+                style={{ objectFit: 'cover' }}
+              />
               <div className={styles.tagStack}>
                 {/* {slide.tag?.includes('tbd') && (
                   <div className={styles.tbdTag}>

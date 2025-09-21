@@ -28,11 +28,11 @@ export default function UserRanking({ member, index, score, rankingType }: Props
         {rankingType === 'All Time' ? !member?.user_id ? <p>User has not logged in</p> : score ?? 0 < 1 ? <p>No participation</p> : <p>{score} month streak</p> : ''}
         {rankingType === 'Monthly' ? (
           !member?.user_id ? (
-            <p>User has not logged in</p>
+            <p className={styles.participation}>User has not logged in</p>
           ) : !member?.participated ? (
-            <p>No participation</p>
+            <p className={styles.participation}>No participation</p>
           ) : (
-            <p>
+            <p className={styles.participation}>
               joined{' '}
               {member.fastestTime
                 ? new Date(member.fastestTime).toLocaleString('en-US', {

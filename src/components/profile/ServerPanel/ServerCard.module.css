@@ -37,8 +37,8 @@
 }
 
 .serverName {
-  font-weight: 500;
-  font-size: clamp(0.3rem, 2vw, 1.2rem);
+  font-weight: 300;
+  font-size: clamp(0.3rem, 2vw, 0.9rem);
   font-family: var(--font-baloo);
 }
 

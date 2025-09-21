@@ -43,9 +43,10 @@ export const metadata: Metadata = {
 export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
+
   const { serverName, themes } = await fetchThemes(currentYear, serverId);
   const serverPoll = await fetchServerPoll(serverId as string);
-  const { pollOptions } = await fetchPollOptions(serverPoll.id as string);
+  const { pollOptions } = await fetchPollOptions(serverPoll?.id as string);
   const supabase = await createClient();
   const { data: user } = await supabase.auth.getUser();
 
@@ -81,7 +82,13 @@ export default async function Page() {
         </section>
         {user && (
           <section role="region" aria-label="Current Server Themes">
-            <ThemeSliderClientWrapper serverName={serverName as string} serverId={serverId as string} initialYear={currentYear} initialThemes={themes} isHomePage={true} />
+            <ThemeSliderClientWrapper
+              serverName={serverName as string}
+              serverId={serverId as string}
+              initialYear={currentYear}
+              initialThemes={themes}
+              isHomePage={true}
+            />
           </section>
         )}
         {/* <section className={styles.CallToAction}>

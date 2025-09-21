@@ -12,7 +12,6 @@
   outline: 1px solid black;
   padding: var(--panel-padding-lg);
   flex: 1;
-  flex-basis: 150px;
   border-radius: 20px;
   box-sizing: border-box;
   box-shadow: inset 4px 7px 7px rgba(0, 0, 0, 0.35);

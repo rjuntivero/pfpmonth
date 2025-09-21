@@ -56,7 +56,7 @@ export default function TimelinePanel({ themes, userCharacters }: Props) {
               {hasTheme && userJoined && <JoinIcon width="72" height="72" />}
               {!hasTheme && <LeaveIcon width="72" height="72" />}
             </div>
-            <h1 className={`${userJoined ? styles.joinedTheme : ''}`}>{monthLabel}</h1>
+            <h1 className={`${userJoined ? styles.joinedTheme : ''} ${styles.timelineMonth}`}>{monthLabel}</h1>
           </div>
         );
       })}

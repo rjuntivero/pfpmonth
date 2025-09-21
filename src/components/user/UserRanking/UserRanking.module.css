@@ -18,3 +18,9 @@
   display: flex;
   padding: 2.5em;
 }
+
+.participation {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--main);
+}

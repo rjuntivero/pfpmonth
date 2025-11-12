@@ -4,7 +4,6 @@ import { Baloo_2 } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import Footer from '@/components/layout/Footer/Footer';
-import { Inter } from 'next/font/google';
 import { ReduxProvider } from './ReduxProvider';
 
 const clashDisplay = localFont({
@@ -16,13 +15,6 @@ const clashDisplay = localFont({
 
 const baloo = Baloo_2({
   variable: '--font-baloo',
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  display: 'swap',
-});
-
-const inter = Inter({
-  variable: '--font-inter',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
@@ -40,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${clashDisplay.variable} ${baloo.variable} ${inter.variable}`}>
+      <body className={`${clashDisplay.variable} ${baloo.variable}`}>
         <ReduxProvider>
           <Navbar />
           {children}

@@ -1,6 +1,6 @@
 import TrendingThemes from '@/components/theme/TrendingThemes/TrendingThemes';
 import styles from './page.module.css';
-import CallToAction from '@/components/layout/CallToAction/CallToAction';
+// import CallToAction from '@/components/layout/CallToAction/CallToAction';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import { cookies } from 'next/headers';
 import { Metadata } from 'next';
@@ -43,7 +43,6 @@ export const metadata: Metadata = {
 export default async function Page() {
   const currentYear = new Date().getFullYear();
   const serverId = (await cookies()).get('server_id')?.value;
-
   const { serverName, themes } = await fetchThemes(currentYear, serverId);
   const serverPoll = await fetchServerPoll(serverId as string);
   const { pollOptions } = await fetchPollOptions(serverPoll?.id as string);
@@ -80,7 +79,7 @@ export default async function Page() {
         <section aria-hidden="true">
           <TrendingThemes />
         </section>
-        {user && (
+        {user && serverId && (
           <section role="region" aria-label="Current Server Themes">
             <ThemeSliderClientWrapper
               serverName={serverName as string}

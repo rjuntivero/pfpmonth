@@ -48,7 +48,7 @@ export default function JoinThemeModal({ themeTitle, themeId, username }: Props)
         themeId,
         fileBase64: base64Data,
         fileName: selectedFile?.name,
-        name: character.name,
+        name: character.character_name,
       }),
     });
 
@@ -71,22 +71,36 @@ export default function JoinThemeModal({ themeTitle, themeId, username }: Props)
       <div className={styles.modalWrapper}>
         <div className={styles.content}>
           <div className={styles.actions}>
-            <Avatar editable={true} onImageChange={handleImageChange} imageURL={previewUrl || '/no-image-placeholder.jpg'} className={styles.avatar} zoom={true} />
+            <Avatar
+              editable={true}
+              onImageChange={handleImageChange}
+              imageURL={previewUrl || '/no-image-placeholder.jpg'}
+              className={styles.avatar}
+              zoom={true}
+            />
             <h2 className={styles.username}>{username}</h2>
-            <h2 className={styles.characterName}>{character.name}</h2>
-            <CharacterSearch themeTitle={themeTitle} themeId={themeId} />
+            <div className={styles.characterSearch}>
+              <h2 className={styles.characterName}>{character.character_name}</h2>
+              <CharacterSearch themeTitle={themeTitle} themeId={themeId} />
+            </div>
             <article className={styles.manualSearch}>
               <p>or... Enter manually</p>
             </article>
           </div>
           <div className={styles.participants}>
             <h1 className={styles.participantTitle}>Claimed Characters</h1>
-            <ParticipantList />
+            <ParticipantList themeId={themeId} />
           </div>
         </div>
       </div>
 
-      {showCropper && selectedFile && <ImageCropper imageSrc={URL.createObjectURL(selectedFile)} onCancel={handleCropCancel} onConfirm={handleCropConfirm} />}
+      {showCropper && selectedFile && (
+        <ImageCropper
+          imageSrc={URL.createObjectURL(selectedFile)}
+          onCancel={handleCropCancel}
+          onConfirm={handleCropConfirm}
+        />
+      )}
     </>
   );
 }

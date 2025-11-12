@@ -4,6 +4,8 @@ export interface Participant {
   theme_id: string;
   image_url: string | null;
   user_id: string;
-  username: string;
-  avatar_url: string;
+  users: {
+    username: string;
+    avatar_url: string;
+  };
 }

@@ -3,21 +3,21 @@
 import { useEffect, useState } from 'react';
 import styles from './CharacterSearch.module.css';
 import Button from '@/components/shared/Button/Button';
-import { ClaimedCharacter } from '@/types/Character';
-import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { Character, ClaimedCharacter } from '@/types/Character';
+import { useAppDispatch } from '@/state/hooks';
 import { updateCharacterName } from '@/features/characterSlice';
 interface Props {
   themeTitle?: string;
   themeId: string;
+  claimedCharacter?: Character;
 }
 
-export default function CharacterSearch({ themeTitle, themeId }: Props) {
+export default function CharacterSearch({ themeTitle, themeId, claimedCharacter }: Props) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<ClaimedCharacter[]>([]);
   const [filteredResults, setFilteredResults] = useState<ClaimedCharacter[]>([]);
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState(false);
-  const claimedCharacter = useAppSelector((state) => state.character.chosenCharacter[themeId as string]);
 
   const dispatch = useAppDispatch();
 
@@ -28,17 +28,26 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
 
       setLoading(true);
 
-      const res = await fetch(`/api/themes/${themeId}/characters?theme=${encodeURIComponent(themeTitle)}`);
-      const data = await res.json();
+      try {
+        const res = await fetch(
+          `/api/themes/${themeId}/characters?theme=${encodeURIComponent(themeTitle)}`
+        );
+        const data = await res.json();
 
-      if (res.ok) {
-        setResults(data.characters);
-        setFilteredResults(data.characters);
-      } else {
-        console.error('Error fetching characters:', data.error);
+        if (res.ok && Array.isArray(data.characters)) {
+          setResults(data.characters);
+          setFilteredResults(data.characters);
+        } else {
+          setResults([]);
+          setFilteredResults([]);
+        }
+      } catch (err) {
+        console.error('Error fetching characters:', err);
+        setResults([]);
+        setFilteredResults([]);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchCharacters();
@@ -46,7 +55,9 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
 
   // live update results as query changes
   useEffect(() => {
-    const filtered = results.filter((character) => character?.character_name?.toLowerCase()?.includes(query?.toLowerCase()));
+    const filtered = results.filter((character) =>
+      character?.character_name?.toLowerCase()?.includes(query?.toLowerCase())
+    );
     setFilteredResults(filtered);
   }, [query, results]);
 
@@ -73,7 +84,14 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
   return (
     <div className={styles.container}>
       <form onSubmit={(e) => e.preventDefault()}>
-        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setTimeout(() => setFocused(false), 150)} placeholder="Search for a Character..." />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setTimeout(() => setFocused(false), 150)}
+          placeholder="Search for a Character..."
+        />
       </form>
 
       <div className={`${styles.resultsWrapper} ${focused ? styles.show : ''}`}>
@@ -87,10 +105,11 @@ export default function CharacterSearch({ themeTitle, themeId }: Props) {
               <li key={i}>
                 <Button
                   variant="character-result"
-                  className={`${styles.searchItem} ${char.character_name === claimedCharacter?.name ? styles.claimed : ''}`}
-                  disabled={char.character_name === claimedCharacter?.name}
-                  onClick={() => handleCharacterSelection(char.character_name)}
-                >
+                  className={`${styles.searchItem} ${
+                    char.character_name === claimedCharacter?.character_name ? styles.claimed : ''
+                  }`}
+                  disabled={char.character_name === claimedCharacter?.character_name}
+                  onClick={() => handleCharacterSelection(char.character_name)}>
                   {char.character_name}
                 </Button>
               </li>

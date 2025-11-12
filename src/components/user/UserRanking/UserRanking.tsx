@@ -19,13 +19,29 @@ export default function UserRanking({ member, index, score, rankingType }: Props
         delay: index * 0.05,
         ease: 'easeOut',
       }}
-      className={`${styles.container} ${!member?.user_id ? styles.newUser : ''}`}
-    >
-      <Avatar imageURL={member.discord_users.avatar_url} className={styles.avatar} />
+      className={`${styles.container} ${!member?.user_id ? styles.newUser : ''}`}>
+      <Avatar
+        imageURL={member.discord_users.avatar_url}
+        className={styles.avatar}
+        onError={(e) => {
+          // fallback if the avatar fails to load
+          (e.currentTarget as HTMLImageElement).src = '/no-image-placeholder.jpg';
+        }}
+      />
       <div className={styles.info}>
         <h1>{member.discord_users.username}</h1>
         {/* {!member?.user_id ? <p>not yet participated</p> : ''} */}
-        {rankingType === 'All Time' ? !member?.user_id ? <p>User has not logged in</p> : score ?? 0 < 1 ? <p>No participation</p> : <p>{score} month streak</p> : ''}
+        {rankingType === 'All Time' ? (
+          !member?.user_id ? (
+            <p>User has not logged in</p>
+          ) : score ?? 0 < 1 ? (
+            <p>No participation</p>
+          ) : (
+            <p>{score} month streak</p>
+          )
+        ) : (
+          ''
+        )}
         {rankingType === 'Monthly' ? (
           !member?.user_id ? (
             <p className={styles.participation}>User has not logged in</p>

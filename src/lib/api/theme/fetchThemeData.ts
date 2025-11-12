@@ -14,7 +14,7 @@ export interface ThemeData {
 
   user_characters?: {
     id: string;
-    name: string;
+    character_name: string;
     user_id: string;
     theme_id: string;
     image_url: string | null;
@@ -25,25 +25,24 @@ export interface ThemeData {
     };
   }[];
 
-  theme_likes?: {
-    liked: boolean;
-  }[];
-
   theme_month: string;
-  likes: number;
-  dislikes: number;
+
   participants: {
     id: string;
     character_name: string;
     theme_id: string;
     image_url: string | null;
     user_id: string;
-    username: string;
-    avatar_url: string;
   }[];
 }
 
-export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?: string; characterId?: string }): Promise<ThemeData | { error: string }> {
+interface ThemeDataProps {
+  themeMonth?: string;
+}
+
+export async function fetchThemeData({
+  themeMonth,
+}: ThemeDataProps): Promise<ThemeData | { error: string }> {
   const supabase = await createClient();
 
   const {
@@ -54,104 +53,36 @@ export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?:
     return { error: 'Not authenticated' };
   }
 
-  let themeData: ThemeData | null = null;
-
-  if (characterId) {
-    const { data: themeId } = await supabase.from('user_characters').select('theme_id').eq('id', characterId).single();
-
-    if (!themeId) {
-      console.error('Character not found');
-      return { error: 'Character not found' };
-    }
-
-    const { data, error } = await supabase
-      .from('themes')
-      .select(
-        `
-      id, 
-      name, 
-      description, 
-      image_url,
-      status, 
-      theme_month,
-      created_by:users!themes_created_by_fkey ( 
-        username, 
-        avatar_url
-      ), 
-      user_characters ( 
-        id,
-        name,
-        theme_id,
-        image_url,
-        user_id, 
-        users (
-          username,
-          avatar_url
-        )
-      ), 
-      themes_likes( 
-        liked, 
-        user_id
-      )
+  console.log('Theme Month:', themeMonth);
+  const { data: themeData, error: themeError } = await supabase
+    .from('themes')
+    .select(
+      `
+      *,
+      user_characters (
+      *
+    )
     `
-      )
-      .eq('id', themeId.theme_id)
-      .single<ThemeData>();
+    )
+    .eq('theme_month', themeMonth)
+    .single<ThemeData>();
 
-    if (error) {
-      console.error('Error fetching theme:', error);
-    } else {
-    }
-    themeData = data;
-  } else {
-    const { data } = await supabase
-      .from('themes')
-      .select(
-        `
-      id, 
-      name, 
-      description, 
-      image_url,
-      status, 
-      created_by:users!themes_created_by_fkey ( 
-        username, 
-        avatar_url
-      ), 
-      user_characters ( 
-        id,
-        name,
-        theme_id,
-        image_url,
-        user_id, 
-        users (
-          username,
-          avatar_url
-        )
-      ), 
-      themes_likes( 
-        liked, 
-        user_id
-      )
-    `
-      )
-      .eq('theme_month', themeMonth)
-      .single<ThemeData>();
-    themeData = data;
+  if (themeError || !themeData) {
+    console.error('Error fetching theme:', themeError);
+    return { error: 'Theme not found' };
   }
+
+  console.log('Theme participants', themeData?.user_characters);
 
   if (!themeData) return { error: 'Theme not found' };
 
-  const likes = themeData.theme_likes?.filter((l) => l.liked).length ?? 0;
-  const dislikes = themeData.theme_likes?.filter((l) => !l.liked).length ?? 0;
   const participants =
-    themeData.user_characters?.map((c) => ({
+    themeData?.user_characters?.map((c) => ({
       id: c.id,
       user_id: c.user_id,
       theme_id: c.theme_id,
       image_url: c.image_url,
-      avatar_url: c.users.avatar_url,
-      username: c.users.username,
-      character_name: c.name,
+      character_name: c.character_name,
       character_image: c.image_url,
     })) ?? [];
   return {
@@ -165,8 +96,47 @@ export async function fetchThemeData({ themeMonth, characterId }: { themeMonth?:
       username: themeData?.created_by?.username,
       avatar_url: themeData?.created_by?.avatar_url,
     },
-    likes,
-    dislikes,
     participants,
   };
 }
+
+// if (characterId) {
+//     const { data: themeId } = await supabase
+//       .from('user_characters')
+//       .select('theme_id')
+//       .eq('id', characterId)
+//       .single();
+
+//     if (!themeId) {
+//       console.error('Character not found');
+//       return { error: 'Character not found' };
+//     }
+
+//     const { data, error } = await supabase
+//       .from('themes')
+//       .select(
+//         `
+//       id,
+//       name,
+//       description,
+//       image_url,
+//       status,
+//       theme_month,
+//       created_by:users!themes_created_by_fkey (
+//         username,
+//         avatar_url
+//       ),
+//
+//       themes_likes(
+//         liked,
+//         user_id
+//       )
+//     `
+//       )
+//       .eq('id', themeId.theme_id)
+//       .single<ThemeData>();
+
+//     if (error) {
+//       console.error('Error fetching theme:', error);
+//     }
+//     themeData = data;

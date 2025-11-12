@@ -140,7 +140,7 @@ export default function Carousel({ slides }: Props) {
 
                 router.push(clickedSlide.route as string);
               }}>
-              <div className={`${styles.flipCard} ${flippedIndex === i ? styles.flip : ''}`}>
+              <article className={`${styles.flipCard} ${flippedIndex === i ? styles.flip : ''}`}>
                 <div className={styles.flipCardInner}>
                   <button
                     className={styles.viewDetails}
@@ -168,11 +168,12 @@ export default function Carousel({ slides }: Props) {
                     </div>
                     <div>
                       <h1>Description: </h1>
-                      <p>{slide.description}</p>
+                      <p>{slide?.description ?? 'No Description'}</p>
                     </div>
                   </div>
                 </div>
-              </div>
+                <div className={styles.label}>{slide.name}</div>
+              </article>
               <div className={styles.tagStack}>
                 {slide.tag?.includes('suggested') && (
                   <div className={styles.suggestedTag} role="note" aria-label="Suggested theme">
@@ -189,9 +190,7 @@ export default function Carousel({ slides }: Props) {
         <button onClick={() => handleScroll(-1)} aria-label="Previous theme">
           {'<'}
         </button>
-        <h1 aria-live="polite" tabIndex={-1} className={styles.activeSlideName}>
-          <Link href={slides[activeIndex]?.route ?? '#'}>{slides[activeIndex]?.name}</Link>
-        </h1>
+        <h1 aria-live="polite" tabIndex={-1} className={styles.activeSlideName}></h1>
         <button onClick={() => handleScroll(1)} aria-label="Next theme">
           {'>'}
         </button>

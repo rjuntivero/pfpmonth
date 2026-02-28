@@ -100,43 +100,4 @@ export async function fetchThemeData({
   };
 }
 
-// if (characterId) {
-//     const { data: themeId } = await supabase
-//       .from('user_characters')
-//       .select('theme_id')
-//       .eq('id', characterId)
-//       .single();
 
-//     if (!themeId) {
-//       console.error('Character not found');
-//       return { error: 'Character not found' };
-//     }
-
-//     const { data, error } = await supabase
-//       .from('themes')
-//       .select(
-//         `
-//       id,
-//       name,
-//       description,
-//       image_url,
-//       status,
-//       theme_month,
-//       created_by:users!themes_created_by_fkey (
-//         username,
-//         avatar_url
-//       ),
-//
-//       themes_likes(
-//         liked,
-//         user_id
-//       )
-//     `
-//       )
-//       .eq('id', themeId.theme_id)
-//       .single<ThemeData>();
-
-//     if (error) {
-//       console.error('Error fetching theme:', error);
-//     }
-//     themeData = data;

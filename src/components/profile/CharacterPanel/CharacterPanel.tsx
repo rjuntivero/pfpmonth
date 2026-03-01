@@ -1,7 +1,11 @@
 'use client';
 
 import { useDispatch } from 'react-redux';
-import { setLoading, setSelectedCharacterName, setSelectedCharacterYear } from '@/features/profileSlice';
+import {
+  setLoading,
+  setSelectedCharacterName,
+  setSelectedCharacterYear,
+} from '@/features/profileSlice';
 import ProfilePanel from '../ProfilePanel/ProfilePanel';
 import CharacterCard from '@/components/profile/CharacterPanel/CharacterCard';
 import styles from './CharacterPanel.module.css';
@@ -46,10 +50,13 @@ export default function CharacterPanel({ characters }: Props) {
       contentClassName={styles.characterContent}
       headerAction={
         <>
-          <Dropdown selected={selectedCharacterYear} onSelect={(val: string) => dispatch(setSelectedCharacterYear(val))} items={['2025', '2024', '2023']} />
+          <Dropdown
+            selected={selectedCharacterYear}
+            onSelect={(val: string) => dispatch(setSelectedCharacterYear(val))}
+            items={['2025', '2024', '2023']}
+          />
         </>
-      }
-    >
+      }>
       <div className={styles.content}>
         <Searchbar characters={characters ?? []} onSearch={handleSearch} />
         <div className={styles.characters}>
@@ -60,11 +67,11 @@ export default function CharacterPanel({ characters }: Props) {
           ) : (
             filteredCharacters?.map((character) => (
               <CharacterCard
-                key={character.name}
-                selected={character.name === selectedCharacter?.name}
+                key={character.character_name}
+                selected={character.character_name === selectedCharacter?.character_name}
                 onClick={() => dispatch(setSelectedCharacterName(character))}
                 imageURL={character.image_url || '/no-image-placeholder.jpg'}
-                characterName={character.name}
+                characterName={character.character_name}
               />
             ))
           )}

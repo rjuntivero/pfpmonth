@@ -7,76 +7,101 @@ import { fetchPollOptions } from '../poll/fetchPollOptions';
 import { fetchServer } from '../server/fetchServer';
 import { MONTHS } from '@/lib/utils/stringUtils';
 
-export async function fetchThemes(selectedYear: number, serverIdFromCookie?: string): Promise<ThemeSliderResult> {
+export async function fetchThemes(
+  selectedYear: number,
+  serverIdFromCookie?: string
+): Promise<ThemeSliderResult> {
   const supabase = await createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return { serverName: null, serverId: null, themes: [] };
-  }
+  if (!user) return { serverName: null, serverId: null, themes: [] };
 
-  // create server poll if it does not yet exist
-  if (serverIdFromCookie) {
-    await createServerPoll(serverIdFromCookie as string);
-  }
-
-  // fetch existing poll themes
-  const pollExists = await fetchServerPoll(serverIdFromCookie as string);
-  if (pollExists) {
-    const pollOptionsExist = await fetchPollOptions(pollExists.id as string);
-    if (pollOptionsExist) {
-      pollOptionsExist.pollOptions?.map((poll) => poll);
-    }
-  }
-
+  let serverId = serverIdFromCookie ?? null;
   let serverName: string | null = null;
-  let resolvedServerId = serverIdFromCookie ?? null;
 
-  // fetch serverId from cookie or user server
-  if (!resolvedServerId) {
+  // Fetch serverId from user server if not provided
+  if (!serverId) {
     const userServer = await fetchServer();
-
-    if (userServer && 'error' in userServer) {
-      console.error(userServer.error);
+    if (!userServer || 'error' in userServer) {
+      console.error('Failed to fetch user server:', userServer?.error);
+      return { serverName: null, serverId: null, themes: [] };
     }
-    resolvedServerId = userServer!.server_id;
-  } else {
-    const { data: server } = await supabase.from('servers').select('name').eq('id', resolvedServerId).single();
-
-    serverName = server?.name ?? null;
+    serverId = userServer.server_id;
   }
 
-  if (!resolvedServerId) return { serverName, serverId: null, themes: [] };
+  // Fetch server name
+  const { data: server, error: serverError } = await supabase
+    .from('servers')
+    .select('name')
+    .eq('id', serverId)
+    .single();
+  if (serverError) {
+    console.error('Failed to fetch server name:', serverError);
+    return { serverName: null, serverId, themes: [] };
+  }
+  serverName = server?.name ?? null;
+
+  // Create server poll if it does not exist
+  try {
+    await createServerPoll(serverId);
+  } catch (err) {
+    console.error('Failed to create server poll:', err);
+  }
+
+  // Fetch existing poll themes
+  try {
+    const pollExists = await fetchServerPoll(serverId);
+    if (pollExists) {
+      const pollOptionsExist = await fetchPollOptions(pollExists.id as string);
+      pollOptionsExist?.pollOptions?.map((poll) => poll);
+    }
+  } catch (err) {
+    console.error('Failed to fetch existing poll themes:', err);
+  }
 
   const now = new Date();
   const currentYear = selectedYear;
 
-  // fetch official themes
-  const { data: themesData = [] } = await supabase.from('themes').select('id, name, image_url, theme_month, description, created_by(id,username,avatar_url)').eq('server_id', resolvedServerId);
+  // Fetch official themes
+  const { data: themesData = [], error: themesError } = await supabase
+    .from('themes')
+    .select('id, name, image_url, theme_month, description, created_by(id,username,avatar_url)')
+    .eq('server_id', serverId);
+  if (themesError) {
+    console.error('Failed to fetch themes:', themesError);
+    return { serverName, serverId, themes: [] };
+  }
   const themes = themesData as unknown as Theme[];
 
-  // fetch centralized poll
-  const { data: centralPoll, error: pollError } = await supabase.from('polls').select('id').eq('server_id', resolvedServerId).maybeSingle();
-  if (pollError || !centralPoll) {
-    // return { suggestions: [] };
+  // Fetch centralized poll
+  const { data: centralPoll, error: pollError } = await supabase
+    .from('polls')
+    .select('id')
+    .eq('server_id', serverId)
+    .maybeSingle();
+  if (pollError) {
+    console.error('Failed to fetch central poll:', pollError);
   }
 
-  // fetch poll options
-  const { data: pollOptions, error: optionsError } = await supabase.from('poll_options_with_vote_count').select('*').eq('poll_id', centralPoll?.id);
-
-  if (optionsError || !pollOptions) {
-    // return { suggestions: [] };
+  // Fetch poll options
+  const { data: pollOptions, error: optionsError } = await supabase
+    .from('poll_options_with_vote_count')
+    .select('*')
+    .eq('poll_id', centralPoll?.id);
+  if (optionsError) {
+    console.error('Failed to fetch poll options:', optionsError);
   }
 
   const suggestions = (pollOptions ?? []).sort((a, b) => {
     const voteDiff = (b.vote_count ?? 0) - (a.vote_count ?? 0);
-    return voteDiff !== 0 ? voteDiff : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    return voteDiff !== 0
+      ? voteDiff
+      : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
-  // avoid reusing suggestions
   const usedSuggestions = new Set<string>();
 
   const slides = MONTHS.map((monthName, monthIndex) => {
@@ -98,66 +123,43 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
       route: `/themes/month/${slug}`,
       type: 'tbd',
       theme_month: themeMonth,
-      server_id: resolvedServerId,
+      server_id: serverId,
       username: '',
       avatar_url: '/no-image-placeholder.jpg',
       created_by: undefined as { id: string; username: string; avatar_url: string } | undefined,
     };
-    // slides that have a corresponding theme table entry
+
     if (theme) {
       return {
         ...defaultSlide,
-        month: monthName,
-        year: currentYear,
         image: theme.image_url,
         name: theme.name,
         id: theme.id,
         description: theme.description,
         tag: 'final',
-        route: `/themes/month/${slug}`,
         type: 'final',
-        theme_month: themeMonth,
-        server_id: resolvedServerId,
         username: theme.created_by?.username,
         avatar_url: theme.created_by?.avatar_url || '/no-image-placeholder.jpg',
       };
     }
 
-    // current active month slide without a theme
-    if (isCurrentMonth) {
-      return {
-        ...defaultSlide,
-        month: monthName,
-        year: currentYear,
-        image: '/no-image-placeholder.jpg',
-        name: 'No Theme',
-        tag: 'active',
-        route: `/themes/month/${slug}`,
-        type: 'tbd',
-        theme_month: themeMonth,
-        server_id: resolvedServerId,
-      };
-    }
+    if (isCurrentMonth) return { ...defaultSlide, tag: 'active', type: 'tbd' };
 
-    const isFuture = currentYear > now.getFullYear() || (currentYear === now.getFullYear() && monthIndex > now.getMonth());
+    const isFuture =
+      currentYear > now.getFullYear() ||
+      (currentYear === now.getFullYear() && monthIndex > now.getMonth());
 
-    // If future month and theme is missing, use suggestion if available
     if (isFuture && suggestions.length > 0) {
       const suggestion = suggestions.find((s) => !usedSuggestions.has(s.id));
       if (suggestion) {
         usedSuggestions.add(suggestion.id);
         return {
           ...defaultSlide,
-          month: monthName,
-          year: currentYear,
           image: suggestion.image_url ?? '/no-image-placeholder.jpg',
           name: suggestion.name || 'No Theme',
           id: suggestion.id,
           tag: 'suggested',
-          route: `/themes/month/${slug}`,
           type: 'suggestion',
-          theme_month: themeMonth,
-          server_id: resolvedServerId,
           description: suggestion.option_text,
           created_by: {
             id: suggestion.created_by_user?.id,
@@ -168,22 +170,8 @@ export async function fetchThemes(selectedYear: number, serverIdFromCookie?: str
       }
     }
 
-    // future slide WITHOUT a theme
-    return {
-      ...defaultSlide,
-      month: monthName,
-      year: currentYear,
-      image: '/no-image-placeholder.jpg',
-      name: 'No Theme',
-      route: `/themes/month/${slug}`,
-      type: 'tbd',
-      theme_month: themeMonth,
-      server_id: resolvedServerId,
-    };
+    return defaultSlide;
   });
 
-  // log final slides
-  // console.log('📊 Final slides generated for theme slider:', slides);
-
-  return { serverName, serverId: resolvedServerId, themes: slides };
+  return { serverName, serverId, themes: slides };
 }

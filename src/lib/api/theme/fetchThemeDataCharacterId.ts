@@ -1,47 +1,14 @@
 import { createClient } from '@/lib/supabase/supabaseSSR';
-
-export interface ThemeData {
-  id: string;
-  name: string;
-  description: string;
-  image_url: string;
-  status: 'final' | 'suggestion' | 'tbd';
-
-  created_by: {
-    username: string;
-    avatar_url: string;
-  };
-
-  user_characters?: {
-    id: string;
-    character_name: string;
-    user_id: string;
-    theme_id: string;
-    image_url: string | null;
-    users: {
-      id: string;
-      username: string;
-      avatar_url: string;
-    };
-  }[];
-
-  theme_month: string;
-
-  participants: {
-    id: string;
-    character_name: string;
-    theme_id: string;
-    image_url: string | null;
-    user_id: string;
-  }[];
-}
+import { ThemeData } from './fetchThemeData';
 
 interface ThemeDataProps {
   themeMonth?: string;
+  characterId?: string;
 }
 
-export async function fetchThemeData({
+export async function fetchThemeDataCharacterID({
   themeMonth,
+  characterId,
 }: ThemeDataProps): Promise<ThemeData | { error: string }> {
   const supabase = await createClient();
 
@@ -53,28 +20,37 @@ export async function fetchThemeData({
     return { error: 'Not authenticated' };
   }
 
-  console.log('Theme Month:', themeMonth);
+  console.log('Character ID: ', characterId);
+  const { data: themeId } = await supabase
+    .from('user_characters')
+    .select('theme_id')
+    .eq('id', characterId)
+    .single();
+
+  if (!themeId) {
+    console.error('Character not found');
+    return { error: 'Character not found' };
+  }
+
   const { data: themeData, error: themeError } = await supabase
     .from('themes')
     .select(
       `
-      *,
-      user_characters (
-      *
-    )
+      id, 
+      name, 
+      description, 
+      image_url,
+      status, 
+      theme_month
     `
     )
-    .eq('theme_month', themeMonth)
+    .eq('id', themeId.theme_id)
     .single<ThemeData>();
 
   if (themeError || !themeData) {
     console.error('Error fetching theme:', themeError);
     return { error: 'Theme not found' };
   }
-
-  console.log('Theme participants', themeData?.user_characters);
-
-  if (!themeData) return { error: 'Theme not found' };
 
   const participants =
     themeData?.user_characters?.map((c) => ({
@@ -99,5 +75,3 @@ export async function fetchThemeData({
     participants,
   };
 }
-
-

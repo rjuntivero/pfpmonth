@@ -12,7 +12,6 @@ import { setChosenMonth, setChosenYear, setLoaded } from '@/features/leaderboard
 import { MONTHS as monthNames } from '@/lib/utils/stringUtils';
 import { ThemeData } from '@/lib/api/theme/fetchThemeData';
 import { AvailableTime } from '@/lib/api/user/fetchRankings';
-import Image from 'next/image';
 
 interface Props {
   serverName: string;
@@ -20,7 +19,7 @@ interface Props {
 
 interface TopUser {
   name?: string;
-  imageURL?: string;
+  avatar_url?: string;
 }
 
 export default function LeaderboardClientWrapper({ serverName }: Props) {
@@ -78,7 +77,12 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         // fetch rankings
         const rankRes = await fetch('/api/server/rankings', {
           method: 'POST',
-          body: JSON.stringify({ chosenMonth, chosenYear, guildData: guildData.sortedMembers, rankingType }),
+          body: JSON.stringify({
+            chosenMonth,
+            chosenYear,
+            guildData: guildData.sortedMembers,
+            rankingType,
+          }),
         });
 
         const {
@@ -98,7 +102,9 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         setGuildMembers(sortedMembers);
 
         // update dropdowns
-        const uniqueYears = Array.from(new Set(availableTimes.map((t) => t.year.toString()))).sort();
+        const uniqueYears = Array.from(
+          new Set(availableTimes.map((t) => t.year.toString()))
+        ).sort();
         setYearsDropdown(uniqueYears);
 
         const monthsForYear = availableTimes
@@ -110,7 +116,7 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         setTopUsers(
           topUserRanks.map((m) => ({
             name: m.discord_users?.username ?? 'Unknown',
-            imageURL: m.discord_users?.avatar_url ? `${m.discord_users.avatar_url}?size=512` : undefined,
+            avatar_url: m.discord_users?.avatar_url ?? '/no-image-placeholder.jpg',
           }))
         );
 
@@ -130,7 +136,9 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
     dispatch(setChosenYear(year));
 
     // use the availableTimes from state
-    const monthsForYear = availableTimes.filter((t) => t.year.toString() === year).map((t) => monthNames[t.month - 1]);
+    const monthsForYear = availableTimes
+      .filter((t) => t.year.toString() === year)
+      .map((t) => monthNames[t.month - 1]);
 
     // pick first available month if current chosenMonth is invalid
     const newMonth = monthsForYear.includes(chosenMonth) ? chosenMonth : monthsForYear[0];
@@ -158,9 +166,29 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
           <h2 className={styles.serverName}>{serverName}</h2>
           <h1 className={styles.themeTitle}>{chosenTheme?.name ?? 'No Theme'}</h1>
           <div className={styles.filters}>
-            <Dropdown selected={chosenMonth} items={monthsDropdown} onSelect={handleMonthSelect} isOpen={isMonthDropdownOpen} setIsOpen={setIsMonthDropdownOpen} disabled={rankingType === 'All Time'} />
-            <Dropdown onSelect={handleYearSelect} selected={chosenYear} items={yearsDropdown} isOpen={isYearDropdownOpen} setIsOpen={setIsYearDropdownOpen} disabled={rankingType === 'All Time'} />{' '}
-            <Dropdown selected={rankingType} items={['All Time', 'Monthly']} onSelect={handleTypeSelect} isOpen={isRankingDropdownOpen} setIsOpen={setIsRankingDropdownOpen} />
+            <Dropdown
+              selected={chosenMonth}
+              items={monthsDropdown}
+              onSelect={handleMonthSelect}
+              isOpen={isMonthDropdownOpen}
+              setIsOpen={setIsMonthDropdownOpen}
+              disabled={rankingType === 'All Time'}
+            />
+            <Dropdown
+              onSelect={handleYearSelect}
+              selected={chosenYear}
+              items={yearsDropdown}
+              isOpen={isYearDropdownOpen}
+              setIsOpen={setIsYearDropdownOpen}
+              disabled={rankingType === 'All Time'}
+            />{' '}
+            <Dropdown
+              selected={rankingType}
+              items={['All Time', 'Monthly']}
+              onSelect={handleTypeSelect}
+              isOpen={isRankingDropdownOpen}
+              setIsOpen={setIsRankingDropdownOpen}
+            />
           </div>
         </div>
         <div className={styles.topUsers}>
@@ -172,8 +200,22 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
             pedestalOrder.map((rank, i) => {
               const user = topUsers[rank];
               return (
-                <motion.div key={rank} className={styles.topUser} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.2 }} data-name={user?.name ?? 'N/A'}>
-                  <Avatar imageURL={user?.imageURL ?? '/no-image-placeholder.jpg'} className={styles.topUserAvatar} zoom={user?.imageURL ? false : true} />
+                <motion.div
+                  key={rank}
+                  className={styles.topUser}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.2 }}
+                  data-name={user?.name ?? 'N/A'}>
+                  <Avatar
+                    imageURL={user?.avatar_url ?? '/no-image-placeholder.jpg'}
+                    className={styles.topUserAvatar}
+                    zoom={!user?.avatar_url}
+                    onError={(e) => {
+                      // fallback if the avatar fails to load
+                      (e.currentTarget as HTMLImageElement).src = '/no-image-placeholder.jpg';
+                    }}
+                  />
                 </motion.div>
               );
             })
@@ -198,7 +240,12 @@ export default function LeaderboardClientWrapper({ serverName }: Props) {
         ) : (
           currentMembers.map((member, i) => (
             <div key={member.discord_users.username}>
-              <UserRanking score={member.score} member={member} index={startIndex + i} rankingType={rankingType} />
+              <UserRanking
+                score={member.score}
+                member={member}
+                index={startIndex + i}
+                rankingType={rankingType}
+              />
             </div>
           ))
         )}

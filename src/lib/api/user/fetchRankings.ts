@@ -16,7 +16,13 @@ interface RankingsResult {
 
 export type RankingType = 'All Time' | 'Monthly' | null;
 
-export default async function fetchRankings(chosenMonth: string, chosenYear: string, serverId: string, guildMembers: GuildMemberRank[], rankingType: RankingType): Promise<RankingsResult> {
+export default async function fetchRankings(
+  chosenMonth: string,
+  chosenYear: string,
+  serverId: string,
+  guildMembers: GuildMemberRank[],
+  rankingType: RankingType
+): Promise<RankingsResult> {
   const supabase = await createClient();
 
   try {
@@ -26,7 +32,10 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
     if (!user) return { leaderboard: [], theme: null, availableTimes: [] };
 
     // fetch all available years and months
-    const { data: themeTimes, error: themeTimesError } = await supabase.from('server_theme_calendar').select('year, months').eq('server_id', serverId);
+    const { data: themeTimes, error: themeTimesError } = await supabase
+      .from('server_theme_calendar')
+      .select('year, months')
+      .eq('server_id', serverId);
 
     if (themeTimesError) {
       console.error('Error fetching available themeTimes', themeTimesError);
@@ -62,7 +71,12 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
     const lastDay = new Date(Number(chosenYear), monthNumber, 0).getDate();
 
     // query theme safely
-    const { data: theme, error: themeError } = await supabase.from('themes').select('*').gte('theme_month', `${chosenYear}-${monthStr}-01`).lte('theme_month', `${chosenYear}-${monthStr}-${lastDay}`).single();
+    const { data: theme, error: themeError } = await supabase
+      .from('themes')
+      .select('*')
+      .gte('theme_month', `${chosenYear}-${monthStr}-01`)
+      .lte('theme_month', `${chosenYear}-${monthStr}-${lastDay}`)
+      .single();
 
     if (themeError || !theme) {
       console.error('Error fetching theme:', themeError);
@@ -73,7 +87,10 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
     let leaderboard: GuildMemberRank[] = [];
     if (rankingType === 'All Time') {
       // global: across server
-      const { data: participations, error } = await supabase.from('user_streaks').select('user_id, streak_count, longest_streak').eq('server_id', serverId);
+      const { data: participations, error } = await supabase
+        .from('user_streaks')
+        .select('user_id, streak_count, longest_streak')
+        .eq('server_id', serverId);
 
       if (error) console.error('Error fetching all-time participations:', error);
 
@@ -89,7 +106,11 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
 
       leaderboard.sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
     } else if (rankingType === 'Monthly') {
-      const { data: participations, error } = await supabase.from('user_characters').select('user_id, created_at').eq('theme_id', theme.id).order('created_at', { ascending: true });
+      const { data: participations, error } = await supabase
+        .from('user_characters')
+        .select('user_id, created_at')
+        .eq('theme_id', theme.id)
+        .order('created_at', { ascending: true });
 
       if (error) console.error('Error fetching fastest participations:', error);
 
@@ -111,6 +132,8 @@ export default async function fetchRankings(chosenMonth: string, chosenYear: str
         return new Date(a.fastestTime).getTime() - new Date(b.fastestTime).getTime();
       });
     }
+
+    console.log('LEADERBOARD: ', leaderboard);
     return { leaderboard, theme, availableTimes };
   } catch (err) {
     console.error('fetchRankings failed:', err);

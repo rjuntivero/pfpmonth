@@ -3,49 +3,41 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 1068px;
-  height: 566px;
+
+  width: 100%;
+  max-width: 1068px;
+  aspect-ratio: 1068 / 566;
+  margin: 0 auto;
   overflow: hidden;
 }
 
 .chasm {
   position: absolute;
-  left: 0px;
+  inset: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   z-index: 1;
 }
 
-.floatingHeader {
-  font-size: 5.75rem;
+.header {
   z-index: 3;
-  max-width: 687px;
   font-weight: bold;
   font-family: 'ClashDisplay';
-  line-height: 82.46%;
-  contain: layout paint;
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
+  line-height: 0.82;
+  max-width: 800px;
 
-.wrapper h1 {
-  font-size: 5.75rem;
-  z-index: 3;
-  max-width: 687px;
-  color: var(--main);
-  font-weight: bold;
-
-  font-family: 'ClashDisplay';
-  line-height: 82.46%;
+  /* fluid type */
+  font-size: clamp(2rem, 6vw, 5.75rem);
+  text-align: start;
 }
 
 .wrapper h1 span {
   font-family: 'ClashDisplay';
   font-style: normal;
   font-weight: 700;
-  font-size: 92px;
-  line-height: 82.46%;
-
+  font-size: inherit;
+  line-height: 0.82;
   color: rgba(217, 217, 217, 0.75);
 }
 
@@ -54,38 +46,30 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent;
-}
-
-.motionSpan {
-  display: inline-block;
-  will-change: transform;
-}
-
-.baloo {
-  font-family: var(--font-baloo) !important;
 }
 
 .voteBtn {
   position: absolute;
-  width: 154px;
-  height: 53px;
-  left: 700px;
-  top: 355px;
+  /* Use % so button moves with aspect ratio */
+  left: 65%;
+  top: 63%;
+
+  width: clamp(120px, 15vw, 154px);
+  height: clamp(40px, 6vw, 53px);
+
   border-radius: 70%;
   padding: 0;
   margin: 0;
   background: #d19c1d;
   box-shadow: 0px 9px 0px rgba(0, 0, 0, 0.41);
   transform: rotate(-10.26deg);
-  transition: 200ms all 0ms cubic-bezier(1, 0, 0, 1);
+  transition: 200ms all cubic-bezier(1, 0, 0, 1);
   z-index: 5;
 }
 
 .voteBtn:hover {
   background-color: var(--main);
   transform: scale(1.05) rotate(-10.26deg);
-  transition: 100ms all 0ms cubic-bezier(1, 0, 0, 1);
 }
 
 .voteBtn:hover .voteLabel {
@@ -97,6 +81,34 @@
   transform: rotate(9.26deg);
   font-family: 'ClashDisplay';
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 3vw, 1.5rem);
   color: #000;
+}
+
+@media screen and (max-width: 800px) {
+  .floatingHeader {
+    font-size: clamp(1.5rem, 8vw, 3.5rem);
+  }
+
+  .voteBtn {
+    left: 55%;
+    top: 70%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .floatingHeader {
+    font-size: clamp(1.25rem, 7vw, 2.5rem);
+    max-width: 95%;
+  }
+
+  .voteBtn {
+    left: 50%;
+    top: 75%;
+    transform: translateX(-50%) rotate(-10.26deg);
+  }
+}
+
+.word {
+  margin-left: 0.5ch; /* adjustable spacing */
 }

@@ -1,5 +1,5 @@
 export type Character = {
-  name: string;
+  character_name: string;
   id: string;
   theme_id: string;
   user_id: string;

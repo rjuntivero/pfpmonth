@@ -1,6 +1,6 @@
 import TrendingThemes from '@/components/theme/TrendingThemes/TrendingThemes';
 import styles from './page.module.css';
-import CallToAction from '@/components/layout/CallToAction/CallToAction';
+// import CallToAction from '@/components/layout/CallToAction/CallToAction';
 import { fetchThemes } from '@/lib/api/theme/fetchThemes';
 import { cookies } from 'next/headers';
 import { Metadata } from 'next';
@@ -8,6 +8,7 @@ import ThemeSliderClientWrapper from '@/components/wrappers/ThemeSliderClientWra
 import PollInitClientWrapper from '@/components/wrappers/PollInitClientWrapper/PollInitClientWrapper';
 import { fetchServerPoll } from '@/lib/api/poll/fetchServerPoll';
 import { fetchPollOptions } from '@/lib/api/poll/fetchPollOptions';
+import { createClient } from '@/lib/supabase/supabaseSSR';
 
 export const metadata: Metadata = {
   title: 'PFPMonth - Home',
@@ -44,7 +45,9 @@ export default async function Page() {
   const serverId = (await cookies()).get('server_id')?.value;
   const { serverName, themes } = await fetchThemes(currentYear, serverId);
   const serverPoll = await fetchServerPoll(serverId as string);
-  const { pollOptions } = await fetchPollOptions(serverPoll.id as string);
+  const { pollOptions } = await fetchPollOptions(serverPoll?.id as string);
+  const supabase = await createClient();
+  const { data: user } = await supabase.auth.getUser();
 
   return (
     <div className={styles.page}>
@@ -59,7 +62,10 @@ export default async function Page() {
               <span className={styles.highlight}>
                 P<span>F</span>P
               </span>
-              Mo<span>n</span>t<span>h</span>
+              <span className={styles.mo}>Mo</span>
+              <span>n</span>
+              <span className={styles.t}>t</span>
+              <span>h</span>
             </h1>
             <p>Create Monthly Profile Themes for your Discord server</p>
           </header>
@@ -73,12 +79,20 @@ export default async function Page() {
         <section aria-hidden="true">
           <TrendingThemes />
         </section>
-        <section role="region" aria-label="Current Server Themes">
-          <ThemeSliderClientWrapper serverName={serverName as string} serverId={serverId as string} initialYear={currentYear} initialThemes={themes} isHomePage={true} />
-        </section>
-        <section className={styles.CallToAction}>
+        {user && serverId && (
+          <section role="region" aria-label="Current Server Themes">
+            <ThemeSliderClientWrapper
+              serverName={serverName as string}
+              serverId={serverId as string}
+              initialYear={currentYear}
+              initialThemes={themes}
+              isHomePage={true}
+            />
+          </section>
+        )}
+        {/* <section className={styles.CallToAction}>
           <CallToAction />
-        </section>
+        </section> */}
       </main>
     </div>
   );

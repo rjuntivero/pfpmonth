@@ -5,15 +5,24 @@ import { Participant } from '@/types/Participant';
 import { useState } from 'react';
 
 export default function User({ participant }: { participant?: Participant }) {
-  const [characterName, _setCharacterName] = useState<string | 'No Character'>(participant?.character_name || 'No Character');
+  const [characterName, _setCharacterName] = useState<string | 'No Character'>(
+    participant?.character_name || 'No Character'
+  );
+
+  console.log('participant', participant);
 
   return (
     <div className={styles.container}>
       <div className={styles.avatarContainer}>
-        <Image src={participant?.image_url || '/no-image-placeholder.jpg'} alt="User photo" fill className={styles.avatar} />
+        <Image
+          src={participant?.image_url || '/no-image-placeholder.jpg'}
+          alt="User photo"
+          fill
+          className={styles.avatar}
+        />
       </div>
       <div className={styles.user}>
-        <h3 className={styles.username}>{participant?.username}</h3>
+        <h3 className={styles.username}>{participant?.users?.username}</h3>
         <h3 className={styles.character}>{characterName}</h3>
       </div>
     </div>

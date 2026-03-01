@@ -9,7 +9,10 @@ export default function Footer() {
     { name: 'Home', path: '/' },
     { name: 'Themes', path: '/themes' },
     { name: 'Polls', path: '/themes/vote' },
-    { name: 'Github', path: '/' },
+    {
+      name: 'Github',
+      path: 'https://github.com/rjuntivero',
+    },
   ];
 
   const credits = ['Made with ❤️ by RJ Untivero', '© 2025 PFPMonth'];

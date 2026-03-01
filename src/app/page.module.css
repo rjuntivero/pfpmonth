@@ -42,19 +42,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.header p {
-  font-size: 1.75rem;
   max-width: 520px;
-  text-align: center;
+  & p {
+    line-height: 1.3;
+    text-align: center;
+    font-size: 2rem;
+    max-width: 22ch;
+  }
+  & h1 > * {
+    font-size: 5.7rem;
+  }
+  & h1 {
+    & .mo,
+    .t {
+      font-family: 'ClashDisplay';
+    }
+  }
 }
 
 .hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  grid-row-start: 2;
   gap: 61px;
 }
 
@@ -138,22 +147,17 @@ a.secondary {
   grid-row-start: 3;
   display: flex;
   gap: 24px;
-}
-
-.footer a {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.footer img {
-  flex-shrink: 0;
+  & a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  & img {
+    flex-shrink: 0;
+  }
 }
 
 .getStarted {
-  & h2 {
-    margin-bottom: 0.6em;
-  }
   text-align: center;
 }
 
@@ -166,7 +170,47 @@ a.secondary {
   font-size: 1.25rem;
 }
 
-.pollButton {
-  position: fixed;
-  z-index: 2000;
+.CallToAction {
+  width: 100%;
+}
+
+@media screen and (max-width: 1000px) {
+  .header {
+    & p {
+      font-size: 1.6rem;
+    }
+    & h1 > * {
+      font-size: 4.8rem;
+    }
+    line-height: 1.3;
+  }
+  .getStarted h2 {
+    font-size: 2.4rem;
+  }
+  .hero {
+    gap: 30px;
+  }
+  .main {
+    gap: 2.5rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header {
+    & p {
+      font-size: 1.2rem;
+    }
+    & h1 > * {
+      font-size: 3.5rem;
+    }
+  }
+  .getStarted h2 {
+    font-size: 1.75rem;
+  }
+  .hero {
+    gap: 12px;
+  }
+  .main {
+    gap: 2.25rem;
+  }
 }

@@ -7,7 +7,11 @@ export interface Metadata {
   server_icon?: string;
 }
 
-export async function updateSupabaseTables(supabase: SupabaseClient, user: User, metadata: Metadata) {
+export async function updateSupabaseTables(
+  supabase: SupabaseClient,
+  user: User,
+  metadata: Metadata
+) {
   const { discord_id, server_id, server_name, server_icon } = metadata;
   const { id, user_metadata } = user;
 
@@ -52,4 +56,3 @@ export async function updateSupabaseTables(supabase: SupabaseClient, user: User,
     if (linkInsertError) console.error('❌ Upsert user-server failed:', linkInsertError.message);
   }
 }
-

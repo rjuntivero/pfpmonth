@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchThemeData } from '@/lib/api/theme/fetchThemeData';
-import { createTheme } from '@/lib/api/theme/themeActions';
+import { fetchThemeDataCharacterID } from '@/lib/api/theme/fetchThemeDataCharacterId';
 
 interface Props {
   characterId: string;
@@ -9,7 +8,7 @@ interface Props {
 // fetch theme data by characterId
 export async function GET(req: Request, { params }: { params: Promise<Props> }) {
   const { characterId } = await params;
-  const theme = await fetchThemeData({ characterId: characterId ?? undefined });
+  const theme = await fetchThemeDataCharacterID({ characterId: characterId ?? undefined });
 
   return NextResponse.json(theme);
 }
